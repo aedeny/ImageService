@@ -17,7 +17,7 @@ namespace ap_ex_01
             ServiceBase[] ServicesToRun;
             ServicesToRun = new ServiceBase[]
             {
-                new Service1()
+                new ap_ex_01()
             };
             ServiceBase.Run(ServicesToRun);
         }
