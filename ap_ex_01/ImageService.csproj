@@ -48,12 +48,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ap_ex_01.cs">
+    <Compile Include="Commands\ICommand.cs" />
+    <Compile Include="Commands\NewFileCommand.cs" />
+    <Compile Include="Controller\Handlers\DirectoyHandler.cs" />
+    <Compile Include="Controller\Handlers\IDirectoryHandler.cs" />
+    <Compile Include="Controller\IImageController.cs" />
+    <Compile Include="Controller\ImageController.cs" />
+    <Compile Include="ImageService.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ap_ex_01.Designer.cs">
-      <DependentUpon>ap_ex_01.cs</DependentUpon>
+    <Compile Include="ImageService.Designer.cs">
+      <DependentUpon>ImageService.cs</DependentUpon>
     </Compile>
+    <Compile Include="Modal\Event\CommandRecievedEventArgs.cs" />
+    <Compile Include="Modal\Event\DirectoryCloseEventArgs.cs" />
+    <Compile Include="Modal\IImageServiceModal.cs" />
+    <Compile Include="Modal\ImageServiceModal.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ProjectInstaller.cs">
       <SubType>Component</SubType>
@@ -62,14 +75,14 @@
       <DependentUpon>ProjectInstaller.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Server\ImageServer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="ap_ex_01.resx">
-      <DependentUpon>ap_ex_01.cs</DependentUpon>
+    <EmbeddedResource Include="ImageService.resx">
+      <DependentUpon>ImageService.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="obj\Debug\ap_ex_01.ap_ex_01.resources" />
+    <EmbeddedResource Include="obj\Debug\ap_ex_01.ProjectInstaller.resources" />
     <EmbeddedResource Include="ProjectInstaller.resx">
       <DependentUpon>ProjectInstaller.cs</DependentUpon>
     </EmbeddedResource>
@@ -83,6 +96,33 @@
       <Project>{a1f4809a-6a88-4d9b-bf5b-01ba0f2ab5c6}</Project>
       <Name>ImageService.Logging</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bin\Debug\ap_ex_01.exe" />
+    <Content Include="bin\Debug\ap_ex_01.pdb" />
+    <Content Include="obj\Debug\ap_ex_01.csproj.FileListAbsolute.txt" />
+    <Content Include="obj\Debug\ap_ex_01.exe" />
+    <Content Include="obj\Debug\ap_ex_01.pdb" />
+    <Content Include="obj\Debug\ImageService.csproj.FileListAbsolute.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="bin\Debug\ap_ex_01.exe.config" />
+    <None Include="bin\Debug\ap_ex_01.InstallLog" />
+    <None Include="bin\Debug\InstallUtil.InstallLog" />
+    <None Include="obj\Debug\ap2_ex_01.csproj.CoreCompileInputs.cache" />
+    <None Include="obj\Debug\ap_ex_01.csproj.CoreCompileInputs.cache" />
+    <None Include="obj\Debug\ap_ex_01.csproj.GenerateResource.Cache" />
+    <None Include="obj\Debug\ap_ex_01.csprojResolveAssemblyReference.cache" />
+    <None Include="obj\Debug\DesignTimeResolveAssemblyReferences.cache" />
+    <None Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
+    <None Include="obj\Debug\ImageService.csproj.CoreCompileInputs.cache" />
+    <None Include="obj\Debug\ImageService.csproj.GenerateResource.Cache" />
+    <None Include="obj\Debug\ImageService.csprojResolveAssemblyReference.cache" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\Release\" />
+    <Folder Include="obj\Debug\TempPE\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

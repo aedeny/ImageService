@@ -1,6 +1,6 @@
 ﻿namespace ap_ex_01
 {
-    partial class ap_ex_01
+    partial class ImageService
     {
         /// <summary> 
         /// Required designer variable.

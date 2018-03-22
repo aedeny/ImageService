@@ -17,7 +17,7 @@ namespace ap_ex_01
             ServiceBase[] ServicesToRun;
             ServicesToRun = new ServiceBase[]
             {
-                new ap_ex_01(args)
+                new ImageService(args)
             };
             ServiceBase.Run(ServicesToRun);
         }
