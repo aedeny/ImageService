@@ -15,28 +15,54 @@ namespace ap_ex_01
     {
         private int eventId = 1;
 
-        public ap_ex_01()
+        public ap_ex_01(string[] args)
         {
             InitializeComponent();
-            eventLog1 = new System.Diagnostics.EventLog();
-            if (!System.Diagnostics.EventLog.SourceExists("MySource"))
+            string eventSourceName = "MySource";
+            string logName = "MyNewLog";
+            if (args.Count() > 0)
             {
-                System.Diagnostics.EventLog.CreateEventSource(
-                    "MySource", "MyNewLog");
+                eventSourceName = args[0];
             }
-            eventLog1.Source = "MySource";
-            eventLog1.Log = "MyNewLog";
+            if (args.Count() > 1)
+            {
+                logName = args[1];
+            }
+            eventLog1 = new System.Diagnostics.EventLog();
+            if (!System.Diagnostics.EventLog.SourceExists(eventSourceName))
+            {
+                System.Diagnostics.EventLog.CreateEventSource(eventSourceName, logName);
+            }
+            eventLog1.Source = eventSourceName;
+            eventLog1.Log = logName;
         }
+
+        [DllImport("advapi32.dll", SetLastError = true)]
+        private static extern bool SetServiceStatus(IntPtr handle, ref ServiceStatus serviceStatus);
 
         protected override void OnStart(string[] args)
         {
             eventLog1.WriteEntry("In OnStart");
 
+            // Update the service state to Start Pending.  
+            ServiceStatus serviceStatus = new ServiceStatus
+            {
+                dwCurrentState = ServiceState.SERVICE_START_PENDING,
+                dwWaitHint = 100000
+            };
+            SetServiceStatus(this.ServiceHandle, ref serviceStatus);
+
             // Set up a timer to trigger every minute.  
-            System.Timers.Timer timer = new System.Timers.Timer();
-            timer.Interval = 60000; // 60 seconds  
+            System.Timers.Timer timer = new System.Timers.Timer
+            {
+                Interval = 60000 // 60 seconds  
+            };
             timer.Elapsed += new System.Timers.ElapsedEventHandler(this.OnTimer);
             timer.Start();
+
+            // Update the service state to Running.  
+            serviceStatus.dwCurrentState = ServiceState.SERVICE_RUNNING;
+            SetServiceStatus(this.ServiceHandle, ref serviceStatus);
         }
         protected override void OnContinue()
         {
@@ -56,6 +82,18 @@ namespace ap_ex_01
         protected override void OnStop()
         {
             eventLog1.WriteEntry("In onStop.");
+
+            // Update the service state to Start Pending.  
+            ServiceStatus serviceStatus = new ServiceStatus
+            {
+                dwCurrentState = ServiceState.SERVICE_STOP_PENDING,
+                dwWaitHint = 100000
+            };
+            SetServiceStatus(this.ServiceHandle, ref serviceStatus);
+
+            // Update the service state to Running.  
+            serviceStatus.dwCurrentState = ServiceState.SERVICE_STOPPED;
+            SetServiceStatus(this.ServiceHandle, ref serviceStatus);
         }
 
         public void OnTimer(object sender, System.Timers.ElapsedEventArgs args)

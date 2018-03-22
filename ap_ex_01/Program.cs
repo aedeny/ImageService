@@ -12,12 +12,12 @@ namespace ap_ex_01
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
-        static void Main()
+        static void Main(string[] args)
         {
             ServiceBase[] ServicesToRun;
             ServicesToRun = new ServiceBase[]
             {
-                new ap_ex_01()
+                new ap_ex_01(args)
             };
             ServiceBase.Run(ServicesToRun);
         }
