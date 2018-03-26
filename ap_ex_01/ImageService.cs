@@ -45,35 +45,37 @@ namespace ImageService
     public partial class ImageService : ServiceBase
     {
         private int eventId = 1;
-        private ImageServer m_image_server;          // The Image Server
-        private IImageServiceModel m_model;
-        private IImageController m_controller;
-        private ILoggingService m_logging_service;
+        private ImageServer mImageServer;
+        private IImageServiceModel mModel;
+        private IImageController mController;
+        private ILoggingService mLoggingService;
 
         // Here You will Use the App Config!
 
         public ImageService()
         {
             InitializeComponent();
-            event_log = new System.Diagnostics.EventLog();
+            eventLog = new System.Diagnostics.EventLog();
             if (!System.Diagnostics.EventLog.SourceExists("MySource"))
             {
                 System.Diagnostics.EventLog.CreateEventSource(
                     "MySource", "MyNewLog");
             }
-            event_log.Source = "MySource";
-            event_log.Log = "MyNewLog";
+            eventLog.Source = "MySource";
+            eventLog.Log = "MyNewLog";
         }
 
         protected override void OnStart(string[] args)
         {
-            // Set up a timer to trigger every minute.  
-            System.Timers.Timer timer = new System.Timers.Timer();
-            timer.Interval = 60000; // 60 seconds  
+            // Sets up a timer to trigger every minute.  
+            System.Timers.Timer timer = new System.Timers.Timer
+            {
+                Interval = 60000 // 60 seconds  
+            };
             timer.Elapsed += new System.Timers.ElapsedEventHandler(this.OnTimer);
             timer.Start();
 
-            event_log.WriteEntry("In OnStart");
+            eventLog.WriteEntry("In OnStart");
 
             // Update the service state to Start Pending.  
             ServiceStatus serviceStatus = new ServiceStatus();
@@ -84,7 +86,6 @@ namespace ImageService
             // Update the service state to Running.  
             serviceStatus.dwCurrentState = ServiceState.SERVICE_RUNNING;
             SetServiceStatus(this.ServiceHandle, ref serviceStatus);
-
         }
 
         protected override void OnStop()
@@ -94,7 +95,7 @@ namespace ImageService
 
         private void OnMsgEvent(object sender, MessageRecievedEventArgs args)
         {
-            event_log.WriteEntry(args.Message);
+            eventLog.WriteEntry(args.Message);
         }
 
         [DllImport("advapi32.dll", SetLastError = true)]
@@ -103,7 +104,7 @@ namespace ImageService
         public void OnTimer(object sender, System.Timers.ElapsedEventArgs args)
         {
             // TODO: Insert monitoring activities here.  
-            event_log.WriteEntry("Monitoring the System", EventLogEntryType.Information, eventId++);
+            eventLog.WriteEntry("Monitoring the System", EventLogEntryType.Information, eventId++);
         }
     }
 }

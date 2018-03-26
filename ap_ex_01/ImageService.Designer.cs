@@ -28,18 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.event_log = new System.Diagnostics.EventLog();
-            ((System.ComponentModel.ISupportInitialize)(this.event_log)).BeginInit();
+            this.eventLog = new System.Diagnostics.EventLog();
+            ((System.ComponentModel.ISupportInitialize)(this.eventLog)).BeginInit();
             // 
             // ap_ex_01
             // 
             this.ServiceName = "ap_ex_01";
-            ((System.ComponentModel.ISupportInitialize)(this.event_log)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.eventLog)).EndInit();
 
         }
 
         #endregion
 
-        private System.Diagnostics.EventLog event_log;
+        private System.Diagnostics.EventLog eventLog;
     }
 }

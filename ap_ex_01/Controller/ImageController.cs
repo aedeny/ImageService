@@ -14,6 +14,8 @@ namespace ImageService.Controller
     {
         private IImageServiceModel mModel;
         private Dictionary<int, ICommand> mCommands;
+        
+
 
         public ImageController(IImageServiceModel model)
         {
