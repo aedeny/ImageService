@@ -10,16 +10,17 @@ namespace ImageService.Commands
 {
     public class NewFileCommand : ICommand
     {
-        private IImageServiceModel m_Model;
+        private IImageServiceModel mModel;
 
         public NewFileCommand(IImageServiceModel Model)
         {
-            m_Model = Model;            // Storing the Model
+            mModel = Model;
         }
 
         public string Execute(string[] args, out bool result)
         {
-			// The String Will Return the New Path if result = true, and will return the error message
+            // The string will return the new path if result is true, or the error message otherwise.
+            return mModel.AddFile(args[0], out result);
         }
     }
 }

@@ -12,20 +12,27 @@ namespace ImageService.Controller
 {
     public class ImageController : IImageController
     {
-        private IImageServiceModel m_Model;                      // The Model Object
-        private Dictionary<int, ICommand> commands;
+        private IImageServiceModel mModel;
+        private Dictionary<int, ICommand> mCommands;
 
-        public ImageController(IImageServiceModel Model)
+        public ImageController(IImageServiceModel model)
         {
-            m_Model = Model;                    // Storing the Model Of The System
-            commands = new Dictionary<int, ICommand>()
+            mModel = model;
+            mCommands = new Dictionary<int, ICommand>()
             {
-				// For Now will contain NEW_FILE_COMMAND
+                {0, new NewFileCommand(mModel)}
             };
         }
         public string ExecuteCommand(int commandID, string[] args, out bool resultSuccesful)
         {
-           // Write Code Here
+            resultSuccesful = false;
+
+            if (!mCommands.TryGetValue(commandID, out ICommand currentCommand))
+            {
+                return "No such command";
+            }
+
+            return currentCommand.Execute(args, out resultSuccesful);
         }
     }
 }

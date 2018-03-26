@@ -16,14 +16,23 @@ namespace ImageService.Controller.Handlers
     public class DirectoyHandler : IDirectoryHandler
     {
         #region Members
-        private IImageController m_controller;              // The Image Processing Controller
-        private ILoggingService m_logging;
-        private FileSystemWatcher m_dirWatcher;             // The Watcher of the Dir
-        private string m_path;                              // The Path of directory
+        private IImageController mImageController;
+        private ILoggingService mLoggingService;
+        private FileSystemWatcher mDirWatcher;
+        private string m_path;
         #endregion
 
-        public event EventHandler<DirectoryCloseEventArgs> DirectoryClose;              // The Event That Notifies that the Directory is being closed
+        public event EventHandler<DirectoryCloseEventArgs> DirectoryClosedEvent;
 
-		// Implement Here!
+        public void OnCommandRecieved(object sender, CommandRecievedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void StartHandleDirectory(string dirPath)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace ap_ex_01
+﻿namespace ImageService
 {
     partial class ImageService
     {
@@ -28,18 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.eventLog1 = new System.Diagnostics.EventLog();
-            ((System.ComponentModel.ISupportInitialize)(this.eventLog1)).BeginInit();
+            this.event_log = new System.Diagnostics.EventLog();
+            ((System.ComponentModel.ISupportInitialize)(this.event_log)).BeginInit();
             // 
             // ap_ex_01
             // 
             this.ServiceName = "ap_ex_01";
-            ((System.ComponentModel.ISupportInitialize)(this.eventLog1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.event_log)).EndInit();
 
         }
 
         #endregion
 
-        private System.Diagnostics.EventLog eventLog1;
+        private System.Diagnostics.EventLog event_log;
     }
 }

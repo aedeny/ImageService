@@ -10,10 +10,16 @@ namespace ImageService.Logging
 {
     public class LoggingService : ILoggingService
     {
-        public event EventHandler<MessageRecievedEventArgs> MessageRecieved;
+        public event EventHandler<MessageRecievedEventArgs> m_msg_rcv_event;
         public void Log(string message, MessageTypeEnum type)
         {
+            MessageRecievedEventArgs msg_rcv_args = new MessageRecievedEventArgs
+            {
+                Message = message,
+                Status = type
+            };
 
+            m_msg_rcv_event?.Invoke(this, msg_rcv_args);
         }
     }
 }
