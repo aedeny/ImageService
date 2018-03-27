@@ -19,19 +19,44 @@ namespace ImageService.Controller.Handlers
         private IImageController mImageController;
         private ILoggingService mLoggingService;
         private FileSystemWatcher mDirWatcher;
-        private string m_path;
+        private string mPath;
+        private readonly string[] mExtenstions = { ".jpg", ".png", ".bmp", ".gif" };
         #endregion
 
         public event EventHandler<DirectoryCloseEventArgs> DirectoryClosedEvent;
 
+        public DirectoyHandler(IImageController imageController, ILoggingService loggingService, string path)
+        {
+            mImageController = imageController;
+            mLoggingService = loggingService;
+            mDirWatcher = new FileSystemWatcher(path);
+            mPath = path;
+        }
+
         public void OnCommandRecieved(object sender, CommandRecievedEventArgs e)
         {
-            throw new NotImplementedException();
+            string msg = mImageController.ExecuteCommand(e.CommandID, e.Args, out bool result);
+
+            if (result)
+            {
+                mLoggingService.Log(msg, MessageTypeEnum.INFO);
+            }
+            else
+            {
+                mLoggingService.Log(msg, MessageTypeEnum.FAILURE);
+            }
         }
 
         public void StartHandleDirectory(string dirPath)
         {
-            throw new NotImplementedException();
+            foreach (string file in Directory.GetFiles(mPath))
+            {
+                string[] args = { file, mPath };
+                if (mExtenstions.Contains(Path.GetExtension(file)))
+                {
+                    OnCommandRecieved(this, new CommandRecievedEventArgs(CommandEnum.NewFileCommand, args, dirPath));
+                }
+            }
         }
 
     }

@@ -9,7 +9,7 @@ namespace ImageService.Logging
 {
     public interface ILoggingService
     {
-        event EventHandler<MessageRecievedEventArgs> m_msg_rcv_event;
+        event EventHandler<MessageRecievedEventArgs> MsgRecievedEvent;
         void Log(string message, MessageTypeEnum type);           // Logging the Message
     }
 }

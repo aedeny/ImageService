@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ImageService.Infrastructure.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,11 +9,11 @@ namespace ImageService.Model
 {
     public class CommandRecievedEventArgs : EventArgs
     {
-        public int CommandID { get; set; }      // The Command ID
+        public CommandEnum CommandID { get; set; }
         public string[] Args { get; set; }
-        public string RequestDirPath { get; set; }  // The Request Directory
+        public string RequestDirPath { get; set; } 
 
-        public CommandRecievedEventArgs(int id, string[] args, string path)
+        public CommandRecievedEventArgs(CommandEnum id, string[] args, string path)
         {
             CommandID = id;
             Args = args;

@@ -76,16 +76,21 @@ namespace ImageService
             timer.Start();
 
             eventLog.WriteEntry("In OnStart");
-
             // Update the service state to Start Pending.  
-            ServiceStatus serviceStatus = new ServiceStatus();
-            serviceStatus.dwCurrentState = ServiceState.SERVICE_START_PENDING;
-            serviceStatus.dwWaitHint = 100000;
+            ServiceStatus serviceStatus = new ServiceStatus
+            {
+                dwCurrentState = ServiceState.SERVICE_START_PENDING,
+                dwWaitHint = 100000
+            };
             SetServiceStatus(this.ServiceHandle, ref serviceStatus);
 
             // Update the service state to Running.  
             serviceStatus.dwCurrentState = ServiceState.SERVICE_RUNNING;
             SetServiceStatus(this.ServiceHandle, ref serviceStatus);
+
+            mLoggingService = new LoggingService();
+            mLoggingService.MsgRecievedEvent += OnMsgEvent;
+            // TODO mImageServer = new ImageServer()
         }
 
         protected override void OnStop()

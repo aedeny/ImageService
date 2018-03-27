@@ -10,6 +10,6 @@ namespace ImageService.Logging.Model
     {
         INFO,
         WARNING,
-        FAIL
+        FAILURE
     }
 }
