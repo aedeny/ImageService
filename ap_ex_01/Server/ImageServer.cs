@@ -23,6 +23,21 @@ namespace ImageService.Server
         public event EventHandler<CommandRecievedEventArgs> CommandRecieved;
         #endregion
 
-       
+        public ImageServer(IImageController controller, ILoggingService loggingService)
+        {
+            mController = controller;
+            mLoggingService = loggingService;
+        }
+
+        public void CreateHandler(string path)
+        {
+            DirectoyHandler dh = new DirectoyHandler(mController, mLoggingService, path);
+            CommandRecieved += dh.OnCommandRecieved;
+        }
+
+        public void OnCloseServer()
+        {
+        }
+
     }
 }

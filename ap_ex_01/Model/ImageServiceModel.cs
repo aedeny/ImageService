@@ -42,24 +42,33 @@ namespace ImageService.Model
                     return "File does not exist.";
                 }
 
-                // Check if output folder exists
+                // Checks if output folder exists
                 if (!Directory.Exists(mOutputFolder))
                 {
                     Directory.CreateDirectory(mOutputFolder);
                 }
 
                 DateTime dateTime = GetDateTakenFromImage(path);
-                if (!Directory.Exists(mOutputFolder + '\\' + dateTime.Year))
+
+                string pathInOutputDirSuffix = "\\" + dateTime.Year;
+                if (!Directory.Exists(mOutputFolder + pathInOutputDirSuffix))
                 {
-                    Directory.CreateDirectory(mOutputFolder + '\\' + dateTime.Year);
+                    Directory.CreateDirectory(mOutputFolder + pathInOutputDirSuffix);
                 }
 
-                string destDir = mOutputFolder + '\\' + dateTime.Year + '\\' + dateTime.Month;
+                pathInOutputDirSuffix += "\\" + dateTime.Month;
+                string destDir = mOutputFolder + pathInOutputDirSuffix;
 
                 if (!Directory.Exists(destDir))
                 {
                     Directory.CreateDirectory(destDir);
                 }
+
+                // Creates thumbnail
+                string thumbnailDir = mOutputFolder + "\\Thumbnails" + pathInOutputDirSuffix;
+                Image image = Image.FromFile(path);
+                Image thumb = image.GetThumbnailImage(mThumbnailSize, mThumbnailSize, () => false, IntPtr.Zero);
+                thumb.Save(Path.ChangeExtension(thumbnailDir, "thumb"));
 
                 System.IO.File.Copy(path, destDir, true);
                 return destDir;

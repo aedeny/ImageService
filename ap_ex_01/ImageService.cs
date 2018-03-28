@@ -70,7 +70,8 @@ namespace ImageService
             // Sets up a timer to trigger every minute.  
             System.Timers.Timer timer = new System.Timers.Timer
             {
-                Interval = 60000 // 60 seconds  
+                // 60 seconds
+                Interval = 60000
             };
             timer.Elapsed += new System.Timers.ElapsedEventHandler(this.OnTimer);
             timer.Start();
@@ -90,7 +91,7 @@ namespace ImageService
 
             mLoggingService = new LoggingService();
             mLoggingService.MsgRecievedEvent += OnMsgEvent;
-            // TODO mImageServer = new ImageServer()
+            mImageServer = new ImageServer(mController, mLoggingService);
         }
 
         protected override void OnStop()

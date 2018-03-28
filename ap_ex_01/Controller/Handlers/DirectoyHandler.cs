@@ -33,6 +33,18 @@ namespace ImageService.Controller.Handlers
             mPath = path;
         }
 
+        private void OnNewFileCreated(object sender, FileSystemEventArgs e)
+        {
+            foreach (string file in Directory.GetFiles(mPath))
+            {
+                if (mExtenstions.Contains(Path.GetExtension(file)))
+                {
+                    string[] args = { file };
+                    OnCommandRecieved(this, new CommandRecievedEventArgs(CommandEnum.NewFileCommand, args, mPath));
+                }
+            }
+        }
+
         public void OnCommandRecieved(object sender, CommandRecievedEventArgs e)
         {
             string msg = mImageController.ExecuteCommand(e.CommandID, e.Args, out bool result);
@@ -49,15 +61,7 @@ namespace ImageService.Controller.Handlers
 
         public void StartHandleDirectory(string dirPath)
         {
-            foreach (string file in Directory.GetFiles(mPath))
-            {
-                string[] args = { file, mPath };
-                if (mExtenstions.Contains(Path.GetExtension(file)))
-                {
-                    OnCommandRecieved(this, new CommandRecievedEventArgs(CommandEnum.NewFileCommand, args, dirPath));
-                }
-            }
+            mDirWatcher.Created += OnNewFileCreated;
         }
-
     }
 }
