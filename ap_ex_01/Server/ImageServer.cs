@@ -32,11 +32,13 @@ namespace ImageService.Server
         public void CreateHandler(string path)
         {
             DirectoyHandler dh = new DirectoyHandler(mController, mLoggingService, path);
+            dh.StartHandleDirectory(path);
             CommandRecieved += dh.OnCommandRecieved;
         }
 
         public void OnCloseServer()
         {
+            CommandRecieved?.Invoke(this, new CommandRecievedEventArgs(CommandEnum.CloseCommand, null, null));
         }
 
     }

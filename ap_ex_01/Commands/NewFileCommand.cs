@@ -1,4 +1,5 @@
 ﻿using ImageService.Infrastructure;
+using ImageService.Logging.Model;
 using ImageService.Model;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace ImageService.Commands
             mModel = Model;
         }
 
-        public string Execute(string[] args, out bool result)
+        public string Execute(string[] args, out MessageTypeEnum result)
         {
             // The string will return the new path if result is true, or the error message otherwise.
             return mModel.AddFile(args[0], out result);

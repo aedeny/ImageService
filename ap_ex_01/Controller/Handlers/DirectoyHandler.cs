@@ -10,6 +10,7 @@ using ImageService.Infrastructure.Enums;
 using ImageService.Logging;
 using ImageService.Logging.Model;
 using System.Text.RegularExpressions;
+using ImageService.Commands;
 
 namespace ImageService.Controller.Handlers
 {
@@ -20,6 +21,7 @@ namespace ImageService.Controller.Handlers
         private ILoggingService mLoggingService;
         private FileSystemWatcher mDirWatcher;
         private string mPath;
+        private Dictionary<CommandEnum, Action<string[]>> mCommands;
         private readonly string[] mExtenstions = { ".jpg", ".png", ".bmp", ".gif" };
         #endregion
 
@@ -31,37 +33,47 @@ namespace ImageService.Controller.Handlers
             mLoggingService = loggingService;
             mDirWatcher = new FileSystemWatcher(path);
             mPath = path;
+            mCommands = new Dictionary<CommandEnum, Action<string[]>>()
+            {
+                {CommandEnum.CloseCommand, new Action<string[]>(StopHandleDirectory)}
+            };
         }
 
         private void OnNewFileCreated(object sender, FileSystemEventArgs e)
         {
-            foreach (string file in Directory.GetFiles(mPath))
+            string filePath = new FileInfo(e.FullPath).FullName;
+
+            if (mExtenstions.Contains(Path.GetExtension(filePath)))
             {
-                if (mExtenstions.Contains(Path.GetExtension(file)))
-                {
-                    string[] args = { file };
-                    OnCommandRecieved(this, new CommandRecievedEventArgs(CommandEnum.NewFileCommand, args, mPath));
-                }
+                string[] args = { filePath };
+
+                // Tell the controller about the new file
+                string msg = mImageController.ExecuteCommand(CommandEnum.NewFileCommand, args, out MessageTypeEnum result);
+
+                mLoggingService.Log(msg, result);
             }
         }
 
+        public void StopHandleDirectory(string[] args)
+        {
+            mDirWatcher.Created -= OnNewFileCreated;
+            mLoggingService.Log("Stopped handling directory " + mPath, MessageTypeEnum.INFO);
+        }
+
+        // Invokes the corresponding method
         public void OnCommandRecieved(object sender, CommandRecievedEventArgs e)
         {
-            string msg = mImageController.ExecuteCommand(e.CommandID, e.Args, out bool result);
-
-            if (result)
+            if (!mCommands.TryGetValue(e.CommandID, out Action<string[]> currentCommand))
             {
-                mLoggingService.Log(msg, MessageTypeEnum.INFO);
+                return;
             }
-            else
-            {
-                mLoggingService.Log(msg, MessageTypeEnum.FAILURE);
-            }
+            currentCommand.BeginInvoke(e.Args, null, null);
         }
 
         public void StartHandleDirectory(string dirPath)
         {
             mDirWatcher.Created += OnNewFileCreated;
+            mLoggingService.Log("Started handling directory " + mPath, MessageTypeEnum.INFO);
         }
     }
 }

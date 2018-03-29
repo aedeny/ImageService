@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ImageService.Logging.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,6 @@ namespace ImageService.Model
         /// </summary>
         /// <param name="path">The Path of the Image from the file</param>
         /// <returns>Indication if the Addition Was Successful</returns>
-        string AddFile(string path, out bool result);
+        string AddFile(string path, out MessageTypeEnum result);
     }
 }

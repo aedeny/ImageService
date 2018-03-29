@@ -1,6 +1,7 @@
 ﻿using ImageService.Commands;
 using ImageService.Infrastructure;
 using ImageService.Infrastructure.Enums;
+using ImageService.Logging.Model;
 using ImageService.Model;
 using System;
 using System.Collections.Generic;
@@ -25,23 +26,24 @@ namespace ImageService.Controller
                 {CommandEnum.NewFileCommand, new NewFileCommand(mModel)}
             };
         }
-        public string ExecuteCommand(CommandEnum commandID, string[] args, out bool resultSuccesful)
+        public string ExecuteCommand(CommandEnum commandID, string[] args, out MessageTypeEnum result)
         {
-            resultSuccesful = false;
+            result = MessageTypeEnum.FAILURE;
 
             if (!mCommands.TryGetValue(commandID, out ICommand currentCommand))
             {
                 return "No such command";
             }
 
-            Task<Tuple<string, bool>> task = new Task<Tuple<string, bool>>(() =>
+            // Task == Thread
+            Task<Tuple<string, MessageTypeEnum>> task = new Task<Tuple<string, MessageTypeEnum>>(() =>
             {
-                string s = currentCommand.Execute(args, out bool temp);
+                string s = currentCommand.Execute(args, out MessageTypeEnum temp);
                 return Tuple.Create(s, temp);
             });
             task.Start();
-            Tuple<string, bool> tuple = task.Result;
-            resultSuccesful = tuple.Item2;
+            Tuple<string, MessageTypeEnum> tuple = task.Result;
+            result = tuple.Item2;
             return tuple.Item1;
         }
     }

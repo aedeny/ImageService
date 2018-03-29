@@ -4,6 +4,7 @@ using System.Text;
 using System.Drawing;
 using System.Text.RegularExpressions;
 using System.Drawing.Imaging;
+using ImageService.Logging.Model;
 //using static System.Net.Mime.MediaTypeNames;
 
 
@@ -32,9 +33,9 @@ namespace ImageService.Model
                 return DateTime.Parse(dateTaken);
             }
         }
-        public string AddFile(string path, out bool result)
+        public string AddFile(string path, out MessageTypeEnum result)
         {
-            result = false;
+            result = MessageTypeEnum.FAILURE;
             try
             {
                 if (!File.Exists(path))
@@ -71,6 +72,7 @@ namespace ImageService.Model
                 thumb.Save(Path.ChangeExtension(thumbnailDir, "thumb"));
 
                 System.IO.File.Copy(path, destDir, true);
+                result = MessageTypeEnum.INFO;
                 return destDir;
             }
             catch (Exception)

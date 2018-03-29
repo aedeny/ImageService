@@ -96,7 +96,7 @@ namespace ImageService
 
         protected override void OnStop()
         {
-
+            eventLog.WriteEntry("In OnStop");
         }
 
         private void OnMsgEvent(object sender, MessageRecievedEventArgs args)
