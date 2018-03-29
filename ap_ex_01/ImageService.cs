@@ -52,7 +52,7 @@ namespace ImageService
 
         // Here You will Use the App Config!
 
-        public ImageService()
+        public ImageService(string[] args)
         {
             InitializeComponent();
             eventLog = new System.Diagnostics.EventLog();
@@ -92,6 +92,8 @@ namespace ImageService
             mLoggingService = new LoggingService();
             mLoggingService.MsgRecievedEvent += OnMsgEvent;
             mImageServer = new ImageServer(mController, mLoggingService);
+            mImageServer.CreateHandler("C:\\Users\\edeny\\Documents\\ex01\\handled_dir");
+            mModel = new ImageServiceModel("C:\\Users\\edeny\\Documents\\ex01\\output", 100);
         }
 
         protected override void OnStop()

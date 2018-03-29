@@ -18,6 +18,13 @@ namespace ImageService.Model
         private string mOutputFolder;
         private int mThumbnailSize;
 
+
+        public ImageServiceModel(string outputFolder, int thumbnailSize)
+        {
+            mOutputFolder = outputFolder;
+            mThumbnailSize = thumbnailSize;
+        }
+
         // We init this once so that if the function is repeatedly called
         // it isn't stressing the garbage man
         private static Regex r = new Regex(":");
