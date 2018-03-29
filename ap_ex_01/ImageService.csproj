@@ -36,10 +36,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -55,19 +57,21 @@
     <Compile Include="Controller\Handlers\IDirectoryHandler.cs" />
     <Compile Include="Controller\IImageController.cs" />
     <Compile Include="Controller\ImageController.cs" />
+    <Compile Include="Enums\CommandEnum.cs" />
     <Compile Include="ImageService.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ImageService.Designer.cs">
       <DependentUpon>ImageService.cs</DependentUpon>
     </Compile>
+    <Compile Include="Logger\ILoggingService.cs" />
+    <Compile Include="Logger\LoggingService.cs" />
+    <Compile Include="Logger\Model\MessageRecievedEventArgs.cs" />
+    <Compile Include="Logger\Model\MessageTypeEnum.cs" />
     <Compile Include="Model\Event\CommandRecievedEventArgs.cs" />
     <Compile Include="Model\Event\DirectoryCloseEventArgs.cs" />
     <Compile Include="Model\IImageServiceModel.cs" />
     <Compile Include="Model\ImageServiceModel.cs" />
-    <Compile Include="obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
-    <Compile Include="obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
-    <Compile Include="obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ProjectInstaller.cs">
       <SubType>Component</SubType>
@@ -82,48 +86,22 @@
     <EmbeddedResource Include="ImageService.resx">
       <DependentUpon>ImageService.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="obj\Debug\ap_ex_01.ap_ex_01.resources" />
-    <EmbeddedResource Include="obj\Debug\ap_ex_01.ProjectInstaller.resources" />
     <EmbeddedResource Include="ProjectInstaller.resx">
       <DependentUpon>ProjectInstaller.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ImageService.Infrastructure\ImageService.Infrastructure.csproj">
-      <Project>{9a319f6c-fc34-4ed7-a007-5e44a9ffe34c}</Project>
-      <Name>ImageService.Infrastructure</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ImageService.Logging\ImageService.Logging.csproj">
-      <Project>{a1f4809a-6a88-4d9b-bf5b-01ba0f2ab5c6}</Project>
-      <Name>ImageService.Logging</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="bin\Debug\ap_ex_01.exe" />
     <Content Include="bin\Debug\ap_ex_01.pdb" />
-    <Content Include="obj\Debug\ap_ex_01.csproj.FileListAbsolute.txt" />
-    <Content Include="obj\Debug\ap_ex_01.exe" />
-    <Content Include="obj\Debug\ap_ex_01.pdb" />
-    <Content Include="obj\Debug\ImageService.csproj.FileListAbsolute.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="bin\Debug\ap_ex_01.exe.config" />
     <None Include="bin\Debug\ap_ex_01.InstallLog" />
     <None Include="bin\Debug\InstallUtil.InstallLog" />
-    <None Include="obj\Debug\ap2_ex_01.csproj.CoreCompileInputs.cache" />
-    <None Include="obj\Debug\ap_ex_01.csproj.CoreCompileInputs.cache" />
-    <None Include="obj\Debug\ap_ex_01.csproj.GenerateResource.Cache" />
-    <None Include="obj\Debug\ap_ex_01.csprojResolveAssemblyReference.cache" />
-    <None Include="obj\Debug\DesignTimeResolveAssemblyReferences.cache" />
-    <None Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
-    <None Include="obj\Debug\ImageService.csproj.CoreCompileInputs.cache" />
-    <None Include="obj\Debug\ImageService.csproj.GenerateResource.Cache" />
-    <None Include="obj\Debug\ImageService.csprojResolveAssemblyReference.cache" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bin\Release\" />
-    <Folder Include="obj\Debug\TempPE\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

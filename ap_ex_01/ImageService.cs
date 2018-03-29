@@ -88,12 +88,12 @@ namespace ImageService
             // Update the service state to Running.  
             serviceStatus.dwCurrentState = ServiceState.SERVICE_RUNNING;
             SetServiceStatus(this.ServiceHandle, ref serviceStatus);
-
             mLoggingService = new LoggingService();
             mLoggingService.MsgRecievedEvent += OnMsgEvent;
+            mModel = new ImageServiceModel("C:\\Users\\edeny\\Documents\\ex01\\output", 100, mLoggingService);
+            mController = new ImageController(mModel);
             mImageServer = new ImageServer(mController, mLoggingService);
             mImageServer.CreateHandler("C:\\Users\\edeny\\Documents\\ex01\\handled_dir");
-            mModel = new ImageServiceModel("C:\\Users\\edeny\\Documents\\ex01\\output", 100);
         }
 
         protected override void OnStop()

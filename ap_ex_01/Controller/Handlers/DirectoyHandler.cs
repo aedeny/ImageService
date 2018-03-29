@@ -31,7 +31,10 @@ namespace ImageService.Controller.Handlers
         {
             mImageController = imageController;
             mLoggingService = loggingService;
-            mDirWatcher = new FileSystemWatcher(path);
+            mDirWatcher = new FileSystemWatcher(path)
+            {
+                EnableRaisingEvents = true
+            };
             mPath = path;
             mCommands = new Dictionary<CommandEnum, Action<string[]>>()
             {
@@ -41,12 +44,15 @@ namespace ImageService.Controller.Handlers
 
         private void OnNewFileCreated(object sender, FileSystemEventArgs e)
         {
+            mLoggingService.Log("OnNewFileCreated: " + e.FullPath, MessageTypeEnum.INFO);
             string filePath = new FileInfo(e.FullPath).FullName;
+            mLoggingService.Log("filePath: " + filePath, MessageTypeEnum.INFO);
 
+            mLoggingService.Log("ext: " + Path.GetExtension(filePath), MessageTypeEnum.INFO);
             if (mExtenstions.Contains(Path.GetExtension(filePath)))
             {
                 string[] args = { filePath };
-
+                mLoggingService.Log("inside", MessageTypeEnum.INFO);
                 // Tell the controller about the new file
                 string msg = mImageController.ExecuteCommand(CommandEnum.NewFileCommand, args, out MessageTypeEnum result);
 
@@ -72,7 +78,7 @@ namespace ImageService.Controller.Handlers
 
         public void StartHandleDirectory(string dirPath)
         {
-            mDirWatcher.Created += OnNewFileCreated;
+            mDirWatcher.Created += new FileSystemEventHandler(OnNewFileCreated);
             mLoggingService.Log("Started handling directory " + mPath, MessageTypeEnum.INFO);
         }
     }
