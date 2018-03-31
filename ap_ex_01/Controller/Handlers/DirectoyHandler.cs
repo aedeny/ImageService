@@ -3,14 +3,9 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ImageService.Infrastructure;
-using ImageService.Infrastructure.Enums;
-using ImageService.Logging;
-using ImageService.Logging.Model;
-using System.Text.RegularExpressions;
-using ImageService.Commands;
+using ImageService.Enums;
+using ImageService.Logger;
+using ImageService.Logger.Model;
 
 namespace ImageService.Controller.Handlers
 {
@@ -46,14 +41,12 @@ namespace ImageService.Controller.Handlers
         {
             mLoggingService.Log("OnNewFileCreated: " + e.FullPath, MessageTypeEnum.INFO);
             string filePath = new FileInfo(e.FullPath).FullName;
-            mLoggingService.Log("filePath: " + filePath, MessageTypeEnum.INFO);
 
-            mLoggingService.Log("ext: " + Path.GetExtension(filePath), MessageTypeEnum.INFO);
             if (mExtenstions.Contains(Path.GetExtension(filePath)))
             {
                 string[] args = { filePath };
-                mLoggingService.Log("inside", MessageTypeEnum.INFO);
-                // Tell the controller about the new file
+                
+                // Tells the controller about the new file
                 string msg = mImageController.ExecuteCommand(CommandEnum.NewFileCommand, args, out MessageTypeEnum result);
 
                 mLoggingService.Log(msg, result);

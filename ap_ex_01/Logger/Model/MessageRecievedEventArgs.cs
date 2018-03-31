@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ImageService.Logging.Model
+namespace ImageService.Logger.Model
 {
     public class MessageRecievedEventArgs : EventArgs
     {

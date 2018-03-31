@@ -1,7 +1,7 @@
 ﻿using ImageService.Controller;
 using ImageService.Controller.Handlers;
-using ImageService.Infrastructure.Enums;
-using ImageService.Logging;
+using ImageService.Enums;
+using ImageService.Logger;
 using ImageService.Model;
 using System;
 using System.Collections.Generic;
@@ -36,7 +36,7 @@ namespace ImageService.Server
             CommandRecieved += dh.OnCommandRecieved;
         }
 
-        public void OnCloseServer()
+        public void Close()
         {
             CommandRecieved?.Invoke(this, new CommandRecievedEventArgs(CommandEnum.CloseCommand, null, null));
         }

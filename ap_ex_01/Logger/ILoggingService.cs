@@ -1,15 +1,11 @@
-﻿using ImageService.Logging.Model;
+﻿using ImageService.Logger.Model;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ImageService.Logging
+namespace ImageService.Logger
 {
     public interface ILoggingService
     {
         event EventHandler<MessageRecievedEventArgs> MsgRecievedEvent;
-        void Log(string message, MessageTypeEnum type);           // Logging the Message
+        void Log(string message, MessageTypeEnum type);
     }
 }

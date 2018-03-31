@@ -1,12 +1,9 @@
 ﻿using ImageService.Commands;
-using ImageService.Infrastructure;
-using ImageService.Infrastructure.Enums;
-using ImageService.Logging.Model;
+using ImageService.Enums;
+using ImageService.Logger.Model;
 using ImageService.Model;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ImageService.Controller

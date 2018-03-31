@@ -1,20 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Linq;
 using System.ServiceProcess;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using ImageService.Server;
 using ImageService.Controller;
 using ImageService.Model;
-using ImageService.Logging;
-using ImageService.Logging.Model;
+using ImageService.Logger;
+using ImageService.Logger.Model;
 using System.Configuration;
-using ImageService.Infrastructure;
 
 namespace ImageService
 {
@@ -50,23 +43,27 @@ namespace ImageService
         private IImageController mController;
         private ILoggingService mLoggingService;
 
-        // Here You will Use the App Config!
+        // Gets info from App.config
+        string sourceName = ConfigurationManager.AppSettings["SourceName"];
+        string logName = ConfigurationManager.AppSettings["LogName"];
 
         public ImageService(string[] args)
         {
             InitializeComponent();
             eventLog = new System.Diagnostics.EventLog();
-            if (!System.Diagnostics.EventLog.SourceExists("MySource"))
+            if (!System.Diagnostics.EventLog.SourceExists(sourceName))
             {
                 System.Diagnostics.EventLog.CreateEventSource(
-                    "MySource", "MyNewLog");
+                    sourceName, logName);
             }
-            eventLog.Source = "MySource";
-            eventLog.Log = "MyNewLog";
+            eventLog.Source = sourceName;
+            eventLog.Log = logName;
         }
 
         protected override void OnStart(string[] args)
         {
+            eventLog.WriteEntry("In OnStart");
+
             // Sets up a timer to trigger every minute.  
             System.Timers.Timer timer = new System.Timers.Timer
             {
@@ -76,8 +73,7 @@ namespace ImageService
             timer.Elapsed += new System.Timers.ElapsedEventHandler(this.OnTimer);
             timer.Start();
 
-            eventLog.WriteEntry("In OnStart");
-            // Update the service state to Start Pending.  
+            // Updates the service state to Start Pending.  
             ServiceStatus serviceStatus = new ServiceStatus
             {
                 dwCurrentState = ServiceState.SERVICE_START_PENDING,
@@ -85,20 +81,31 @@ namespace ImageService
             };
             SetServiceStatus(this.ServiceHandle, ref serviceStatus);
 
-            // Update the service state to Running.  
+            // Updates the service state to Running.  
             serviceStatus.dwCurrentState = ServiceState.SERVICE_RUNNING;
             SetServiceStatus(this.ServiceHandle, ref serviceStatus);
             mLoggingService = new LoggingService();
             mLoggingService.MsgRecievedEvent += OnMsgEvent;
-            mModel = new ImageServiceModel("C:\\Users\\edeny\\Documents\\ex01\\output", 100, mLoggingService);
+
+            // Gets info from App.config
+            string outputDir = ConfigurationManager.AppSettings["OutputDir"];
+            string handledDir = ConfigurationManager.AppSettings["HandledDir"];
+            if (!int.TryParse(ConfigurationManager.AppSettings["ThumbnailSize"], out int thumbnailSize))
+            {
+                // Sets default thumbnail size
+                thumbnailSize = 100;
+            }
+
+            mModel = new ImageServiceModel(outputDir, thumbnailSize, mLoggingService);
             mController = new ImageController(mModel);
             mImageServer = new ImageServer(mController, mLoggingService);
-            mImageServer.CreateHandler("C:\\Users\\edeny\\Documents\\ex01\\handled_dir");
+            mImageServer.CreateHandler(handledDir);
         }
 
         protected override void OnStop()
         {
             eventLog.WriteEntry("In OnStop");
+            mImageServer.Close();
         }
 
         private void OnMsgEvent(object sender, MessageRecievedEventArgs args)
@@ -111,7 +118,6 @@ namespace ImageService
 
         public void OnTimer(object sender, System.Timers.ElapsedEventArgs args)
         {
-            // TODO: Insert monitoring activities here.  
             eventLog.WriteEntry("Monitoring the System", EventLogEntryType.Information, eventId++);
         }
     }

@@ -1,12 +1,7 @@
-﻿
-using ImageService.Logging.Model;
+﻿using ImageService.Logger.Model;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ImageService.Logging
+namespace ImageService.Logger
 {
     public class LoggingService : ILoggingService
     {

@@ -1,11 +1,5 @@
-﻿using ImageService.Infrastructure;
-using ImageService.Logging.Model;
+﻿using ImageService.Logger.Model;
 using ImageService.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ImageService.Commands
 {

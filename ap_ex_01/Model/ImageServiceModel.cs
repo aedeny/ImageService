@@ -4,11 +4,8 @@ using System.Text;
 using System.Drawing;
 using System.Text.RegularExpressions;
 using System.Drawing.Imaging;
-using ImageService.Logging.Model;
-using ImageService.Logging;
-//using static System.Net.Mime.MediaTypeNames;
-
-
+using ImageService.Logger.Model;
+using ImageService.Logger;
 
 namespace ImageService.Model
 {
@@ -19,7 +16,7 @@ namespace ImageService.Model
         private string mOutputFolder;
         private int mThumbnailSize;
         private ILoggingService mLoggingService;
-
+        #endregion
 
         public ImageServiceModel(string outputFolder, int thumbnailSize, ILoggingService loggingService)
         {
@@ -28,21 +25,14 @@ namespace ImageService.Model
             mLoggingService = loggingService;
         }
 
-        // We init this once so that if the function is repeatedly called
-        // it isn't stressing the garbage man
         private static Regex r = new Regex(":");
 
-        // Retrieves the datetime WITHOUT loading the whole image
-        private DateTime GetDateTakenFromImage(string path)
+        private DateTime GetDateTakenFromImage(string filePath)
         {
-            mLoggingService.Log("aa", MessageTypeEnum.INFO);
-
-            // TODO Stuck here (doesn't reach to bb)
-            using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
+            using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
             using (Image myImage = Image.FromStream(fs, false, false))
             {
-                mLoggingService.Log("bb", MessageTypeEnum.INFO);
-                PropertyItem propItem = myImage.GetPropertyItem(36867);
+                PropertyItem propItem = myImage.GetPropertyItem(306);
                 string dateTaken = r.Replace(Encoding.UTF8.GetString(propItem.Value), "-", 2);
                 mLoggingService.Log("dateTakenString: " + dateTaken, MessageTypeEnum.INFO);
                 return DateTime.Parse(dateTaken);
@@ -50,8 +40,8 @@ namespace ImageService.Model
         }
         public string AddFile(string path, out MessageTypeEnum result)
         {
-            mLoggingService.Log("In AddFile", MessageTypeEnum.INFO);
             result = MessageTypeEnum.FAILURE;
+
             try
             {
                 if (!File.Exists(path))
@@ -59,59 +49,48 @@ namespace ImageService.Model
                     return "File does not exist.";
                 }
 
-                mLoggingService.Log("a", MessageTypeEnum.INFO);
-
-                // Checks if output folder exists
-                if (!Directory.Exists(mOutputFolder))
+                // Tries to get date taken from image. If property doesn't exist, gets date created.
+                DateTime dateTime;
+                try
                 {
-                    Directory.CreateDirectory(mOutputFolder);
+                    dateTime = GetDateTakenFromImage(path);
+                }
+                catch (Exception)
+                {
+                    dateTime = File.GetCreationTime(path);
                 }
 
-                mLoggingService.Log("b", MessageTypeEnum.INFO);
-                DateTime dateTime = GetDateTakenFromImage(path);
+                CreateDirectoriesStructure(dateTime);
 
-                string pathInOutputDirSuffix = "\\" + dateTime.Year;
-                if (!Directory.Exists(mOutputFolder + pathInOutputDirSuffix))
-                {
-                    Directory.CreateDirectory(mOutputFolder + pathInOutputDirSuffix);
-                }
+                string pathSuffix = dateTime.Year + "\\" + dateTime.Month + "\\" + Path.GetFileName(path);
+                string outputFilePath = mOutputFolder + "\\" + pathSuffix;
+                string thumbnailPath = mOutputFolder + "\\thumbnails\\" + pathSuffix;
 
-                mLoggingService.Log("c", MessageTypeEnum.INFO);
-                pathInOutputDirSuffix += "\\" + dateTime.Month;
-                string destDir = mOutputFolder + pathInOutputDirSuffix;
-
-                if (!Directory.Exists(destDir))
-                {
-                    Directory.CreateDirectory(destDir);
-                }
-
-                mLoggingService.Log("d", MessageTypeEnum.INFO);
                 // Creates thumbnail
-                string thumbnailDir = mOutputFolder + "\\Thumbnails" + pathInOutputDirSuffix;
-                Image image = Image.FromFile(path);
-                Image thumb = image.GetThumbnailImage(mThumbnailSize, mThumbnailSize, () => false, IntPtr.Zero);
-                thumb.Save(Path.ChangeExtension(thumbnailDir, "thumb"));
+                using (Image image = Image.FromFile(path))
+                using (Image thumb = image.GetThumbnailImage(mThumbnailSize, mThumbnailSize, () => false, IntPtr.Zero))
+                    thumb.Save(Path.ChangeExtension(thumbnailPath, "thumb"));
 
-                mLoggingService.Log("e", MessageTypeEnum.INFO);
-                System.IO.File.Copy(path, destDir, true);
+                // Copies file to output folder
+                System.IO.File.Copy(path, outputFilePath, true);
+
                 result = MessageTypeEnum.INFO;
-
-                mLoggingService.Log("f", MessageTypeEnum.INFO);
-                return destDir;
+                return outputFilePath;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return "Could not add file.";
+                return e.Message;
             }
         }
-        // TODO Change to more specific error discriptions
-        // TODO Create Dir if doesn't exist function
 
+        private void CreateDirectoriesStructure(DateTime dateTime)
+        {
+            // Creates image folder
+            Directory.CreateDirectory(mOutputFolder + "\\" + dateTime.Year + "\\" + dateTime.Month);
 
+            // Creates thumbnail folder
+            Directory.CreateDirectory(mOutputFolder + "\\thumbnails\\" + dateTime.Year + "\\" + dateTime.Month);
+        }
     }
-
-
-    #endregion
-
 }
 
