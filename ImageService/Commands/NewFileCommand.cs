@@ -14,7 +14,6 @@ namespace ImageService.Commands
 
         public string Execute(string[] args, out MessageTypeEnum result)
         {
-            // The string will return the new path if result is true, or the error message otherwise.
             return _model.AddFile(args[0], out result);
         }
     }

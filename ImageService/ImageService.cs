@@ -12,7 +12,6 @@ using ImageService.Server;
 
 namespace ImageService
 {
-
     public enum ServiceState
     {
         ServiceStopped = 0x00000001,
@@ -47,7 +46,7 @@ namespace ImageService
         // Gets info from App.config
         private readonly string _sourceName = ConfigurationManager.AppSettings["SourceName"];
         private readonly string _logName = ConfigurationManager.AppSettings["LogName"];
-        
+
         public ImageService()
         {
             InitializeComponent();
@@ -57,6 +56,7 @@ namespace ImageService
                 EventLog.CreateEventSource(
                     _sourceName, _logName);
             }
+
             eventLog.Source = _sourceName;
             eventLog.Log = _logName;
         }

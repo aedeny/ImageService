@@ -13,6 +13,5 @@ namespace ImageService.Model.Event
             DirectoryPath = dirPath;
             Message = message;
         }
-
     }
 }

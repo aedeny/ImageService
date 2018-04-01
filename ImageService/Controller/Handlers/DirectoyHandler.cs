@@ -12,12 +12,14 @@ namespace ImageService.Controller.Handlers
     public class DirectoyHandler : IDirectoryHandler
     {
         #region Members
+
         private readonly IImageController _imageController;
         private readonly ILoggingService _loggingService;
         private readonly FileSystemWatcher _dirWatcher;
         private readonly string _path;
         private readonly Dictionary<CommandEnum, Action<string[]>> _commandsDictionary;
-        private readonly string[] _extenstions = { ".jpg", ".png", ".bmp", ".gif" };
+        private readonly string[] _extenstions = {".jpg", ".png", ".bmp", ".gif"};
+
         #endregion
 
         public event EventHandler<DirectoryCloseEventArgs> DirectoryClosedEvent;
@@ -42,15 +44,14 @@ namespace ImageService.Controller.Handlers
             _loggingService.Log("OnNewFileCreated: " + e.FullPath, MessageTypeEnum.Info);
             string filePath = new FileInfo(e.FullPath).FullName;
 
-            if (_extenstions.Contains(Path.GetExtension(filePath)))
-            {
-                string[] args = { filePath };
-                
-                // Tells the controller about the new file
-                string msg = _imageController.ExecuteCommand(CommandEnum.NewFileCommand, args, out MessageTypeEnum result);
+            if (!_extenstions.Contains(Path.GetExtension(filePath))) return;
+            string[] args = {filePath};
 
-                _loggingService.Log(msg, result);
-            }
+            // Notifies the controller about the newly created file
+            string msg =
+                _imageController.ExecuteCommand(CommandEnum.NewFileCommand, args, out MessageTypeEnum result);
+
+            _loggingService.Log(msg, result);
         }
 
         public void StopHandleDirectory(string[] args)
@@ -66,6 +67,7 @@ namespace ImageService.Controller.Handlers
             {
                 return;
             }
+
             currentCommand.BeginInvoke(e.Args, null, null);
         }
 

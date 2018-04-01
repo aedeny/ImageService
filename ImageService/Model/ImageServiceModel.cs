@@ -8,14 +8,13 @@ using ImageService.Logger.Model;
 
 namespace ImageService.Model
 {
-
     public class ImageServiceModel : IImageServiceModel
     {
         #region Members
+
         private readonly string _outputFolder;
         private readonly int _thumbnailSize;
         private static readonly Regex Regex = new Regex(":");
-
 
         #endregion
 
@@ -91,4 +90,3 @@ namespace ImageService.Model
         }
     }
 }
-

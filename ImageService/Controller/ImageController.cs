@@ -13,7 +13,6 @@ namespace ImageService.Controller
         private readonly Dictionary<CommandEnum, ICommand> _commandsDictionary;
 
 
-
         public ImageController(IImageServiceModel model)
         {
             _commandsDictionary = new Dictionary<CommandEnum, ICommand>
@@ -21,6 +20,7 @@ namespace ImageService.Controller
                 {CommandEnum.NewFileCommand, new NewFileCommand(model)}
             };
         }
+
         public string ExecuteCommand(CommandEnum commandId, string[] args, out MessageTypeEnum result)
         {
             result = MessageTypeEnum.Failure;
@@ -30,7 +30,6 @@ namespace ImageService.Controller
                 return "No such command";
             }
 
-            // Task == Thread
             Task<Tuple<string, MessageTypeEnum>> task = new Task<Tuple<string, MessageTypeEnum>>(() =>
             {
                 string s = currentCommand.Execute(args, out MessageTypeEnum temp);
@@ -39,6 +38,7 @@ namespace ImageService.Controller
             task.Start();
             Tuple<string, MessageTypeEnum> tuple = task.Result;
             result = tuple.Item2;
+
             return tuple.Item1;
         }
     }

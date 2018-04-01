@@ -10,13 +10,17 @@ namespace ImageService.Server
     public class ImageServer
     {
         #region Members
+
         private readonly IImageController _controller;
         private readonly ILoggingService _loggingService;
+
         #endregion
 
         #region Properties
+
         // The event that notifies about a new command being recieved
         public event EventHandler<CommandRecievedEventArgs> CommandRecieved;
+
         #endregion
 
         public ImageServer(IImageController controller, ILoggingService loggingService)
@@ -36,6 +40,5 @@ namespace ImageService.Server
         {
             CommandRecieved?.Invoke(this, new CommandRecievedEventArgs(CommandEnum.CloseCommand, null, null));
         }
-
     }
 }
