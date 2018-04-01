@@ -1,13 +1,14 @@
 ﻿using System;
+using System.Configuration;
 using System.Diagnostics;
-using System.ServiceProcess;
 using System.Runtime.InteropServices;
-using ImageService.Server;
+using System.ServiceProcess;
+using System.Timers;
 using ImageService.Controller;
-using ImageService.Model;
 using ImageService.Logger;
 using ImageService.Logger.Model;
-using System.Configuration;
+using ImageService.Model;
+using ImageService.Server;
 
 namespace ImageService
 {
@@ -20,7 +21,7 @@ namespace ImageService
         ServiceRunning = 0x00000004,
         ServiceContinuePending = 0x00000005,
         ServicePausePending = 0x00000006,
-        ServicePaused = 0x00000007,
+        ServicePaused = 0x00000007
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -33,7 +34,7 @@ namespace ImageService
         public int dwServiceSpecificExitCode;
         public int dwCheckPoint;
         public int dwWaitHint;
-    };
+    }
 
     public partial class ImageService : ServiceBase
     {
@@ -47,13 +48,13 @@ namespace ImageService
         private readonly string _sourceName = ConfigurationManager.AppSettings["SourceName"];
         private readonly string _logName = ConfigurationManager.AppSettings["LogName"];
         
-        public ImageService(string[] args)
+        public ImageService()
         {
             InitializeComponent();
-            eventLog = new System.Diagnostics.EventLog();
-            if (!System.Diagnostics.EventLog.SourceExists(_sourceName))
+            eventLog = new EventLog();
+            if (!EventLog.SourceExists(_sourceName))
             {
-                System.Diagnostics.EventLog.CreateEventSource(
+                EventLog.CreateEventSource(
                     _sourceName, _logName);
             }
             eventLog.Source = _sourceName;
@@ -65,12 +66,12 @@ namespace ImageService
             eventLog.WriteEntry("In OnStart");
 
             // Sets up a timer to trigger every minute.  
-            System.Timers.Timer timer = new System.Timers.Timer
+            Timer timer = new Timer
             {
                 // 60 seconds
                 Interval = 60000
             };
-            timer.Elapsed += new System.Timers.ElapsedEventHandler(this.OnTimer);
+            timer.Elapsed += OnTimer;
             timer.Start();
 
             // Updates the service state to Start Pending.  
@@ -79,11 +80,11 @@ namespace ImageService
                 dwCurrentState = ServiceState.ServiceStartPending,
                 dwWaitHint = 100000
             };
-            SetServiceStatus(this.ServiceHandle, ref serviceStatus);
+            SetServiceStatus(ServiceHandle, ref serviceStatus);
 
             // Updates the service state to Running.  
             serviceStatus.dwCurrentState = ServiceState.ServiceRunning;
-            SetServiceStatus(this.ServiceHandle, ref serviceStatus);
+            SetServiceStatus(ServiceHandle, ref serviceStatus);
             _loggingService = new LoggingService();
             _loggingService.MsgRecievedEvent += OnMsgEvent;
 
@@ -96,7 +97,7 @@ namespace ImageService
                 thumbnailSize = 100;
             }
 
-            _model = new ImageServiceModel(outputDir, thumbnailSize, _loggingService);
+            _model = new ImageServiceModel(outputDir, thumbnailSize);
             _controller = new ImageController(_model);
             _imageServer = new ImageServer(_controller, _loggingService);
             _imageServer.CreateHandler(handledDir);
@@ -116,7 +117,7 @@ namespace ImageService
         [DllImport("advapi32.dll", SetLastError = true)]
         private static extern bool SetServiceStatus(IntPtr handle, ref ServiceStatus serviceStatus);
 
-        public void OnTimer(object sender, System.Timers.ElapsedEventArgs args)
+        public void OnTimer(object sender, ElapsedEventArgs args)
         {
             eventLog.WriteEntry("Monitoring the System", EventLogEntryType.Information, _eventId++);
         }

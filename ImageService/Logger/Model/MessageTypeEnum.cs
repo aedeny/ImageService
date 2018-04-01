@@ -1,6 +1,6 @@
 ﻿namespace ImageService.Logger.Model
 {
-    public enum MessageTypeEnum : int
+    public enum MessageTypeEnum
     {
         Info,
         Warning,

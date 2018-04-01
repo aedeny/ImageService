@@ -1,11 +1,10 @@
 ﻿using System;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Text;
-using System.Drawing;
 using System.Text.RegularExpressions;
-using System.Drawing.Imaging;
 using ImageService.Logger.Model;
-using ImageService.Logger;
 
 namespace ImageService.Model
 {
@@ -15,17 +14,15 @@ namespace ImageService.Model
         #region Members
         private readonly string _outputFolder;
         private readonly int _thumbnailSize;
-        private ILoggingService _loggingService;
         private static readonly Regex Regex = new Regex(":");
 
 
         #endregion
 
-        public ImageServiceModel(string outputFolder, int thumbnailSize, ILoggingService loggingService)
+        public ImageServiceModel(string outputFolder, int thumbnailSize)
         {
             _outputFolder = outputFolder;
             _thumbnailSize = thumbnailSize;
-            _loggingService = loggingService;
         }
 
         private static DateTime GetDateTakenFromImage(string filePath)
@@ -73,7 +70,7 @@ namespace ImageService.Model
                     thumb.Save(Path.ChangeExtension(thumbnailPath, "thumb"));
 
                 // Copies file to output folder
-                System.IO.File.Copy(path, outputFilePath, true);
+                File.Copy(path, outputFilePath, true);
 
                 result = MessageTypeEnum.Info;
                 return outputFilePath;

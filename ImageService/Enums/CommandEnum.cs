@@ -1,6 +1,6 @@
 ﻿namespace ImageService.Enums
 {
-    public enum CommandEnum : int
+    public enum CommandEnum
     {
         NewFileCommand,
         CloseCommand

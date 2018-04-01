@@ -1,5 +1,5 @@
-﻿using ImageService.Model;
-using System;
+﻿using System;
+using ImageService.Model.Event;
 
 namespace ImageService.Controller.Handlers
 {

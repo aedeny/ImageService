@@ -1,10 +1,10 @@
-﻿using ImageService.Commands;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using ImageService.Commands;
 using ImageService.Enums;
 using ImageService.Logger.Model;
 using ImageService.Model;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace ImageService.Controller
 {
@@ -16,7 +16,7 @@ namespace ImageService.Controller
 
         public ImageController(IImageServiceModel model)
         {
-            _commandsDictionary = new Dictionary<CommandEnum, ICommand>()
+            _commandsDictionary = new Dictionary<CommandEnum, ICommand>
             {
                 {CommandEnum.NewFileCommand, new NewFileCommand(model)}
             };

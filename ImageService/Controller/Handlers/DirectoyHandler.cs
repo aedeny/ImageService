@@ -1,11 +1,11 @@
-﻿using ImageService.Model;
-using System;
-using System.IO;
+﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using ImageService.Enums;
 using ImageService.Logger;
 using ImageService.Logger.Model;
+using ImageService.Model.Event;
 
 namespace ImageService.Controller.Handlers
 {
@@ -31,9 +31,9 @@ namespace ImageService.Controller.Handlers
                 EnableRaisingEvents = true
             };
             _path = path;
-            _commandsDictionary = new Dictionary<CommandEnum, Action<string[]>>()
+            _commandsDictionary = new Dictionary<CommandEnum, Action<string[]>>
             {
-                {CommandEnum.CloseCommand, new Action<string[]>(StopHandleDirectory)}
+                {CommandEnum.CloseCommand, StopHandleDirectory}
             };
         }
 
@@ -71,7 +71,7 @@ namespace ImageService.Controller.Handlers
 
         public void StartHandleDirectory(string dirPath)
         {
-            _dirWatcher.Created += new FileSystemEventHandler(OnNewFileCreated);
+            _dirWatcher.Created += OnNewFileCreated;
             _loggingService.Log("Started handling directory " + _path, MessageTypeEnum.Info);
         }
     }

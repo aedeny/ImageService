@@ -1,7 +1,7 @@
-﻿using ImageService.Enums;
-using System;
+﻿using System;
+using ImageService.Enums;
 
-namespace ImageService.Model
+namespace ImageService.Model.Event
 {
     public class CommandRecievedEventArgs : EventArgs
     {

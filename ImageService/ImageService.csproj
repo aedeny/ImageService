@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{C530B804-88D2-4EF3-9843-0162F1B0F1BB}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>ap_ex_01</RootNamespace>
-    <AssemblyName>ap_ex_01</AssemblyName>
+    <RootNamespace>ImageService</RootNamespace>
+    <AssemblyName>ImageService</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -32,7 +32,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>ap_ex_01.Program</StartupObject>
+    <StartupObject>ImageService.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

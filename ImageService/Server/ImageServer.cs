@@ -1,21 +1,17 @@
-﻿using ImageService.Controller;
+﻿using System;
+using ImageService.Controller;
 using ImageService.Controller.Handlers;
 using ImageService.Enums;
 using ImageService.Logger;
-using ImageService.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ImageService.Model.Event;
 
 namespace ImageService.Server
 {
     public class ImageServer
     {
         #region Members
-        private IImageController mController;
-        private ILoggingService mLoggingService;
+        private readonly IImageController _controller;
+        private readonly ILoggingService _loggingService;
         #endregion
 
         #region Properties
@@ -25,13 +21,13 @@ namespace ImageService.Server
 
         public ImageServer(IImageController controller, ILoggingService loggingService)
         {
-            mController = controller;
-            mLoggingService = loggingService;
+            _controller = controller;
+            _loggingService = loggingService;
         }
 
         public void CreateHandler(string path)
         {
-            DirectoyHandler dh = new DirectoyHandler(mController, mLoggingService, path);
+            DirectoyHandler dh = new DirectoyHandler(_controller, _loggingService, path);
             dh.StartHandleDirectory(path);
             CommandRecieved += dh.OnCommandRecieved;
         }

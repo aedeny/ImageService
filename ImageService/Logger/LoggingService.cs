@@ -1,5 +1,5 @@
-﻿using ImageService.Logger.Model;
-using System;
+﻿using System;
+using ImageService.Logger.Model;
 
 namespace ImageService.Logger
 {

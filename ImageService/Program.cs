@@ -1,20 +1,18 @@
 ﻿using System.ServiceProcess;
 
-namespace ap_ex_01
+namespace ImageService
 {
     internal static class Program
     {
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
-        private static void Main(string[] args)
+        private static void Main()
         {
-            ServiceBase[] ServicesToRun;
-            ServicesToRun = new ServiceBase[]
-            {
-                new ImageService.ImageService(args)
+            ServiceBase[] servicesToRun = {
+                new ImageService()
             };
-            ServiceBase.Run(ServicesToRun);
+            ServiceBase.Run(servicesToRun);
         }
     }
 }
