@@ -13,34 +13,35 @@ namespace ImageService.Model
     public class ImageServiceModel : IImageServiceModel
     {
         #region Members
-        private string mOutputFolder;
-        private int mThumbnailSize;
-        private ILoggingService mLoggingService;
+        private readonly string _outputFolder;
+        private readonly int _thumbnailSize;
+        private ILoggingService _loggingService;
+        private static readonly Regex Regex = new Regex(":");
+
+
         #endregion
 
         public ImageServiceModel(string outputFolder, int thumbnailSize, ILoggingService loggingService)
         {
-            mOutputFolder = outputFolder;
-            mThumbnailSize = thumbnailSize;
-            mLoggingService = loggingService;
+            _outputFolder = outputFolder;
+            _thumbnailSize = thumbnailSize;
+            _loggingService = loggingService;
         }
 
-        private static Regex r = new Regex(":");
-
-        private DateTime GetDateTakenFromImage(string filePath)
+        private static DateTime GetDateTakenFromImage(string filePath)
         {
             using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
             using (Image myImage = Image.FromStream(fs, false, false))
             {
                 PropertyItem propItem = myImage.GetPropertyItem(306);
-                string dateTaken = r.Replace(Encoding.UTF8.GetString(propItem.Value), "-", 2);
-                mLoggingService.Log("dateTakenString: " + dateTaken, MessageTypeEnum.INFO);
+                string dateTaken = Regex.Replace(Encoding.UTF8.GetString(propItem.Value), "-", 2);
                 return DateTime.Parse(dateTaken);
             }
         }
+
         public string AddFile(string path, out MessageTypeEnum result)
         {
-            result = MessageTypeEnum.FAILURE;
+            result = MessageTypeEnum.Failure;
 
             try
             {
@@ -63,18 +64,18 @@ namespace ImageService.Model
                 CreateDirectoriesStructure(dateTime);
 
                 string pathSuffix = dateTime.Year + "\\" + dateTime.Month + "\\" + Path.GetFileName(path);
-                string outputFilePath = mOutputFolder + "\\" + pathSuffix;
-                string thumbnailPath = mOutputFolder + "\\thumbnails\\" + pathSuffix;
+                string outputFilePath = _outputFolder + "\\" + pathSuffix;
+                string thumbnailPath = _outputFolder + "\\thumbnails\\" + pathSuffix;
 
                 // Creates thumbnail
                 using (Image image = Image.FromFile(path))
-                using (Image thumb = image.GetThumbnailImage(mThumbnailSize, mThumbnailSize, () => false, IntPtr.Zero))
+                using (Image thumb = image.GetThumbnailImage(_thumbnailSize, _thumbnailSize, () => false, IntPtr.Zero))
                     thumb.Save(Path.ChangeExtension(thumbnailPath, "thumb"));
 
                 // Copies file to output folder
                 System.IO.File.Copy(path, outputFilePath, true);
 
-                result = MessageTypeEnum.INFO;
+                result = MessageTypeEnum.Info;
                 return outputFilePath;
             }
             catch (Exception e)
@@ -86,10 +87,10 @@ namespace ImageService.Model
         private void CreateDirectoriesStructure(DateTime dateTime)
         {
             // Creates image folder
-            Directory.CreateDirectory(mOutputFolder + "\\" + dateTime.Year + "\\" + dateTime.Month);
+            Directory.CreateDirectory(_outputFolder + "\\" + dateTime.Year + "\\" + dateTime.Month);
 
             // Creates thumbnail folder
-            Directory.CreateDirectory(mOutputFolder + "\\thumbnails\\" + dateTime.Year + "\\" + dateTime.Month);
+            Directory.CreateDirectory(_outputFolder + "\\thumbnails\\" + dateTime.Year + "\\" + dateTime.Month);
         }
     }
 }

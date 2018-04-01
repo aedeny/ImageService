@@ -14,13 +14,13 @@ namespace ImageService
 
     public enum ServiceState
     {
-        SERVICE_STOPPED = 0x00000001,
-        SERVICE_START_PENDING = 0x00000002,
-        SERVICE_STOP_PENDING = 0x00000003,
-        SERVICE_RUNNING = 0x00000004,
-        SERVICE_CONTINUE_PENDING = 0x00000005,
-        SERVICE_PAUSE_PENDING = 0x00000006,
-        SERVICE_PAUSED = 0x00000007,
+        ServiceStopped = 0x00000001,
+        ServiceStartPending = 0x00000002,
+        ServiceStopPending = 0x00000003,
+        ServiceRunning = 0x00000004,
+        ServiceContinuePending = 0x00000005,
+        ServicePausePending = 0x00000006,
+        ServicePaused = 0x00000007,
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -37,27 +37,27 @@ namespace ImageService
 
     public partial class ImageService : ServiceBase
     {
-        private int eventId = 1;
-        private ImageServer mImageServer;
-        private IImageServiceModel mModel;
-        private IImageController mController;
-        private ILoggingService mLoggingService;
+        private int _eventId = 1;
+        private ImageServer _imageServer;
+        private IImageServiceModel _model;
+        private IImageController _controller;
+        private ILoggingService _loggingService;
 
         // Gets info from App.config
-        string sourceName = ConfigurationManager.AppSettings["SourceName"];
-        string logName = ConfigurationManager.AppSettings["LogName"];
-
+        private readonly string _sourceName = ConfigurationManager.AppSettings["SourceName"];
+        private readonly string _logName = ConfigurationManager.AppSettings["LogName"];
+        
         public ImageService(string[] args)
         {
             InitializeComponent();
             eventLog = new System.Diagnostics.EventLog();
-            if (!System.Diagnostics.EventLog.SourceExists(sourceName))
+            if (!System.Diagnostics.EventLog.SourceExists(_sourceName))
             {
                 System.Diagnostics.EventLog.CreateEventSource(
-                    sourceName, logName);
+                    _sourceName, _logName);
             }
-            eventLog.Source = sourceName;
-            eventLog.Log = logName;
+            eventLog.Source = _sourceName;
+            eventLog.Log = _logName;
         }
 
         protected override void OnStart(string[] args)
@@ -76,16 +76,16 @@ namespace ImageService
             // Updates the service state to Start Pending.  
             ServiceStatus serviceStatus = new ServiceStatus
             {
-                dwCurrentState = ServiceState.SERVICE_START_PENDING,
+                dwCurrentState = ServiceState.ServiceStartPending,
                 dwWaitHint = 100000
             };
             SetServiceStatus(this.ServiceHandle, ref serviceStatus);
 
             // Updates the service state to Running.  
-            serviceStatus.dwCurrentState = ServiceState.SERVICE_RUNNING;
+            serviceStatus.dwCurrentState = ServiceState.ServiceRunning;
             SetServiceStatus(this.ServiceHandle, ref serviceStatus);
-            mLoggingService = new LoggingService();
-            mLoggingService.MsgRecievedEvent += OnMsgEvent;
+            _loggingService = new LoggingService();
+            _loggingService.MsgRecievedEvent += OnMsgEvent;
 
             // Gets info from App.config
             string outputDir = ConfigurationManager.AppSettings["OutputDir"];
@@ -96,16 +96,16 @@ namespace ImageService
                 thumbnailSize = 100;
             }
 
-            mModel = new ImageServiceModel(outputDir, thumbnailSize, mLoggingService);
-            mController = new ImageController(mModel);
-            mImageServer = new ImageServer(mController, mLoggingService);
-            mImageServer.CreateHandler(handledDir);
+            _model = new ImageServiceModel(outputDir, thumbnailSize, _loggingService);
+            _controller = new ImageController(_model);
+            _imageServer = new ImageServer(_controller, _loggingService);
+            _imageServer.CreateHandler(handledDir);
         }
 
         protected override void OnStop()
         {
             eventLog.WriteEntry("In OnStop");
-            mImageServer.Close();
+            _imageServer.Close();
         }
 
         private void OnMsgEvent(object sender, MessageRecievedEventArgs args)
@@ -118,7 +118,7 @@ namespace ImageService
 
         public void OnTimer(object sender, System.Timers.ElapsedEventArgs args)
         {
-            eventLog.WriteEntry("Monitoring the System", EventLogEntryType.Information, eventId++);
+            eventLog.WriteEntry("Monitoring the System", EventLogEntryType.Information, _eventId++);
         }
     }
 }

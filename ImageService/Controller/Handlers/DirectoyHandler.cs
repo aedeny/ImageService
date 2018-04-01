@@ -12,26 +12,26 @@ namespace ImageService.Controller.Handlers
     public class DirectoyHandler : IDirectoryHandler
     {
         #region Members
-        private IImageController mImageController;
-        private ILoggingService mLoggingService;
-        private FileSystemWatcher mDirWatcher;
-        private string mPath;
-        private Dictionary<CommandEnum, Action<string[]>> mCommands;
-        private readonly string[] mExtenstions = { ".jpg", ".png", ".bmp", ".gif" };
+        private readonly IImageController _imageController;
+        private readonly ILoggingService _loggingService;
+        private readonly FileSystemWatcher _dirWatcher;
+        private readonly string _path;
+        private readonly Dictionary<CommandEnum, Action<string[]>> _commandsDictionary;
+        private readonly string[] _extenstions = { ".jpg", ".png", ".bmp", ".gif" };
         #endregion
 
         public event EventHandler<DirectoryCloseEventArgs> DirectoryClosedEvent;
 
         public DirectoyHandler(IImageController imageController, ILoggingService loggingService, string path)
         {
-            mImageController = imageController;
-            mLoggingService = loggingService;
-            mDirWatcher = new FileSystemWatcher(path)
+            _imageController = imageController;
+            _loggingService = loggingService;
+            _dirWatcher = new FileSystemWatcher(path)
             {
                 EnableRaisingEvents = true
             };
-            mPath = path;
-            mCommands = new Dictionary<CommandEnum, Action<string[]>>()
+            _path = path;
+            _commandsDictionary = new Dictionary<CommandEnum, Action<string[]>>()
             {
                 {CommandEnum.CloseCommand, new Action<string[]>(StopHandleDirectory)}
             };
@@ -39,30 +39,30 @@ namespace ImageService.Controller.Handlers
 
         private void OnNewFileCreated(object sender, FileSystemEventArgs e)
         {
-            mLoggingService.Log("OnNewFileCreated: " + e.FullPath, MessageTypeEnum.INFO);
+            _loggingService.Log("OnNewFileCreated: " + e.FullPath, MessageTypeEnum.Info);
             string filePath = new FileInfo(e.FullPath).FullName;
 
-            if (mExtenstions.Contains(Path.GetExtension(filePath)))
+            if (_extenstions.Contains(Path.GetExtension(filePath)))
             {
                 string[] args = { filePath };
                 
                 // Tells the controller about the new file
-                string msg = mImageController.ExecuteCommand(CommandEnum.NewFileCommand, args, out MessageTypeEnum result);
+                string msg = _imageController.ExecuteCommand(CommandEnum.NewFileCommand, args, out MessageTypeEnum result);
 
-                mLoggingService.Log(msg, result);
+                _loggingService.Log(msg, result);
             }
         }
 
         public void StopHandleDirectory(string[] args)
         {
-            mDirWatcher.Created -= OnNewFileCreated;
-            mLoggingService.Log("Stopped handling directory " + mPath, MessageTypeEnum.INFO);
+            _dirWatcher.Created -= OnNewFileCreated;
+            _loggingService.Log("Stopped handling directory " + _path, MessageTypeEnum.Info);
         }
 
         // Invokes the corresponding method
         public void OnCommandRecieved(object sender, CommandRecievedEventArgs e)
         {
-            if (!mCommands.TryGetValue(e.CommandID, out Action<string[]> currentCommand))
+            if (!_commandsDictionary.TryGetValue(e.CommandId, out Action<string[]> currentCommand))
             {
                 return;
             }
@@ -71,8 +71,8 @@ namespace ImageService.Controller.Handlers
 
         public void StartHandleDirectory(string dirPath)
         {
-            mDirWatcher.Created += new FileSystemEventHandler(OnNewFileCreated);
-            mLoggingService.Log("Started handling directory " + mPath, MessageTypeEnum.INFO);
+            _dirWatcher.Created += new FileSystemEventHandler(OnNewFileCreated);
+            _loggingService.Log("Started handling directory " + _path, MessageTypeEnum.Info);
         }
     }
 }

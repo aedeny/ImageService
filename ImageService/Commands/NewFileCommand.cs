@@ -5,17 +5,17 @@ namespace ImageService.Commands
 {
     public class NewFileCommand : ICommand
     {
-        private IImageServiceModel mModel;
+        private readonly IImageServiceModel _model;
 
-        public NewFileCommand(IImageServiceModel Model)
+        public NewFileCommand(IImageServiceModel model)
         {
-            mModel = Model;
+            _model = model;
         }
 
         public string Execute(string[] args, out MessageTypeEnum result)
         {
             // The string will return the new path if result is true, or the error message otherwise.
-            return mModel.AddFile(args[0], out result);
+            return _model.AddFile(args[0], out result);
         }
     }
 }

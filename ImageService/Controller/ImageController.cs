@@ -10,24 +10,22 @@ namespace ImageService.Controller
 {
     public class ImageController : IImageController
     {
-        private IImageServiceModel mModel;
-        private Dictionary<CommandEnum, ICommand> mCommands;
+        private readonly Dictionary<CommandEnum, ICommand> _commandsDictionary;
 
 
 
         public ImageController(IImageServiceModel model)
         {
-            mModel = model;
-            mCommands = new Dictionary<CommandEnum, ICommand>()
+            _commandsDictionary = new Dictionary<CommandEnum, ICommand>()
             {
-                {CommandEnum.NewFileCommand, new NewFileCommand(mModel)}
+                {CommandEnum.NewFileCommand, new NewFileCommand(model)}
             };
         }
-        public string ExecuteCommand(CommandEnum commandID, string[] args, out MessageTypeEnum result)
+        public string ExecuteCommand(CommandEnum commandId, string[] args, out MessageTypeEnum result)
         {
-            result = MessageTypeEnum.FAILURE;
+            result = MessageTypeEnum.Failure;
 
-            if (!mCommands.TryGetValue(commandID, out ICommand currentCommand))
+            if (!_commandsDictionary.TryGetValue(commandId, out ICommand currentCommand))
             {
                 return "No such command";
             }
