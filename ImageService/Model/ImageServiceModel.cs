@@ -29,7 +29,7 @@ namespace ImageService.Model
             using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
             using (Image myImage = Image.FromStream(fs, false, false))
             {
-                PropertyItem propItem = myImage.GetPropertyItem(306);
+                PropertyItem propItem = myImage.GetPropertyItem(0x9004);
                 string dateTaken = Regex.Replace(Encoding.UTF8.GetString(propItem.Value), "-", 2);
                 return DateTime.Parse(dateTaken);
             }
