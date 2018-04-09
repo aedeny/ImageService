@@ -3,6 +3,7 @@ using ImageService.Controller;
 using ImageService.Controller.Handlers;
 using ImageService.Enums;
 using ImageService.Logger;
+using ImageService.Logger.Model;
 using ImageService.Model.Event;
 
 namespace ImageService.Server
@@ -10,18 +11,13 @@ namespace ImageService.Server
     public class ImageServer
     {
         #region Members
-
+        public event EventHandler OnClose;
+        public event EventHandler<CommandRecievedEventArgs> CommandRecieved;
         private readonly IImageController _controller;
         private readonly ILoggingService _loggingService;
 
         #endregion
 
-        #region Properties
-
-        // The event that notifies about a new command being recieved
-        public event EventHandler<CommandRecievedEventArgs> CommandRecieved;
-
-        #endregion
 
         public ImageServer(IImageController controller, ILoggingService loggingService)
         {
@@ -34,11 +30,12 @@ namespace ImageService.Server
             DirectoyHandler dh = new DirectoyHandler(_controller, _loggingService, path);
             dh.StartHandleDirectory(path);
             CommandRecieved += dh.OnCommandRecieved;
+            OnClose += dh.StopHandleDirectory;
         }
 
         public void Close()
         {
-            CommandRecieved?.Invoke(this, new CommandRecievedEventArgs(CommandEnum.CloseCommand, null, null));
+            OnClose?.Invoke(this, null);
         }
     }
 }

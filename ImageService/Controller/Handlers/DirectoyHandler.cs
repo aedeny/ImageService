@@ -30,12 +30,12 @@ namespace ImageService.Controller.Handlers
             _loggingService = loggingService;
             _dirWatcher = new FileSystemWatcher(path)
             {
-                EnableRaisingEvents = true
+                EnableRaisingEvents = true,
+                IncludeSubdirectories = true
             };
             _path = path;
             _commandsDictionary = new Dictionary<CommandEnum, Action<string[]>>
             {
-                {CommandEnum.CloseCommand, StopHandleDirectory}
             };
         }
 
@@ -54,7 +54,7 @@ namespace ImageService.Controller.Handlers
             _loggingService.Log(msg, result);
         }
 
-        public void StopHandleDirectory(string[] args)
+        public void StopHandleDirectory(object o, EventArgs args)
         {
             _dirWatcher.Created -= OnNewFileCreated;
             _loggingService.Log("Stopped handling directory " + _path, MessageTypeEnum.Info);
