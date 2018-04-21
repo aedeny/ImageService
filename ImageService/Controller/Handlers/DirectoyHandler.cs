@@ -18,7 +18,7 @@ namespace ImageService.Controller.Handlers
         private readonly FileSystemWatcher _dirWatcher;
         private readonly string _path;
         private readonly Dictionary<CommandEnum, Action<string[]>> _commandsDictionary;
-        private readonly string[] _extenstions = {".jpg", ".png", ".bmp", ".gif"};
+        private readonly string[] _extenstions = {".jpg", ".jpeg", ".png", ".bmp", ".gif"};
 
         #endregion
 
@@ -44,7 +44,8 @@ namespace ImageService.Controller.Handlers
             _loggingService.Log("OnNewFileCreated: " + e.FullPath, MessageTypeEnum.Info);
             string filePath = new FileInfo(e.FullPath).FullName;
 
-            if (!_extenstions.Contains(Path.GetExtension(filePath))) return;
+            if (!_extenstions.Contains(Path.GetExtension(filePath).ToLower())) return;
+
             string[] args = {filePath};
 
             // Notifies the controller about the newly created file
