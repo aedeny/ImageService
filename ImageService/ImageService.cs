@@ -90,7 +90,7 @@ namespace ImageService
 
             // Gets info from App.config
             string outputDir = ConfigurationManager.AppSettings["OutputDir"];
-            string handledDir = ConfigurationManager.AppSettings["HandledDir"];
+            string handledDirInfo = ConfigurationManager.AppSettings["HandledDir"];
             if (!int.TryParse(ConfigurationManager.AppSettings["ThumbnailSize"], out int thumbnailSize))
             {
                 // Sets default thumbnail size
@@ -100,7 +100,11 @@ namespace ImageService
             _model = new ImageServiceModel(outputDir, thumbnailSize);
             _controller = new ImageController(_model);
             _imageServer = new ImageServer(_controller, _loggingService);
-            _imageServer.CreateHandler(handledDir);
+            string[] handeledDirectories = handledDirInfo.Split(';');
+            foreach (string handeledDir in handeledDirectories)
+            {
+                _imageServer.CreateHandler(handeledDir);
+            }
         }
 
         protected override void OnStop()
