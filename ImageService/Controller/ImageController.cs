@@ -35,6 +35,7 @@ namespace ImageService.Controller
                 string s = currentCommand.Execute(args, out MessageTypeEnum temp);
                 return Tuple.Create(s, temp);
             });
+
             task.Start();
             Tuple<string, MessageTypeEnum> tuple = task.Result;
             result = tuple.Item2;

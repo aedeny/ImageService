@@ -59,9 +59,23 @@ namespace ImageService.Model
 
                 CreateDirectoriesStructure(dateTime);
 
-                string pathSuffix = dateTime.Year + "\\" + dateTime.Month + "\\" + Path.GetFileName(path);
+                string pathSuffix = dateTime.Year + "\\" + dateTime.Month + "\\" + Path.GetFileNameWithoutExtension(path);
                 string outputFilePath = _outputFolder + "\\" + pathSuffix;
-                string thumbnailPath = _outputFolder + "\\thumbnails\\" + pathSuffix;
+                string extension = Path.GetExtension(path);
+
+                int i = 0;
+                string copy_number = "";
+
+                /* If a file named 'name.image' already exists,
+                 * a file named 'name(1).image' will be created */
+                while (File.Exists(outputFilePath + copy_number + extension))
+                {
+                    i++;
+                    copy_number = "(" + i + ")";
+                }
+                outputFilePath += copy_number + extension;
+
+                string thumbnailPath = _outputFolder + "\\thumbnails\\" + pathSuffix + copy_number + extension;
 
                 // Creates thumbnail
                 using (Image image = Image.FromFile(path))
