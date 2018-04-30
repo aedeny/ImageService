@@ -5,8 +5,29 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ImageServiceGUI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Image Service GUI" Height="450" Width="800">
+
     <Grid>
-        
+        <TabControl>
+            <TabItem Name="SettingsTabItem" Header="Settings">
+                <Grid Background="#FFE5E5E5" Margin="0,1,0,-1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="4*"/>
+                        <RowDefinition Height="19*"/>
+                    </Grid.RowDefinitions>
+                    <Label Content="{Binding ElementName=SettingsTabItem, Path=Header}"/>
+                </Grid>
+            </TabItem>
+            <TabItem Name="LogsTabItem" Header="Logs">
+                <Grid Background="#FFE5E5E5" Margin="0,1,0,-1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="4*"/>
+                        <RowDefinition Height="19*"/>
+                    </Grid.RowDefinitions>
+                    <Label Content="{Binding ElementName=LogsTabItem, Path=Header}"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
     </Grid>
 </Window>

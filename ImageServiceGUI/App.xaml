@@ -4,6 +4,16 @@
              xmlns:local="clr-namespace:ImageServiceGUI"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+
+        <Style TargetType="{x:Type Label}">
+            <Setter Property="Background" Value="DarkCyan"></Setter>
+            <!--TODO adjust font size to window-->
+            <Setter Property="FontSize" Value="25"></Setter>
+            <Setter Property="Foreground" Value="Black"></Setter>
+            <Setter Property="VerticalAlignment" Value="Stretch"></Setter>
+            <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
+            <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+            <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
+        </Style>
     </Application.Resources>
 </Application>
