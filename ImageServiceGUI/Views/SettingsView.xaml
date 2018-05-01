@@ -1,16 +1,42 @@
 ﻿<UserControl x:Class="ImageServiceGUI.Views.SettingsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:ImageServiceGUI.Views"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid Background="#FFE5E5E5" Margin="0,1,0,-1">
         <Grid.RowDefinitions>
-            <RowDefinition Height="4*"/>
-            <RowDefinition Height="19*"/>
+            <RowDefinition Height="4*" />
+            <RowDefinition Height="19*" />
         </Grid.RowDefinitions>
-        <Label Content="{Binding Path}"/>
+        <Label Content="Settings" Style="{StaticResource TitleLabelStyle}" />
+        <Grid Height="Auto" Margin="10" Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="71*" />
+                <RowDefinition Height="105*" />
+            </Grid.RowDefinitions>
+            <Grid Height="Auto" Margin="10" Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="149*" />
+                    <ColumnDefinition Width="611*" />
+                </Grid.ColumnDefinitions>
+                <Label Content="Output Directory" Style="{StaticResource BoldLabelStyle}" Grid.Row="0" />
+                <Label Content="Source Name" Style="{StaticResource BoldLabelStyle}" Grid.Row="1" Grid.Column="0" />
+                <Label Content="Log Name" Style="{StaticResource BoldLabelStyle}" Grid.Row="2"
+                       Grid.Column="0" />
+                <Label Content="Thumbnail Size" Style="{StaticResource BoldLabelStyle}" Grid.Row="3" Grid.Column="0" />
+                <TextBlock Text="{Binding LogName}"  Grid.Column="1" Grid.Row="0" Style="{StaticResource NormalFontStyle}"/>
+
+            </Grid>
+        </Grid>
+
     </Grid>
 </UserControl>

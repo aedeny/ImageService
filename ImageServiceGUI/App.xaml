@@ -5,15 +5,36 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
 
-        <Style TargetType="{x:Type Label}">
+        <Style x:Key="TitleLabelStyle" TargetType="{x:Type Label}">
             <Setter Property="Background" Value="DarkCyan"></Setter>
             <!--TODO adjust font size to window-->
+            <Setter Property="FontWeight" Value="Bold"></Setter>
             <Setter Property="FontSize" Value="25"></Setter>
             <Setter Property="Foreground" Value="Black"></Setter>
             <Setter Property="VerticalAlignment" Value="Stretch"></Setter>
             <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
             <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
             <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
+        </Style>
+
+        <!--Change to TextBlock-->
+        <Style x:Key="BoldLabelStyle" TargetType="{x:Type Label}">
+            <!--TODO adjust font size to window-->
+            <Setter Property="FontWeight" Value="Bold"></Setter>
+            <Setter Property="FontSize" Value="15"></Setter>
+            <Setter Property="Foreground" Value="Black"></Setter>
+            <Setter Property="VerticalAlignment" Value="Stretch"></Setter>
+            <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
+            <Setter Property="HorizontalContentAlignment" Value="Left"></Setter>
+            <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
+        </Style>
+
+        <Style x:Key="NormalFontStyle" TargetType="{x:Type TextBlock}">
+            <!--TODO adjust font size to window-->
+            <Setter Property="FontSize" Value="15"></Setter>
+            <Setter Property="Foreground" Value="Black"></Setter>
+            <Setter Property="VerticalAlignment" Value="Center"></Setter>
+            <Setter Property="HorizontalAlignment" Value="Left"></Setter>
         </Style>
     </Application.Resources>
 </Application>

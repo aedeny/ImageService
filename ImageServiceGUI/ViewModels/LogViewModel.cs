@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace ImageServiceGUI.ViewModels
 {
-    class SettingsViewModel
+    class LogViewModel
     {
-        private string _logName;
-        
-        public string LogName => "Test111";
+
     }
 }

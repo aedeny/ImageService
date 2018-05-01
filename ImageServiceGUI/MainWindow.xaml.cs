@@ -12,9 +12,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ImageServiceGUI.ViewModels;
 
 namespace ImageServiceGUI
 {
+    /// <inheritdoc />
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -23,6 +25,8 @@ namespace ImageServiceGUI
         public MainWindow()
         {
             InitializeComponent();
+            SettingsViewModel settingsViewModel = new SettingsViewModel();
         }
+
     }
 }

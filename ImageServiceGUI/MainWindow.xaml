@@ -11,16 +11,10 @@
     <Grid>
         <TabControl>
             <TabItem Name="SettingsTabItem" Header="Settings">
-                <views:SettingsView Grid.Row="1" DataContext="{Binding ElementName=SettingsTabItem, Path=Header}"/>
+                <views:SettingsView DataContext="{Binding ElementName=SettingsTabItem, Path=Header}"/>
             </TabItem>
             <TabItem Name="LogsTabItem" Header="Logs">
-                <Grid Background="#FFE5E5E5" Margin="0,1,0,-1">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="4*" />
-                        <RowDefinition Height="19*" />
-                    </Grid.RowDefinitions>
-                    <Label Content="{Binding ElementName=LogsTabItem, Path=Header}" />
-                </Grid>
+                <views:LogView DataContext="{Binding ElementName=SettingsTabItem, Path=Header}"/>
             </TabItem>
         </TabControl>
 
