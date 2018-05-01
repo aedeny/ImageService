@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:views="clr-namespace:ImageServiceGUI.Views"
         xmlns:local="clr-namespace:ImageServiceGUI"
         mc:Ignorable="d"
         Title="Image Service GUI" Height="450" Width="800">
@@ -10,21 +11,15 @@
     <Grid>
         <TabControl>
             <TabItem Name="SettingsTabItem" Header="Settings">
-                <Grid Background="#FFE5E5E5" Margin="0,1,0,-1">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="4*"/>
-                        <RowDefinition Height="19*"/>
-                    </Grid.RowDefinitions>
-                    <Label Content="{Binding ElementName=SettingsTabItem, Path=Header}"/>
-                </Grid>
+                <views:SettingsView Grid.Row="1" DataContext="{Binding ElementName=SettingsTabItem, Path=Header}"/>
             </TabItem>
             <TabItem Name="LogsTabItem" Header="Logs">
                 <Grid Background="#FFE5E5E5" Margin="0,1,0,-1">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="4*"/>
-                        <RowDefinition Height="19*"/>
+                        <RowDefinition Height="4*" />
+                        <RowDefinition Height="19*" />
                     </Grid.RowDefinitions>
-                    <Label Content="{Binding ElementName=LogsTabItem, Path=Header}"/>
+                    <Label Content="{Binding ElementName=LogsTabItem, Path=Header}" />
                 </Grid>
             </TabItem>
         </TabControl>
