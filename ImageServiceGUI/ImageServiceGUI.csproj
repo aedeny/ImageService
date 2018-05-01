@@ -54,6 +54,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Model\ILogModel.cs" />
+    <Compile Include="Model\ISettingsModel.cs" />
+    <Compile Include="Model\LogModel.cs" />
+    <Compile Include="Model\SettingsModel.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ViewModels\LogViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
