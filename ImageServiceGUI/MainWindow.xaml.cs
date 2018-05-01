@@ -27,6 +27,5 @@ namespace ImageServiceGUI
             InitializeComponent();
             SettingsViewModel settingsViewModel = new SettingsViewModel();
         }
-
     }
 }

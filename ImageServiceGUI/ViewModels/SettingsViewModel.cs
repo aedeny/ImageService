@@ -10,6 +10,6 @@ namespace ImageServiceGUI.ViewModels
     {
         private string _logName;
         
-        public string LogName => "Test111";
+        public string LogName => "KAKA PUPU";
     }
 }

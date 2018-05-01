@@ -11,16 +11,7 @@ namespace ImageServiceGUI.Views
         public SettingsView()
         {
             InitializeComponent();
-            DataContext = new SettingsViewModel();
+            this.DataContext = new SettingsViewModel();
         }
-
-        //public string TabText
-        //{
-        //    get => (string) GetValue(TabTextProperty);
-        //    set => SetValue(TabTextProperty, value);
-        //}
-
-        //public static readonly DependencyProperty TabTextProperty = DependencyProperty.Register("TabText",
-        //    typeof(string), typeof(LogView), new PropertyMetadata("Default"));
     }
 }

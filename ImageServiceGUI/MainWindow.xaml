@@ -11,7 +11,7 @@
     <Grid>
         <TabControl>
             <TabItem Name="SettingsTabItem" Header="Settings">
-                <views:SettingsView DataContext="{Binding ElementName=SettingsTabItem, Path=Header}"/>
+                <views:SettingsView/>
             </TabItem>
             <TabItem Name="LogsTabItem" Header="Logs">
                 <views:LogView DataContext="{Binding ElementName=SettingsTabItem, Path=Header}"/>
