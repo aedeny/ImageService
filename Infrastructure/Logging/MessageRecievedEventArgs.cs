@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ImageService.Logger.Model
+namespace Infrastructure.Logging
 {
     public class MessageRecievedEventArgs : EventArgs
     {

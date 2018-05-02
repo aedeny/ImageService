@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using ImageService.Commands;
 using Infrastructure.Enums;
-using ImageService.Logger.Model;
+using Infrastructure.Logging;
 using ImageService.Model;
 
 namespace ImageService.Controller
