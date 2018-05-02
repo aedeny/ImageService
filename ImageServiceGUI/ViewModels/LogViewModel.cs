@@ -8,6 +8,9 @@ namespace ImageServiceGUI.ViewModels
 {
     class LogViewModel
     {
-
+        public void Log(string msg, int category)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

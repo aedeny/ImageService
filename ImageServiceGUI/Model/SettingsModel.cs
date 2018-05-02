@@ -8,6 +8,14 @@ namespace ImageServiceGUI.Model
 {
     class SettingsModel : ISettingsModel
     {
+        public void UpdateConfigView()
+        {
+            throw new NotImplementedException();
+        }
 
+        public void OnHandlerRemoved()
+        {
+
+        }
     }
 }
