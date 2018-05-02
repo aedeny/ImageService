@@ -33,7 +33,10 @@
                 <Label Content="Log Name" Style="{StaticResource BoldLabelStyle}" Grid.Row="2"
                        Grid.Column="0" />
                 <Label Content="Thumbnail Size" Style="{StaticResource BoldLabelStyle}" Grid.Row="3" Grid.Column="0" />
-                <TextBlock Text="{Binding LogName}"  Grid.Column="1" Grid.Row="0" Style="{StaticResource NormalFontStyle}"/>
+                <TextBlock Text="{Binding OutputDirectory}"  Grid.Column="1" Grid.Row="0" Style="{StaticResource NormalFontStyle}"/>
+                <TextBlock Text="{Binding SourceName}"  Grid.Column="1" Grid.Row="1" Style="{StaticResource NormalFontStyle}"/>
+                <TextBlock Text="{Binding LogName}"  Grid.Column="1" Grid.Row="2" Style="{StaticResource NormalFontStyle}"/>
+                <TextBlock Text="{Binding ThumbnailSize}"  Grid.Column="1" Grid.Row="3" Style="{StaticResource NormalFontStyle}"/>
 
             </Grid>
         </Grid>

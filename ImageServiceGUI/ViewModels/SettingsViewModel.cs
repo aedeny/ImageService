@@ -15,13 +15,19 @@ namespace ImageServiceGUI.ViewModels
         public SettingsViewModel()
         {
             Debug.WriteLine("SettingsViewModel ctor");
-            LogName = "HHH";
+            LogName = "[Log name here]";
+            SourceName = "[Source Name Here]";
+            OutputDirectory = "[Output Directory Here]";
+            ThumbnailSize = 120;
         }
 
         public string LogName { get; set; }
+        public string SourceName { get; set; }
+        public string OutputDirectory { get; set; }
+        public int ThumbnailSize { get; set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
-        [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
