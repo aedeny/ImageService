@@ -3,7 +3,7 @@ using ImageService.Controller;
 using ImageService.Controller.Handlers;
 using Infrastructure.Enums;
 using ImageService.Logger;
-using ImageService.Logger.Model;
+using Infrastructure.Logging;
 using ImageService.Model.Event;
 
 namespace ImageService.Server

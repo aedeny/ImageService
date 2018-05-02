@@ -1,4 +1,4 @@
-﻿namespace ImageService.Logger.Model
+﻿namespace Infrastructure.Logging
 {
     public enum MessageTypeEnum
     {

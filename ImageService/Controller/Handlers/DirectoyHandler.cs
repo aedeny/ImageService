@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using Infrastructure.Enums;
 using ImageService.Logger;
-using ImageService.Logger.Model;
+using Infrastructure.Logging;
 using ImageService.Model.Event;
 
 namespace ImageService.Controller.Handlers

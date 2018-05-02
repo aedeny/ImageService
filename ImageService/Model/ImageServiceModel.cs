@@ -4,7 +4,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using ImageService.Logger.Model;
+using Infrastructure.Logging;
 
 namespace ImageService.Model
 {

@@ -8,6 +8,8 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using ImageServiceGUI.ViewModels;
+using Infrastructure.Enums;
+using Infrastructure.Logging;
 
 namespace ImageServiceGUI
 {
@@ -17,33 +19,30 @@ namespace ImageServiceGUI
         public event EventHandler DirHandlerRemoved;
         private IPEndPoint _ep;
         private TcpClient _client;
+        private LogViewModel _logViewModel;
 
-
+        private BinaryWriter _writer;
+        private BinaryReader _reader;
+        private NetworkStream _stream;
         public OurTcpClient(LogViewModel logViewModel)
         {
-            throw new NotImplementedException();
+            _logViewModel = logViewModel;
         }
 
         // TODO Put in Task?
         public void Start()
         {
             _ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8000);
-            TcpClient client = new TcpClient();
-            client.Connect(_ep);
+            _client = new TcpClient();
+            _client.Connect(_ep);
 
             Console.WriteLine(@"You are connected");
-            using (NetworkStream stream = client.GetStream())
-            using (BinaryReader reader = new BinaryReader(stream))
-            using (BinaryWriter writer = new BinaryWriter(stream))
+            using (_stream = _client.GetStream())
+            using (_reader = new BinaryReader(_stream))
+            using (_writer = new BinaryWriter(_stream))
             {
-                // Send data to server
-                Console.Write(@"Please enter a number: ");
-                int num = int.Parse(Console.ReadLine() ?? throw new InvalidOperationException());
-                writer.Write(num);
-
-                // Get result from server
-                int result = reader.ReadInt32();
-                Console.WriteLine(@"Result = {0}", result);
+                string readCommand = _reader.ReadString();
+                Console.WriteLine(@"Result = {0}", readCommand);
             }
         }
 
@@ -52,21 +51,31 @@ namespace ImageServiceGUI
          */
         public void ParseMessage(string msg)
         {
+            string[] parameters = msg.Split(';');
+            CommandEnum command = (CommandEnum) int.Parse(parameters[0]);
+
             throw new NotImplementedException();
         }
 
-        public ConfigDetails GetConfigDetails()
+        /**
+         * Asks the server to send the config details which will later be recieved and sent to the SettingsVM by an event.
+         */
+        public void GetConfigDetails()
         {
-            throw new NotImplementedException();
+            _writer.Write(CommandEnum.GetConfigCommand.ToString());
         }
 
         /**
          * Send the LogViewModel a log msg via event.
          */
-        public void Log(string msg, int category)
+        public void Log(string msg, MessageTypeEnum command)
         {
-            LogMsgRecieved?.Invoke(this, null);
-            throw new NotImplementedException();
+            MessageRecievedEventArgs messageRecievedEventArgs = new MessageRecievedEventArgs()
+            {
+                Message = msg,
+                Status = command
+            };
+            LogMsgRecieved?.Invoke(this, messageRecievedEventArgs);
         }
 
         /**

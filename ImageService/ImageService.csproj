@@ -65,8 +65,6 @@
     </Compile>
     <Compile Include="Logger\ILoggingService.cs" />
     <Compile Include="Logger\LoggingService.cs" />
-    <Compile Include="Logger\Model\MessageRecievedEventArgs.cs" />
-    <Compile Include="Logger\Model\MessageTypeEnum.cs" />
     <Compile Include="Model\Event\CommandRecievedEventArgs.cs" />
     <Compile Include="Model\Event\DirectoryCloseEventArgs.cs" />
     <Compile Include="Model\IImageServiceModel.cs" />

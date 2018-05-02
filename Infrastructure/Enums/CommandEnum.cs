@@ -3,6 +3,7 @@
     public enum CommandEnum
     {
         NewFileCommand,
-        CloseCommand
+        CloseCommand,
+        GetConfigCommand
     }
 }

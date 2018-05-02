@@ -1,4 +1,4 @@
-﻿using ImageService.Logger.Model;
+﻿using Infrastructure.Logging;
 using ImageService.Model;
 
 namespace ImageService.Commands
