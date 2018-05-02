@@ -14,7 +14,7 @@
                 <views:SettingsView/>
             </TabItem>
             <TabItem Name="LogsTabItem" Header="Logs">
-                <views:LogView DataContext="{Binding ElementName=SettingsTabItem, Path=Header}"/>
+                <views:LogView/>
             </TabItem>
         </TabControl>
 

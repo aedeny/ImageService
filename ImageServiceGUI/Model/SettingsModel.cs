@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ImageServiceGUI.Model
 {
-    class SettingsModel
+    class SettingsModel : ISettingsModel
     {
 
     }
