@@ -26,6 +26,8 @@ namespace ImageServiceGUI
         {
             InitializeComponent();
             SettingsViewModel settingsViewModel = new SettingsViewModel();
+            LogViewModel logViewModel = new LogViewModel();
+            OurTcpClient tcpClient = new OurTcpClient(logViewModel);
         }
     }
 }
