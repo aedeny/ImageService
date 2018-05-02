@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ImageService.Logger.Model;
+using Infrastructure.Logging;
+
 
 namespace ImageService.Commands
 {
