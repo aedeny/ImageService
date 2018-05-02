@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\CloseHandlerCommand.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\NewFileCommand.cs" />
     <Compile Include="Controller\Handlers\DirectoyHandler.cs" />

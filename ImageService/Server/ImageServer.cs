@@ -5,6 +5,8 @@ using Infrastructure.Enums;
 using ImageService.Logger;
 using ImageService.Logger.Model;
 using ImageService.Model.Event;
+using System.Linq;
+using System.IO;
 
 namespace ImageService.Server
 {
@@ -12,13 +14,12 @@ namespace ImageService.Server
     {
         #region Members
 
-        public event EventHandler OnClose;
+        public event EventHandler<FileSystemEventArgs> OnClose;
         public event EventHandler<CommandRecievedEventArgs> CommandRecieved;
         private readonly IImageController _controller;
         private readonly ILoggingService _loggingService;
 
         #endregion
-
 
         public ImageServer(IImageController controller, ILoggingService loggingService)
         {
@@ -34,9 +35,17 @@ namespace ImageService.Server
             OnClose += dh.StopHandleDirectory;
         }
 
-        public void Close()
+        public void Close(FileSystemEventArgs args)
         {
-            OnClose?.Invoke(this, null);
+            OnClose?.Invoke(this, args);
+        }
+
+        public void Parser(string command)
+        {
+            CommandEnum cid = (CommandEnum)Convert.ToInt16(command.Split(';')[0]);
+            string[] args = command.Split(';', ',').Skip(1).ToArray();
+
+            _controller.ExecuteCommand(cid, args, out MessageTypeEnum result);
         }
     }
 }

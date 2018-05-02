@@ -14,7 +14,7 @@ namespace ImageServiceGUI.ViewModels
     {
         public SettingsViewModel()
         {
-            Debug.WriteLine("SettingsViewModel ctor");
+            Debug.WriteLine("SettingsViewModel c'tor");
             LogName = "[Log name here]";
             SourceName = "[Source Name Here]";
             OutputDirectory = "[Output Directory Here]";

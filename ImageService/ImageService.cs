@@ -110,7 +110,7 @@ namespace ImageService
         protected override void OnStop()
         {
             eventLog.WriteEntry("In OnStop");
-            _imageServer.Close();
+            _imageServer.Close(null);
         }
 
         private void OnMsgEvent(object sender, MessageRecievedEventArgs args)

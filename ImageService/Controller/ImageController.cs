@@ -17,7 +17,8 @@ namespace ImageService.Controller
         {
             _commandsDictionary = new Dictionary<CommandEnum, ICommand>
             {
-                {CommandEnum.NewFileCommand, new NewFileCommand(model)}
+                {CommandEnum.NewFileCommand, new NewFileCommand(model)},
+                {CommandEnum.CloseCommand, new CloseHandlerCommand()}
             };
         }
 

@@ -18,7 +18,6 @@ namespace ImageServiceGUI
         private IPEndPoint _ep;
         private TcpClient _client;
 
-
         public OurTcpClient(LogViewModel logViewModel)
         {
             throw new NotImplementedException();
