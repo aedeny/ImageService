@@ -1,5 +1,5 @@
 ﻿using System;
-using ImageService.Enums;
+using Infrastructure.Enums;
 
 namespace ImageService.Model.Event
 {

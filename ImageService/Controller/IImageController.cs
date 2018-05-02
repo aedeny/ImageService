@@ -1,4 +1,4 @@
-﻿using ImageService.Enums;
+﻿using Infrastructure.Enums;
 using ImageService.Logger.Model;
 
 namespace ImageService.Controller

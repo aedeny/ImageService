@@ -1,7 +1,7 @@
 ﻿using System;
 using ImageService.Controller;
 using ImageService.Controller.Handlers;
-using ImageService.Enums;
+using Infrastructure.Enums;
 using ImageService.Logger;
 using ImageService.Logger.Model;
 using ImageService.Model.Event;
@@ -11,6 +11,7 @@ namespace ImageService.Server
     public class ImageServer
     {
         #region Members
+
         public event EventHandler OnClose;
         public event EventHandler<CommandRecievedEventArgs> CommandRecieved;
         private readonly IImageController _controller;
