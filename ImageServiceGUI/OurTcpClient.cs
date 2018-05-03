@@ -49,7 +49,8 @@ namespace ImageServiceGUI
         {
             string[] parameters = msg.Split(';');
             CommandEnum command = (CommandEnum) int.Parse(parameters[0]);
-            switch (command) {
+            switch (command)
+            {
                 case CommandEnum.LogCommand:
                     Log(parameters[1], (MessageTypeEnum) int.Parse(parameters[2]));
                     break;
@@ -89,9 +90,10 @@ namespace ImageServiceGUI
         /// </summary>
         /// <param name="handledDirectory"></param>
         /// <returns></returns>
-        public bool RemoveHandler(string handledDirectory)
+        public void RemoveHandler(string handledDirectory)
         {
-            throw new NotImplementedException();
+            string command = CommandEnum.CloseCommand.ToString() + ";" + handledDirectory;
+            _writer.Write(command);
         }
 
         /// <summary>
