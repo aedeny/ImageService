@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using ImageServiceGUI.ViewModels;
 using Infrastructure.Enums;
 using Infrastructure.Logging;
@@ -24,6 +19,7 @@ namespace ImageServiceGUI
         private BinaryWriter _writer;
         private BinaryReader _reader;
         private NetworkStream _stream;
+
         public OurTcpClient(LogViewModel logViewModel)
         {
             _logViewModel = logViewModel;
@@ -46,13 +42,22 @@ namespace ImageServiceGUI
             }
         }
 
-        /**
-         * Parse the msg recieved from the server.
-         */
+        /// <summary>
+        /// Parse the msg recieved from the server.
+        /// </summary>
+        /// <param name="msg">The message to parse.</param>
         public void ParseMessage(string msg)
         {
             string[] parameters = msg.Split(';');
             CommandEnum command = (CommandEnum) int.Parse(parameters[0]);
+            if (command == CommandEnum.LogCommand)
+            {
+                Log(parameters[1], (MessageTypeEnum)int.Parse(parameters[2]));
+            }
+            else if (command == CommandEnum.CloseCommand)
+            {
+                
+            }
 
             throw new NotImplementedException();
         }
@@ -65,28 +70,34 @@ namespace ImageServiceGUI
             _writer.Write(CommandEnum.GetConfigCommand.ToString());
         }
 
-        /**
-         * Send the LogViewModel a log msg via event.
-         */
-        public void Log(string msg, MessageTypeEnum command)
+        /// <summary>
+        /// Sends the LogViewModel a log msg via event.
+        /// </summary>
+        /// <param name="msg">The message to log.</param>
+        /// <param name="messageType">Message type.</param>
+        public void Log(string msg, MessageTypeEnum messageType)
         {
             MessageRecievedEventArgs messageRecievedEventArgs = new MessageRecievedEventArgs()
             {
                 Message = msg,
-                Status = command
+                Status = messageType
             };
             LogMsgRecieved?.Invoke(this, messageRecievedEventArgs);
         }
 
-        /**
-         * Send a command to the TcpServer to remove the specified handler and wait for a confirmation.
-         */
+        /// <summary>
+        /// Sends a messageType to the TCP Server to remove the specified handler and wait for a confirmation.
+        /// </summary>
+        /// <param name="handlerId"></param>
+        /// <returns></returns>
         public bool RemoveHandler(int handlerId)
         {
             throw new NotImplementedException();
         }
 
-
+        /// <summary>
+        /// Closes the TCP Client.
+        /// </summary>
         public void Close()
         {
             _client.Close();

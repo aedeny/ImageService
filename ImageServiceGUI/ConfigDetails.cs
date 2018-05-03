@@ -11,6 +11,6 @@ namespace ImageServiceGUI
         public string OutputDirectory { get; set; }
         public string SourceName { get; set; }
         public string LogName { get; set; }
-        public int ThumbnailSize { set; get; }
+        public int ThumbnailSize { get; set; }
     }
 }

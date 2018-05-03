@@ -28,6 +28,15 @@ namespace ImageServiceGUI.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// Raises when a handler is removed from the Service.
+        /// </summary>
+        public void OnHandlerRemoved()
+        {
+            // Remove handler from view
+            throw new NotImplementedException();
+        }
+
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
