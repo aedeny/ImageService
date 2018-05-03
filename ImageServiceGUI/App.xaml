@@ -36,5 +36,11 @@
             <Setter Property="VerticalAlignment" Value="Center"></Setter>
             <Setter Property="HorizontalAlignment" Value="Left"></Setter>
         </Style>
+
+        <Style x:Key="NormalButtonStyle" TargetType="{x:Type Button}">
+            <Setter Property="FontSize" Value="15"></Setter>
+            <Setter Property="FontWeight" Value="SemiBold"></Setter>
+            <Setter Property="Foreground" Value="Black"></Setter>
+        </Style>
     </Application.Resources>
 </Application>

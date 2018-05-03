@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
@@ -56,7 +57,7 @@ namespace ImageServiceGUI
             }
             else if (command == CommandEnum.CloseCommand)
             {
-                
+                DirHandlerRemoved?.Invoke(this, EventArgs.Empty);
             }
 
             throw new NotImplementedException();
