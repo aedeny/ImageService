@@ -1,20 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using ImageServiceGUI.Annotations;
 using Microsoft.Practices.Prism.Commands;
 
 namespace ImageServiceGUI.ViewModels
 {
     class SettingsViewModel : INotifyPropertyChanged
     {
+        public ObservableCollection<string> DirectoryHandlers { get; }
+
+        public string LogName { get; set; }
+
+        public string SourceName { get; set; }
+
+        public string OutputDirectory { get; set; }
+
+        public int ThumbnailSize { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public ICommand SubmitRemove { get; }
+
+        private string _selectedDirectoryHandler;
+
         public SettingsViewModel()
         {
             Debug.WriteLine("SettingsViewModel c'tor");
@@ -24,25 +35,15 @@ namespace ImageServiceGUI.ViewModels
             ThumbnailSize = 120;
             DirectoryHandlers = new ObservableCollection<string>()
             {
-                "One",
-                "Two",
-                "Three"
+                "Buy",
+                "All",
+                "GameBoys!!!"
             };
-
+            OurTcpClientSingleton.Instance.DirHandlerRemoved += OnDirectoryHandlerSuccessfulyRemoved;
             SubmitRemove = new DelegateCommand<object>(OnRemove, CanRemove);
             PropertyChanged += RemoveSelectedHandlerCommand;
         }
 
-        public ObservableCollection<string> DirectoryHandlers { get; }
-        public string LogName { get; set; }
-        public string SourceName { get; set; }
-        public string OutputDirectory { get; set; }
-        public int ThumbnailSize { get; set; }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public ICommand SubmitRemove { get; private set; }
-        private string _selectedDirectoryHandler;
 
         public string SelectedDirectoryHandler
         {
@@ -57,17 +58,17 @@ namespace ImageServiceGUI.ViewModels
 
         public void NotifyPropertyChanged(string name)
         {
-            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
 
         /// <summary>
-        /// Raises when a handler is removed from the Service.
+        /// Raises when a handler is successfuly removed from the Service.
         /// </summary>
-        public void OnHandlerRemoved()
+        public void OnDirectoryHandlerSuccessfulyRemoved(object sender, EventArgs eventArgs)
         {
-            // Remove handler from view
-            throw new NotImplementedException();
+            DirectoryHandlers.Remove(SelectedDirectoryHandler);
+            SelectedDirectoryHandler = null;
         }
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -77,16 +78,19 @@ namespace ImageServiceGUI.ViewModels
 
         public void RemoveSelectedHandlerCommand(object sender, PropertyChangedEventArgs args)
         {
-            Debug.WriteLine("Removing...");
             DelegateCommand<object> command = SubmitRemove as DelegateCommand<object>;
             command?.RaiseCanExecuteChanged();
         }
 
+        /// <summary>
+        /// Asks Service to remove selected directory handler.
+        /// Note: This method doesn't remove the dir handler from the ListBox.
+        /// </summary>
+        /// <param name="obj"></param>
         private void OnRemove(object obj)
         {
             Debug.WriteLine("In OnButtonClicked");
-            DirectoryHandlers.Remove(SelectedDirectoryHandler);
-            SelectedDirectoryHandler = null;
+            OurTcpClientSingleton.Instance.RemoveHandler(SelectedDirectoryHandler);
         }
 
         private bool CanRemove(object obj)

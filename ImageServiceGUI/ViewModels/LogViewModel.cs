@@ -1,16 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ImageServiceGUI.ViewModels
 {
     class LogViewModel
     {
-        public void Log(string msg, int category)
+        public LogViewModel()
         {
-            throw new NotImplementedException();
+            OurTcpClientSingleton.Instance.LogMsgRecieved += OnLogRecieved;
+        }
+
+        public void OnLogRecieved(object obj, EventArgs e)
+        {
+            // TODO Add log msg to view
         }
     }
 }

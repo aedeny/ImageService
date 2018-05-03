@@ -11,6 +11,7 @@
             <RowDefinition Height="4*" />
             <RowDefinition Height="19*" />
         </Grid.RowDefinitions>
-        <Label Content="Log" Style="{StaticResource TitleLabelStyle}"/>
+        <Label Content="Log" Style="{StaticResource TitleLabelStyle}" />
+        <ListBox Grid.Row="1" />
     </Grid>
 </UserControl>

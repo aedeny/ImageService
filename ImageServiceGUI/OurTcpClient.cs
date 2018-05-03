@@ -9,22 +9,20 @@ using Infrastructure.Logging;
 
 namespace ImageServiceGUI
 {
-    class OurTcpClient
+    class OurTcpClientSingleton
     {
+        private static OurTcpClientSingleton _instance;
         public event EventHandler LogMsgRecieved;
         public event EventHandler DirHandlerRemoved;
         private IPEndPoint _ep;
         private TcpClient _client;
-        private LogViewModel _logViewModel;
-
         private BinaryWriter _writer;
         private BinaryReader _reader;
         private NetworkStream _stream;
 
-        public OurTcpClient(LogViewModel logViewModel)
-        {
-            _logViewModel = logViewModel;
-        }
+        private OurTcpClientSingleton() { }
+
+        public static OurTcpClientSingleton Instance => _instance ?? (_instance = new OurTcpClientSingleton());
 
         // TODO Put in Task?
         public void Start()
@@ -51,13 +49,13 @@ namespace ImageServiceGUI
         {
             string[] parameters = msg.Split(';');
             CommandEnum command = (CommandEnum) int.Parse(parameters[0]);
-            if (command == CommandEnum.LogCommand)
-            {
-                Log(parameters[1], (MessageTypeEnum)int.Parse(parameters[2]));
-            }
-            else if (command == CommandEnum.CloseCommand)
-            {
-                DirHandlerRemoved?.Invoke(this, EventArgs.Empty);
+            switch (command) {
+                case CommandEnum.LogCommand:
+                    Log(parameters[1], (MessageTypeEnum) int.Parse(parameters[2]));
+                    break;
+                case CommandEnum.CloseCommand:
+                    DirHandlerRemoved?.Invoke(this, EventArgs.Empty);
+                    break;
             }
 
             throw new NotImplementedException();
@@ -89,9 +87,9 @@ namespace ImageServiceGUI
         /// <summary>
         /// Sends a messageType to the TCP Server to remove the specified handler and wait for a confirmation.
         /// </summary>
-        /// <param name="handlerId"></param>
+        /// <param name="handledDirectory"></param>
         /// <returns></returns>
-        public bool RemoveHandler(int handlerId)
+        public bool RemoveHandler(string handledDirectory)
         {
             throw new NotImplementedException();
         }

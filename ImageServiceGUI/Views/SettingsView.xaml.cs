@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Diagnostics;
+using System.Windows.Controls;
 using ImageServiceGUI.ViewModels;
 
 namespace ImageServiceGUI.Views
@@ -6,12 +7,13 @@ namespace ImageServiceGUI.Views
     /// <summary>
     /// Interaction logic for LogView.xaml
     /// </summary>
-    public partial class SettingsView : UserControl
+    public partial class SettingsView
     {
         public SettingsView()
         {
+            Debug.WriteLine("SettingView");
             InitializeComponent();
-            this.DataContext = new SettingsViewModel();
+            DataContext = new SettingsViewModel();
         }
     }
 }
