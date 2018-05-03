@@ -20,7 +20,10 @@ namespace ImageServiceGUI
         private BinaryReader _reader;
         private NetworkStream _stream;
 
-        private OurTcpClientSingleton() { }
+        private OurTcpClientSingleton()
+        {
+            //Start();
+        }
 
         public static OurTcpClientSingleton Instance => _instance ?? (_instance = new OurTcpClientSingleton());
 
