@@ -6,9 +6,9 @@ using System.ServiceProcess;
 using System.Timers;
 using ImageService.Controller;
 using ImageService.Logger;
-using ImageService.Logger.Model;
 using ImageService.Model;
 using ImageService.Server;
+using Infrastructure.Logging;
 
 namespace ImageService
 {
