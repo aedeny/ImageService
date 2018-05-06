@@ -44,7 +44,6 @@
     <Compile Include="ITcpClientHandler.cs" />
     <Compile Include="ITcpServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TcpClientHandler.cs" />
     <Compile Include="TcpServer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

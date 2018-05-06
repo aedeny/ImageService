@@ -9,7 +9,6 @@ using ImageService.Logger;
 using ImageService.Model;
 using ImageService.Server;
 using Infrastructure.Logging;
-using ImageService.Communication;
 
 namespace ImageService
 {
@@ -43,7 +42,6 @@ namespace ImageService
         private IImageServiceModel _model;
         private IImageController _controller;
         private ILoggingService _loggingService;
-        private ITcpServer _server;
 
         // Gets info from App.config
         private readonly string _sourceName = ConfigurationManager.AppSettings["SourceName"];
@@ -61,8 +59,6 @@ namespace ImageService
 
             eventLog.Source = _sourceName;
             eventLog.Log = _logName;
-            _server = new TcpServer(8000, new TcpClientHandler(), _loggingService);
-            _server.Start();
         }
 
         protected override void OnStart(string[] args)
@@ -102,8 +98,8 @@ namespace ImageService
             }
 
             _model = new ImageServiceModel(outputDir, thumbnailSize);
-            _controller = new ImageController(_model, _imageServer);
             _imageServer = new ImageServer(_controller, _loggingService);
+            _controller = new ImageController(_model, _imageServer);
             string[] handeledDirectories = handledDirInfo.Split(';');
             foreach (string handeledDir in handeledDirectories)
             {

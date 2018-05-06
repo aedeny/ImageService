@@ -12,18 +12,15 @@ namespace Communication
     {
         private readonly int _port;
         private TcpListener _listener;
-        private ICollection<ITcpClient> _clients;
+        private ICollection<ITcpClient> _clietns;
         private readonly ITcpClientHandler _ch;
-        private readonly ILoggingService _loggingService;
 
         public TcpServer(int port, ITcpClientHandler ch)
         {
             _port = port;
             _ch = ch;
-            _clients = new List<ITcpClient>();
-            Start();
+            _clietns = new List<ITcpClient>();
         }
-
 
         public void Start()
         {
@@ -46,7 +43,6 @@ namespace Communication
                     catch (SocketException)
                     {
                         break;
-                        
                     }
                 }
 
