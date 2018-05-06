@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 using Infrastructure.Enums;
+using Infrastructure.Event;
 using Infrastructure.Logging;
 
 namespace ImageServiceGUI
@@ -12,7 +16,7 @@ namespace ImageServiceGUI
     {
         private static OurTcpClientSingleton _instance;
         public event EventHandler LogMsgRecieved;
-        public event EventHandler DirHandlerRemoved;
+        public event EventHandler<DirectoryHandlerClosedEventArgs> DirectoryHandlerRemoved;
         private IPEndPoint _ep;
         private TcpClient _client;
         private BinaryWriter _writer;
@@ -33,17 +37,26 @@ namespace ImageServiceGUI
             _client = new TcpClient();
             _client.Connect(_ep);
 
-            Console.WriteLine(@"You are connected");
+            Debug.WriteLine(@"TcpClient Connected");
             NetworkStream stream = _client.GetStream();
             _reader = new BinaryReader(stream);
             _writer = new BinaryWriter(stream);
 
-            _writer.Write("Yes0");
-            _writer.Write("Yes1");
-            _writer.Write("Yes2");
-            _writer.Write("Yes3");
-            string readCommand = _reader.ReadString();
-            Console.WriteLine(@"Result = {0}", readCommand);
+            new Task(() =>
+            {
+                try
+                {
+                    while (true)
+                    {
+                        string commandLine = _reader.ReadString();
+                        ParseMessage(commandLine);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.StackTrace);
+                }
+            }).Start();
         }
 
         /// <summary>
@@ -56,15 +69,14 @@ namespace ImageServiceGUI
             CommandEnum command = (CommandEnum) int.Parse(parameters[0]);
             switch (command)
             {
-                case CommandEnum.LogCommand:
+                case CommandEnum.NewLogCommand:
                     Log(parameters[1], (MessageTypeEnum) int.Parse(parameters[2]));
                     break;
-                case CommandEnum.CloseCommand:
-                    DirHandlerRemoved?.Invoke(this, EventArgs.Empty);
+                case CommandEnum.CloseDirectoryHandlerCommand:
+                    DirectoryHandlerClosedEventArgs args = new DirectoryHandlerClosedEventArgs(parameters[1], "hmm");
+                    DirectoryHandlerRemoved?.Invoke(this, args);
                     break;
             }
-
-            throw new NotImplementedException();
         }
 
         /**
@@ -72,7 +84,7 @@ namespace ImageServiceGUI
          */
         public void GetConfigDetails()
         {
-            _writer.Write(CommandEnum.GetConfigCommand.ToString());
+            _writer.Write(CommandEnum.ConfigCommand.ToString());
         }
 
         /// <summary>
@@ -97,7 +109,7 @@ namespace ImageServiceGUI
         /// <returns></returns>
         public void RemoveHandler(string handledDirectory)
         {
-            string command = CommandEnum.CloseCommand.ToString() + ";" + handledDirectory;
+            string command = (int)CommandEnum.CloseDirectoryHandlerCommand + ";" + handledDirectory;
             _writer.Write(command);
         }
 

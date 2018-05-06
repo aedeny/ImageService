@@ -3,8 +3,9 @@
     public enum CommandEnum
     {
         NewFileCommand,
-        CloseCommand,
-        GetConfigCommand,
-        LogCommand
+        CloseDirectoryHandlerCommand,
+        ConfigCommand,
+        NewLogCommand,
+        LogHistoryCommand
     }
 }

@@ -54,7 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\CloseHandlerCommand.cs" />
+    <Compile Include="Commands\CloseDirectoryHandlerCommand.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\NewFileCommand.cs" />
     <Compile Include="Communication\ClientHandlerFactory.cs" />
@@ -75,8 +75,6 @@
     </Compile>
     <Compile Include="Logger\ILoggingService.cs" />
     <Compile Include="Logger\LoggingService.cs" />
-    <Compile Include="Model\Event\CommandRecievedEventArgs.cs" />
-    <Compile Include="Model\Event\DirectoryCloseEventArgs.cs" />
     <Compile Include="Model\IImageServiceModel.cs" />
     <Compile Include="Model\ImageServiceModel.cs" />
     <Compile Include="Program.cs" />
@@ -102,7 +100,9 @@
     <Content Include="bin\Debug\ap_ex_01.pdb" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="bin\Debug\ap_ex_01.exe.config" />
     <None Include="bin\Debug\ap_ex_01.InstallLog" />
     <None Include="bin\Debug\InstallUtil.InstallLog" />

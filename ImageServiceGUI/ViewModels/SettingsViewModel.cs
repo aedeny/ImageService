@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using Infrastructure.Event;
 using Microsoft.Practices.Prism.Commands;
 
 namespace ImageServiceGUI.ViewModels
@@ -35,15 +36,14 @@ namespace ImageServiceGUI.ViewModels
             ThumbnailSize = 120;
             DirectoryHandlers = new ObservableCollection<string>()
             {
-                "Buy",
+                @"C:\Users\edeny\Documents\ex01\handled_dir1",
                 "All",
                 "GameBoys!!!"
             };
-            OurTcpClientSingleton.Instance.DirHandlerRemoved += OnDirectoryHandlerSuccessfulyRemoved;
+            OurTcpClientSingleton.Instance.DirectoryHandlerRemoved += OnDirectoryHandlerSuccessfulyRemoved;
             SubmitRemove = new DelegateCommand<object>(OnRemove, CanRemove);
             PropertyChanged += RemoveSelectedHandlerCommand;
         }
-
 
         public string SelectedDirectoryHandler
         {
@@ -65,9 +65,10 @@ namespace ImageServiceGUI.ViewModels
         /// <summary>
         /// Raises when a handler is successfuly removed from the Service.
         /// </summary>
-        public void OnDirectoryHandlerSuccessfulyRemoved(object sender, EventArgs eventArgs)
+        public void OnDirectoryHandlerSuccessfulyRemoved(object sender, DirectoryHandlerClosedEventArgs eventArgs)
         {
-            DirectoryHandlers.Remove(SelectedDirectoryHandler);
+            Debug.WriteLine(eventArgs.DirectoryPath);
+            DirectoryHandlers.Remove(eventArgs.DirectoryPath); // TODO Fix bug here
             SelectedDirectoryHandler = null;
         }
 

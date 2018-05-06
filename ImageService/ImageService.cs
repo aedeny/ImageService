@@ -1,14 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.ServiceProcess;
 using System.Timers;
+using ImageService.Commands;
 using ImageService.Communication;
 using ImageService.Controller;
 using ImageService.Logger;
 using ImageService.Model;
 using ImageService.Server;
+using Infrastructure.Enums;
 using Infrastructure.Logging;
 
 namespace ImageService
@@ -61,7 +64,6 @@ namespace ImageService
 
             eventLog.Source = _sourceName;
             eventLog.Log = _logName;
-            
         }
 
         protected override void OnStart(string[] args)
@@ -101,9 +103,13 @@ namespace ImageService
             }
 
             _model = new ImageServiceModel(outputDir, thumbnailSize);
-            _controller = new ImageController(_model);
+            
+            _controller = new ImageController();
             _imageServer = new ImageServer(_controller, _loggingService);
             _tcpServer = new TcpServer(8000, _loggingService, new TcpClientHandlerFactory(_controller));
+            _controller.AddCommand(CommandEnum.NewFileCommand, new NewFileCommand(_model));
+            _controller.AddCommand(CommandEnum.CloseDirectoryHandlerCommand, new CloseDirectoryHandlerCommand(_imageServer));
+
             string[] handeledDirectories = handledDirInfo.Split(';');
             foreach (string handeledDir in handeledDirectories)
             {

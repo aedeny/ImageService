@@ -5,7 +5,7 @@ using System.Linq;
 using Infrastructure.Enums;
 using ImageService.Logger;
 using Infrastructure.Logging;
-using ImageService.Model.Event;
+using Infrastructure.Event;
 
 namespace ImageService.Controller.Handlers
 {
@@ -22,7 +22,7 @@ namespace ImageService.Controller.Handlers
 
         #endregion
 
-        public event EventHandler<DirectoryCloseEventArgs> DirectoryClosedEvent;
+        public event EventHandler<DirectoryHandlerClosedEventArgs> DirectoryHandlerClosedEventHandler;
 
         public DirectoyHandler(IImageController imageController, ILoggingService loggingService, string path)
         {
@@ -35,8 +35,7 @@ namespace ImageService.Controller.Handlers
             };
             _path = path;
             _commandsDictionary = new Dictionary<CommandEnum, Action<string[]>>
-            {
-            };
+                { };
         }
 
         private void OnNewFileCreated(object sender, FileSystemEventArgs e)
@@ -55,13 +54,14 @@ namespace ImageService.Controller.Handlers
             _loggingService.Log(msg, result);
         }
 
-        public void StopHandleDirectory(object o, DirectoryCloseEventArgs args)
+        public void StopHandleDirectory(object o, DirectoryHandlerClosedEventArgs args)
         {
-            if(args == null || args.DirectoryPath.Equals(_path))
-            {
-                _dirWatcher.Created -= OnNewFileCreated;
-                _loggingService.Log("Stopped handling directory " + _path, MessageTypeEnum.Info);
-            }
+            if (args != null && !args.DirectoryPath.Equals(_path)) return;
+            _dirWatcher.Created -= OnNewFileCreated;
+            DirectoryHandlerClosedEventHandler?.Invoke(this,
+                new DirectoryHandlerClosedEventArgs(_path, "in StopHandleDirectory"));
+            _loggingService.Log("Stopped handling directory " + _path, MessageTypeEnum.Info);
+            if (args != null) args.Closed = true;
         }
 
         // Invokes the corresponding method

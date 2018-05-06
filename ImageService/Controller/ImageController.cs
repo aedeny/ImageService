@@ -12,12 +12,9 @@ namespace ImageService.Controller
     {
         private readonly Dictionary<CommandEnum, ICommand> _commandsDictionary;
 
-        public ImageController(IImageServiceModel model)
+        public ImageController()
         {
-            _commandsDictionary = new Dictionary<CommandEnum, ICommand>
-            {
-                {CommandEnum.NewFileCommand, new NewFileCommand(model)}
-            };
+            _commandsDictionary = new Dictionary<CommandEnum, ICommand>();
         }
 
         public string ExecuteCommand(CommandEnum commandId, string[] args, out MessageTypeEnum result)
@@ -40,6 +37,11 @@ namespace ImageService.Controller
             result = tuple.Item2;
 
             return tuple.Item1;
+        }
+
+        public void AddCommand(CommandEnum commandEnum, ICommand command)
+        {
+            _commandsDictionary.Add(commandEnum,command);
         }
     }
 }

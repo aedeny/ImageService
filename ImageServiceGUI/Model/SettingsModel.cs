@@ -13,9 +13,6 @@ namespace ImageServiceGUI.Model
             throw new NotImplementedException();
         }
 
-        public void OnHandlerRemoved()
-        {
-
-        }
+        
     }
 }

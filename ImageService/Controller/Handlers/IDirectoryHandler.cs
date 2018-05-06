@@ -1,12 +1,12 @@
 ﻿using System;
-using ImageService.Model.Event;
+using Infrastructure.Event;
 
 namespace ImageService.Controller.Handlers
 {
     public interface IDirectoryHandler
     {
         // The event that notifies that the directory is being closed.
-        event EventHandler<DirectoryCloseEventArgs> DirectoryClosedEvent;
+        event EventHandler<DirectoryHandlerClosedEventArgs> DirectoryHandlerClosedEventHandler;
 
         // The function recieves the directory to handle.
         void StartHandleDirectory(string dirPath);
