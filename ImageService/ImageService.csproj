@@ -57,6 +57,8 @@
     <Compile Include="Commands\CloseHandlerCommand.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\NewFileCommand.cs" />
+    <Compile Include="Communication\ClientHandlerFactory.cs" />
+    <Compile Include="Communication\IClientHandlerFactory.cs" />
     <Compile Include="Communication\ITcpClientHandler.cs" />
     <Compile Include="Communication\ITcpServer.cs" />
     <Compile Include="Communication\TcpClientHandler.cs" />

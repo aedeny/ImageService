@@ -5,7 +5,6 @@ using ImageService.Commands;
 using Infrastructure.Enums;
 using Infrastructure.Logging;
 using ImageService.Model;
-using ImageService.Server;
 
 namespace ImageService.Controller
 {

@@ -16,9 +16,11 @@ namespace ImageService.Communication
         private TcpListener _listener;
         private ICollection<TcpClient> _clients;
         private readonly ILoggingService _loggingService;
+        private readonly IClientHandlerFactory _clientHandlerFactory;
 
-        public TcpServer(int port, ILoggingService loggingService)
+        public TcpServer(int port, ILoggingService loggingService, IClientHandlerFactory clientHandlerFactory)
         {
+            _clientHandlerFactory = clientHandlerFactory;
             _port = port;
             _clients = new List<TcpClient>();
             _loggingService = loggingService;
@@ -42,8 +44,7 @@ namespace ImageService.Communication
                     {
                         TcpClient client = _listener.AcceptTcpClient();
                         _loggingService.Log("Got new connection", MessageTypeEnum.Info);
-                        ITcpClientHandler clientHandler = new TcpClientHandler(client, _loggingService);
-                        clientHandler.HandleClient();
+                        _clientHandlerFactory.Create(client,_loggingService).HandleClient();
                     }
                     catch (SocketException)
                     {

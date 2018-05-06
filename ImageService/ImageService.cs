@@ -103,7 +103,7 @@ namespace ImageService
             _model = new ImageServiceModel(outputDir, thumbnailSize);
             _controller = new ImageController(_model);
             _imageServer = new ImageServer(_controller, _loggingService);
-            _tcpServer = new TcpServer(8000, _loggingService);
+            _tcpServer = new TcpServer(8000, _loggingService, new TcpClientHandlerFactory(_controller));
             string[] handeledDirectories = handledDirInfo.Split(';');
             foreach (string handeledDir in handeledDirectories)
             {
