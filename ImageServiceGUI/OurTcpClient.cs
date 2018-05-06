@@ -29,6 +29,8 @@ namespace ImageServiceGUI
             _logViewModel = logViewModel;
         }
 
+        // KAKA
+
         // TODO Put in Task?
         public void Start()
         {

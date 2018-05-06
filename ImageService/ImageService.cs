@@ -6,9 +6,9 @@ using System.ServiceProcess;
 using System.Timers;
 using ImageService.Controller;
 using ImageService.Logger;
-using ImageService.Logger.Model;
 using ImageService.Model;
 using ImageService.Server;
+using Infrastructure.Logging;
 
 namespace ImageService
 {
@@ -98,8 +98,8 @@ namespace ImageService
             }
 
             _model = new ImageServiceModel(outputDir, thumbnailSize);
-            _controller = new ImageController(_model);
             _imageServer = new ImageServer(_controller, _loggingService);
+            _controller = new ImageController(_model, _imageServer);
             string[] handeledDirectories = handledDirInfo.Split(';');
             foreach (string handeledDir in handeledDirectories)
             {
@@ -110,7 +110,7 @@ namespace ImageService
         protected override void OnStop()
         {
             eventLog.WriteEntry("In OnStop");
-            _imageServer.Close(null);
+            _imageServer.Close();
         }
 
         private void OnMsgEvent(object sender, MessageRecievedEventArgs args)

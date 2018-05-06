@@ -14,7 +14,7 @@ namespace ImageService.Server
     {
         #region Members
 
-        public event EventHandler<FileSystemEventArgs> OnClose;
+        public event EventHandler<DirectoryCloseEventArgs> OnClose;
         public event EventHandler<CommandRecievedEventArgs> CommandRecieved;
         private readonly IImageController _controller;
         private readonly ILoggingService _loggingService;
@@ -35,9 +35,17 @@ namespace ImageService.Server
             OnClose += dh.StopHandleDirectory;
         }
 
-        public void Close(FileSystemEventArgs args)
+        public void Close()
+        {
+            OnClose?.Invoke(this, null);
+        }
+
+        public string CloseHandler(DirectoryCloseEventArgs args, out MessageTypeEnum result)
         {
             OnClose?.Invoke(this, args);
+            result = MessageTypeEnum.Info;
+
+            return args.DirectoryPath + " Closed";
         }
 
         public void Parser(string command)
