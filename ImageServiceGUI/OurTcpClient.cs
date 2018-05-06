@@ -21,7 +21,7 @@ namespace ImageServiceGUI
 
         private OurTcpClientSingleton()
         {
-            //Start();
+            Start();
         }
 
         public static OurTcpClientSingleton Instance => _instance ?? (_instance = new OurTcpClientSingleton());

@@ -106,6 +106,10 @@
     <Folder Include="bin\Release\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Communication\Communication.csproj">
+      <Project>{D9C15438-A2BE-4FB5-9093-18CDD64CE36C}</Project>
+      <Name>Communication</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj">
       <Project>{d3a04302-e931-4c21-a566-bb2f1c856584}</Project>
       <Name>Infrastructure</Name>

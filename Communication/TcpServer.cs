@@ -20,7 +20,9 @@ namespace Communication
             _port = port;
             _ch = ch;
             _clietns = new List<ITcpClient>();
+            Start();
         }
+
 
         public void Start()
         {

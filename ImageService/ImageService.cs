@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.ServiceProcess;
 using System.Timers;
+using Communication;
 using ImageService.Controller;
 using ImageService.Logger;
 using ImageService.Model;
@@ -42,6 +43,7 @@ namespace ImageService
         private IImageServiceModel _model;
         private IImageController _controller;
         private ILoggingService _loggingService;
+        private ITcpServer _server;
 
         // Gets info from App.config
         private readonly string _sourceName = ConfigurationManager.AppSettings["SourceName"];
@@ -59,6 +61,7 @@ namespace ImageService
 
             eventLog.Source = _sourceName;
             eventLog.Log = _logName;
+            _server = new TcpServer(8000, new TcpClientHandler());
         }
 
         protected override void OnStart(string[] args)
