@@ -40,7 +40,7 @@ namespace ImageServiceGUI.ViewModels
                 case MessageTypeEnum.Warning:
                     return new SolidColorBrush(Colors.Yellow);
                 default:
-                    return new SolidColorBrush(Colors.Plum);
+                    return new SolidColorBrush(Colors.White);
             }
         }
     }
