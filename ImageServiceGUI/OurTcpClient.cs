@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
-using ImageServiceGUI.ViewModels;
 using Infrastructure.Enums;
 using Infrastructure.Logging;
 
@@ -113,11 +111,15 @@ namespace ImageServiceGUI
             // Dummy log list
             return new List<Tuple<MessageTypeEnum, string>>()
             {
-                new Tuple<MessageTypeEnum, string>(MessageTypeEnum.Warning, "A long time ago in a galaxy far, far away...."),
+                new Tuple<MessageTypeEnum, string>(MessageTypeEnum.Warning,
+                    "A long time ago in a galaxy far, far away...."),
                 new Tuple<MessageTypeEnum, string>(MessageTypeEnum.Info, "It is a period of civil war."),
-                new Tuple<MessageTypeEnum, string>(MessageTypeEnum.Failure, "Rebel spaceships, striking from a hidden base, have won their first victory against the evil Galactic Empire."),
-                new Tuple<MessageTypeEnum, string>(MessageTypeEnum.Warning, "During the battle, Rebel spies managed to steal secret plans to the Empire’s ultimate weapon, the DEATH STAR, an armored space station with enough power to destroy an entire planet."),
-                new Tuple<MessageTypeEnum, string>(MessageTypeEnum.Info, "Pursued by the Empire’s sinister agents, Princess Leia races home aboard her starship, custodian of the stolen plans that can save her people and restore freedom to the galaxy…."),
+                new Tuple<MessageTypeEnum, string>(MessageTypeEnum.Failure,
+                    "Rebel spaceships, striking from a hidden base, have won their first victory against the evil Galactic Empire."),
+                new Tuple<MessageTypeEnum, string>(MessageTypeEnum.Warning,
+                    "During the battle, Rebel spies managed to steal secret plans to the Empire’s ultimate weapon, the DEATH STAR, an armored space station with enough power to destroy an entire planet."),
+                new Tuple<MessageTypeEnum, string>(MessageTypeEnum.Info,
+                    "Pursued by the Empire’s sinister agents, Princess Leia races home aboard her starship, custodian of the stolen plans that can save her people and restore freedom to the galaxy…."),
             };
         }
     }

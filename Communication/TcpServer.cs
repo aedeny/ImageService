@@ -10,10 +10,10 @@ namespace Communication
 {
     public class TcpServer : ITcpServer
     {
-        private int _port;
+        private readonly int _port;
         private TcpListener _listener;
         private ICollection<ITcpClient> _clietns;
-        private ITcpClientHandler _ch;
+        private readonly ITcpClientHandler _ch;
 
         public TcpServer(int port, ITcpClientHandler ch)
         {
@@ -30,7 +30,8 @@ namespace Communication
             _listener.Start();
             Console.WriteLine("Waiting for connections...");
 
-            Task task = new Task(() => {
+            Task task = new Task(() =>
+            {
                 while (true)
                 {
                     try
@@ -44,15 +45,15 @@ namespace Communication
                         break;
                     }
                 }
+
                 Console.WriteLine("Server stopped");
             });
             task.Start();
         }
+
         public void Stop()
         {
             _listener.Stop();
         }
     }
-
-}
 }

@@ -2,7 +2,7 @@
 
 namespace Communication
 {
-    internal interface ITcpClientHandler
+    public interface ITcpClientHandler
     {
         void HandleClient(TcpClient client);
     }
