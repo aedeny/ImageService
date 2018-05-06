@@ -4,12 +4,12 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.ServiceProcess;
 using System.Timers;
-using Communication;
 using ImageService.Controller;
 using ImageService.Logger;
 using ImageService.Model;
 using ImageService.Server;
 using Infrastructure.Logging;
+using ImageService.Communication;
 
 namespace ImageService
 {
@@ -61,7 +61,8 @@ namespace ImageService
 
             eventLog.Source = _sourceName;
             eventLog.Log = _logName;
-            _server = new TcpServer(8000, new TcpClientHandler());
+            _server = new TcpServer(8000, new TcpClientHandler(), _loggingService);
+            _server.Start();
         }
 
         protected override void OnStart(string[] args)
@@ -101,8 +102,8 @@ namespace ImageService
             }
 
             _model = new ImageServiceModel(outputDir, thumbnailSize);
-            _imageServer = new ImageServer(_controller, _loggingService);
             _controller = new ImageController(_model, _imageServer);
+            _imageServer = new ImageServer(_controller, _loggingService);
             string[] handeledDirectories = handledDirInfo.Split(';');
             foreach (string handeledDir in handeledDirectories)
             {

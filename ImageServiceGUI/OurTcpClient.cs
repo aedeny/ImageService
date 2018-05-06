@@ -17,7 +17,7 @@ namespace ImageServiceGUI
         private TcpClient _client;
         private BinaryWriter _writer;
         private BinaryReader _reader;
-        private NetworkStream _stream;
+        //private NetworkStream _stream;
 
         private OurTcpClientSingleton()
         {
@@ -34,13 +34,13 @@ namespace ImageServiceGUI
             _client.Connect(_ep);
 
             Console.WriteLine(@"You are connected");
-            using (_stream = _client.GetStream())
-            using (_reader = new BinaryReader(_stream))
-            using (_writer = new BinaryWriter(_stream))
-            {
-                string readCommand = _reader.ReadString();
-                Console.WriteLine(@"Result = {0}", readCommand);
-            }
+            NetworkStream stream = _client.GetStream();
+            _reader = new BinaryReader(stream);
+            _writer = new BinaryWriter(stream);
+
+            _writer.Write("Yes");
+            string readCommand = _reader.ReadString();
+            Console.WriteLine(@"Result = {0}", readCommand);
         }
 
         /// <summary>

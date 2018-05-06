@@ -6,7 +6,6 @@ using ImageService.Logger;
 using Infrastructure.Logging;
 using ImageService.Model.Event;
 using System.Linq;
-using System.IO;
 
 namespace ImageService.Server
 {

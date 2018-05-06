@@ -5,8 +5,10 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using ImageService.Logger;
+using Infrastructure.Logging;
 
-namespace Communication
+namespace ImageService.Communication
 {
     public class TcpServer : ITcpServer
     {
@@ -16,12 +18,12 @@ namespace Communication
         private readonly ITcpClientHandler _ch;
         private readonly ILoggingService _loggingService;
 
-        public TcpServer(int port, ITcpClientHandler ch)
+        public TcpServer(int port, ITcpClientHandler ch, ILoggingService loggingService)
         {
             _port = port;
             _ch = ch;
             _clients = new List<ITcpClient>();
-            Start();
+            _loggingService = loggingService;
         }
 
 
@@ -31,7 +33,7 @@ namespace Communication
             _listener = new TcpListener(ep);
 
             _listener.Start();
-            Console.WriteLine("Waiting for connections...");
+            _loggingService.Log("Waiting for connections...", MessageTypeEnum.Info);
 
             Task task = new Task(() =>
             {
@@ -40,17 +42,16 @@ namespace Communication
                     try
                     {
                         TcpClient client = _listener.AcceptTcpClient();
-                        Console.WriteLine("Got new connection");
+                        _loggingService.Log("Got new connection", MessageTypeEnum.Info);
                         _ch.HandleClient(client);
                     }
                     catch (SocketException)
                     {
                         break;
-                        
                     }
                 }
 
-                Console.WriteLine("Server stopped");
+                _loggingService.Log("Server stopped", MessageTypeEnum.Info);
             });
             task.Start();
         }
