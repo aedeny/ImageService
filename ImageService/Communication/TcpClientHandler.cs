@@ -2,26 +2,42 @@
 using System.IO;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using ImageService.Logger;
+using Infrastructure.Logging;
 
 namespace ImageService.Communication
 {
     public class TcpClientHandler : ITcpClientHandler
     {
-        public void HandleClient(TcpClient client)
+        private readonly ILoggingService _loggingService;
+        private readonly TcpClient _tcpClient;
+        private readonly NetworkStream _stream;
+        private readonly BinaryReader _reader;
+        private readonly BinaryWriter _writer;
+
+
+        public TcpClientHandler(TcpClient tcpClient, ILoggingService loggingService)
+        {
+            _tcpClient = tcpClient;
+            _loggingService = loggingService;
+            _stream = _tcpClient.GetStream();
+            _reader = new BinaryReader(_stream);
+            _writer = new BinaryWriter(_stream);
+        }
+
+        public void HandleClient()
         {
             new Task(() =>
             {
-                using (NetworkStream stream = client.GetStream())
-                using (BinaryReader reader = new BinaryReader(stream))
-                using (BinaryWriter writer = new BinaryWriter(stream))
+                try
                 {
-                    string commandLine = reader.ReadString();
-                    Console.WriteLine("Got command: {0}", commandLine);
-                    //string result = ExecuteCommand(commandLine, client);
-                    writer.Write("Sex");
+                    while (true)
+                    {
+                        string commandLine = _reader.ReadString();
+                        _loggingService.Log(@"Got command:" + commandLine, MessageTypeEnum.Info);
+                    }
                 }
-
-                client.Close();
+                catch (Exception e) { }
             }).Start();
         }
     }

@@ -13,12 +13,11 @@ namespace ImageService.Controller
     {
         private readonly Dictionary<CommandEnum, ICommand> _commandsDictionary;
 
-        public ImageController(IImageServiceModel model, ImageServer server)
+        public ImageController(IImageServiceModel model)
         {
             _commandsDictionary = new Dictionary<CommandEnum, ICommand>
             {
-                {CommandEnum.NewFileCommand, new NewFileCommand(model)},
-                {CommandEnum.CloseCommand, new CloseHandlerCommand(server)}
+                {CommandEnum.NewFileCommand, new NewFileCommand(model)}
             };
         }
 

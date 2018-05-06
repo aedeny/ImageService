@@ -21,7 +21,7 @@ namespace ImageServiceGUI
 
         private OurTcpClientSingleton()
         {
-            //Start();
+            Start();
         }
 
         public static OurTcpClientSingleton Instance => _instance ?? (_instance = new OurTcpClientSingleton());
@@ -38,7 +38,10 @@ namespace ImageServiceGUI
             _reader = new BinaryReader(stream);
             _writer = new BinaryWriter(stream);
 
-            _writer.Write("Yes");
+            _writer.Write("Yes0");
+            _writer.Write("Yes1");
+            _writer.Write("Yes2");
+            _writer.Write("Yes3");
             string readCommand = _reader.ReadString();
             Console.WriteLine(@"Result = {0}", readCommand);
         }

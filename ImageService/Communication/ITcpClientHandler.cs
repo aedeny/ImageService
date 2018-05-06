@@ -4,6 +4,6 @@ namespace ImageService.Communication
 {
     public interface ITcpClientHandler
     {
-        void HandleClient(TcpClient client);
+        void HandleClient();
     }
 }
