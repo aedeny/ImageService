@@ -55,9 +55,9 @@ namespace ImageService.Controller.Handlers
             _loggingService.Log(msg, result);
         }
 
-        public void StopHandleDirectory(object o, FileSystemEventArgs args)
+        public void StopHandleDirectory(object o, DirectoryCloseEventArgs args)
         {
-            if(args == null || args.FullPath.Equals(_path))
+            if(args == null || args.DirectoryPath.Equals(_path))
             {
                 _dirWatcher.Created -= OnNewFileCreated;
                 _loggingService.Log("Stopped handling directory " + _path, MessageTypeEnum.Info);

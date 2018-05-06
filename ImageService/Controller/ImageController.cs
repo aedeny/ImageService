@@ -5,6 +5,7 @@ using ImageService.Commands;
 using Infrastructure.Enums;
 using Infrastructure.Logging;
 using ImageService.Model;
+using ImageService.Server;
 
 namespace ImageService.Controller
 {
@@ -12,13 +13,12 @@ namespace ImageService.Controller
     {
         private readonly Dictionary<CommandEnum, ICommand> _commandsDictionary;
 
-
-        public ImageController(IImageServiceModel model)
+        public ImageController(IImageServiceModel model, ImageServer server)
         {
             _commandsDictionary = new Dictionary<CommandEnum, ICommand>
             {
                 {CommandEnum.NewFileCommand, new NewFileCommand(model)},
-                {CommandEnum.CloseCommand, new CloseHandlerCommand()}
+                {CommandEnum.CloseCommand, new CloseHandlerCommand(server)}
             };
         }
 
