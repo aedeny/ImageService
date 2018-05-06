@@ -14,10 +14,11 @@
         <Label Content="Settings" Style="{StaticResource TitleLabelStyle}" />
         <Grid Height="Auto" Margin="10" Grid.Row="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="71*" />
-                <RowDefinition Height="105*" />
+                <RowDefinition Height="157*" />
+                <RowDefinition Height="37*" />
+                <RowDefinition Height="158*" />
             </Grid.RowDefinitions>
-            <Grid Height="Auto" Margin="10" Grid.Row="0">
+            <Grid Height="Auto" Margin="10,10,10,0" Grid.Row="0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="1*" />
                     <RowDefinition Height="1*" />
@@ -33,12 +34,26 @@
                 <Label Content="Log Name" Style="{StaticResource BoldLabelStyle}" Grid.Row="2"
                        Grid.Column="0" />
                 <Label Content="Thumbnail Size" Style="{StaticResource BoldLabelStyle}" Grid.Row="3" Grid.Column="0" />
-                <TextBlock Text="{Binding OutputDirectory}"  Grid.Column="1" Grid.Row="0" Style="{StaticResource NormalFontStyle}"/>
-                <TextBlock Text="{Binding SourceName}"  Grid.Column="1" Grid.Row="1" Style="{StaticResource NormalFontStyle}"/>
-                <TextBlock Text="{Binding LogName}"  Grid.Column="1" Grid.Row="2" Style="{StaticResource NormalFontStyle}"/>
-                <TextBlock Text="{Binding ThumbnailSize}"  Grid.Column="1" Grid.Row="3" Style="{StaticResource NormalFontStyle}"/>
+                <TextBlock Text="{Binding OutputDirectory}" Grid.Column="1" Grid.Row="0"
+                           Style="{StaticResource NormalFontStyle}" />
+                <TextBlock Text="{Binding SourceName}" Grid.Column="1" Grid.Row="1"
+                           Style="{StaticResource NormalFontStyle}" />
+                <TextBlock Text="{Binding LogName}" Grid.Column="1" Grid.Row="2"
+                           Style="{StaticResource NormalFontStyle}" />
+                <TextBlock Text="{Binding ThumbnailSize}" Grid.Column="1" Grid.Row="3"
+                           Style="{StaticResource NormalFontStyle}" />
 
             </Grid>
+            <ListBox Grid.Row="2" ItemsSource="{Binding DirectoryHandlers}" SelectedItem="{Binding SelectedDirectoryHandler}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding}" Style="{StaticResource NormalFontStyle}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <Button Content="Remove Directory Handler" Grid.Row="1" Style="{StaticResource NormalButtonStyle}" Command="{Binding SubmitRemove}" />
         </Grid>
 
     </Grid>

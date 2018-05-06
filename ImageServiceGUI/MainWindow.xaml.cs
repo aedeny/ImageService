@@ -16,18 +16,16 @@ using ImageServiceGUI.ViewModels;
 
 namespace ImageServiceGUI
 {
-    /// <inheritdoc />
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
         public MainWindow()
         {
             InitializeComponent();
             SettingsViewModel settingsViewModel = new SettingsViewModel();
             LogViewModel logViewModel = new LogViewModel();
-            OurTcpClient tcpClient = new OurTcpClient(logViewModel);
         }
     }
 }

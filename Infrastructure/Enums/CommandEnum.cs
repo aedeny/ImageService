@@ -4,6 +4,7 @@
     {
         NewFileCommand,
         CloseCommand,
-        GetConfigCommand
+        GetConfigCommand,
+        LogCommand
     }
 }

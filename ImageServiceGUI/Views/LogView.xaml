@@ -11,6 +11,41 @@
             <RowDefinition Height="4*" />
             <RowDefinition Height="19*" />
         </Grid.RowDefinitions>
-        <Label Content="Log" Style="{StaticResource TitleLabelStyle}"/>
+        <Label Content="Log" Style="{StaticResource TitleLabelStyle}" />
+
+        <ListView Grid.Row="1" ItemsSource="{Binding LogList}" HorizontalAlignment="Stretch">
+            <ListView.ItemContainerStyle>
+                <Style>
+                    <Setter Property="ListViewItem.HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="ListViewItem.VerticalContentAlignment" Value="Stretch"/>
+                    <Setter Property="ListViewItem.Margin" Value="-4,0"/>
+                    <Setter Property="ListViewItem.FontSize" Value="15"></Setter>
+
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.View>
+                <GridView AllowsColumnReorder="true">
+                    <GridViewColumn Header="Type" Width="100">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock TextWrapping="Wrap" Text="{Binding Item2}" HorizontalAlignment="Stretch" Background="{Binding Item1}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="Details" Width="650">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock TextWrapping="Wrap" Text="{Binding Item3}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <!--<GridViewColumn DisplayMemberBinding="{Binding Path=Item2}"
+                                    Header="Details" Width="Auto"/>-->
+                </GridView>
+            </ListView.View>
+        </ListView>
+
     </Grid>
 </UserControl>
