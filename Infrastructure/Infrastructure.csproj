@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SettingsInfo.cs" />
     <Compile Include="Enums\CommandEnum.cs" />
     <Compile Include="Event\CommandRecievedEventArgs.cs" />
     <Compile Include="Event\DirectoryHandlerClosedEventArgs.cs" />

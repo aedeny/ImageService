@@ -12,6 +12,7 @@ using ImageService.Model;
 using ImageService.Server;
 using Infrastructure.Enums;
 using Infrastructure.Logging;
+using Infrastructure;
 
 namespace ImageService
 {
@@ -50,6 +51,7 @@ namespace ImageService
         private ILoggingService _loggingService;
         private IImageServiceModel _model;
         private ITcpServer _tcpServer;
+        private SettingsInfo _settingsInfo;
 
         public ImageService()
         {

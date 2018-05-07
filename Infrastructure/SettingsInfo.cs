@@ -1,9 +1,9 @@
 ﻿using Newtonsoft.Json.Linq;
 
 
-namespace ImageServiceGUI
+namespace Infrastructure
 {
-    internal class SettingsInfo
+    public class SettingsInfo
     {
         public string OutputDirectory { get; set; }
         public string SourceName { get; set; }

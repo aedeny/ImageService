@@ -11,6 +11,15 @@ namespace ImageService.Server
 {
     public class ImageServer
     {
+        #region Members
+
+        public event EventHandler<DirectoryHandlerClosedEventArgs> CloseDirectoryHandler;
+        public event EventHandler<CommandRecievedEventArgs> CommandRecieved;
+        private readonly IImageController _controller;
+        private readonly ILoggingService _loggingService;
+
+        #endregion
+
         public ImageServer(IImageController controller, ILoggingService loggingService)
         {
             _controller = controller;
@@ -45,14 +54,5 @@ namespace ImageService.Server
 
             _controller.ExecuteCommand(cid, args, out MessageTypeEnum _);
         }
-
-        #region Members
-
-        public event EventHandler<DirectoryHandlerClosedEventArgs> CloseDirectoryHandler;
-        public event EventHandler<CommandRecievedEventArgs> CommandRecieved;
-        private readonly IImageController _controller;
-        private readonly ILoggingService _loggingService;
-
-        #endregion
     }
 }
