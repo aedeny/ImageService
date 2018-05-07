@@ -13,6 +13,7 @@ using ImageService.Server;
 using Infrastructure.Enums;
 using Infrastructure.Logging;
 using Infrastructure;
+using Infrastructure.Event;
 
 namespace ImageService
 {
@@ -99,13 +100,18 @@ namespace ImageService
                 thumbnailSize = 100;
 
             _model = new ImageServiceModel(outputDir, thumbnailSize);
-
             _controller = new ImageController();
             _imageServer = new ImageServer(_controller, _loggingService);
             _tcpServer = new TcpServer(8000, _loggingService, new TcpClientHandlerFactory(_controller));
+
+            // Creates controller commands
             _controller.AddCommand(CommandEnum.NewFileCommand, new NewFileCommand(_model));
             _controller.AddCommand(CommandEnum.CloseDirectoryHandlerCommand,
                 new CloseDirectoryHandlerCommand(_imageServer));
+
+            SettingsInfoRetrievalCommand configCommand = new SettingsInfoRetrievalCommand();
+            configCommand.SettingsInfoRetrievalCommandRecieved += OnSettingsInfoRetrievalCommandRecieved;
+            _controller.AddCommand(CommandEnum.ConfigCommand, configCommand);
 
             string[] handeledDirectories = handledDirInfo.Split(';');
             foreach (string handeledDir in handeledDirectories) _imageServer.CreateHandler(handeledDir);
@@ -120,6 +126,11 @@ namespace ImageService
         private void OnMsgEvent(object sender, MessageRecievedEventArgs args)
         {
             eventLog.WriteEntry(args.Message);
+        }
+
+        private void OnSettingsInfoRetrievalCommandRecieved(object sender, SettingsInfoRetrievalEventArgs args)
+        {
+            args.SettingsInfoJson = _settingsInfo.ToJson();
         }
 
         [DllImport("advapi32.dll", SetLastError = true)]
