@@ -2,28 +2,16 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Infrastructure.Enums;
 using ImageService.Logger;
-using Infrastructure.Logging;
+using ImageService.Server;
+using Infrastructure.Enums;
 using Infrastructure.Event;
+using Infrastructure.Logging;
 
 namespace ImageService.Controller.Handlers
 {
     public class DirectoyHandler : IDirectoryHandler
     {
-        #region Members
-
-        private readonly IImageController _imageController;
-        private readonly ILoggingService _loggingService;
-        private readonly FileSystemWatcher _dirWatcher;
-        private readonly string _path;
-        private readonly Dictionary<CommandEnum, Action<string[]>> _commandsDictionary;
-        private readonly string[] _extenstions = {".jpg", ".jpeg", ".png", ".bmp", ".gif"};
-
-        #endregion
-
-        public event EventHandler<DirectoryHandlerClosedEventArgs> DirectoryHandlerClosedEventHandler;
-
         public DirectoyHandler(IImageController imageController, ILoggingService loggingService, string path)
         {
             _imageController = imageController;
@@ -34,8 +22,23 @@ namespace ImageService.Controller.Handlers
                 IncludeSubdirectories = true
             };
             _path = path;
-            _commandsDictionary = new Dictionary<CommandEnum, Action<string[]>>
-                { };
+            _commandsDictionary = new Dictionary<CommandEnum, Action<string[]>>();
+        }
+
+        public event EventHandler<DirectoryHandlerClosedEventArgs> DirectoryHandlerClosedEventHandler;
+
+        // Invokes the corresponding method
+        public void OnCommandRecieved(object sender, CommandRecievedEventArgs e)
+        {
+            if (!_commandsDictionary.TryGetValue(e.CommandId, out Action<string[]> currentCommand)) return;
+
+            currentCommand.BeginInvoke(e.Args, null, null);
+        }
+
+        public void StartHandleDirectory(string dirPath)
+        {
+            _dirWatcher.Created += OnNewFileCreated;
+            _loggingService.Log("Started handling directory " + _path, MessageTypeEnum.Info);
         }
 
         private void OnNewFileCreated(object sender, FileSystemEventArgs e)
@@ -54,31 +57,30 @@ namespace ImageService.Controller.Handlers
             _loggingService.Log(msg, result);
         }
 
-        public void StopHandleDirectory(object o, DirectoryHandlerClosedEventArgs args)
+        public void StopHandleDirectory(object sender, DirectoryHandlerClosedEventArgs args)
         {
             if (args != null && !args.DirectoryPath.Equals(_path)) return;
             _dirWatcher.Created -= OnNewFileCreated;
+
+            ImageServer imageServer = (ImageServer) sender;
+            imageServer.CloseDirectoryHandler -= StopHandleDirectory;
+            imageServer.CommandRecieved -= OnCommandRecieved;
+
             DirectoryHandlerClosedEventHandler?.Invoke(this,
                 new DirectoryHandlerClosedEventArgs(_path, "in StopHandleDirectory"));
             _loggingService.Log("Stopped handling directory " + _path, MessageTypeEnum.Info);
             if (args != null) args.Closed = true;
         }
 
-        // Invokes the corresponding method
-        public void OnCommandRecieved(object sender, CommandRecievedEventArgs e)
-        {
-            if (!_commandsDictionary.TryGetValue(e.CommandId, out Action<string[]> currentCommand))
-            {
-                return;
-            }
+        #region Members
 
-            currentCommand.BeginInvoke(e.Args, null, null);
-        }
+        private readonly IImageController _imageController;
+        private readonly ILoggingService _loggingService;
+        private readonly FileSystemWatcher _dirWatcher;
+        private readonly string _path;
+        private readonly Dictionary<CommandEnum, Action<string[]>> _commandsDictionary;
+        private readonly string[] _extenstions = {".jpg", ".jpeg", ".png", ".bmp", ".gif"};
 
-        public void StartHandleDirectory(string dirPath)
-        {
-            _dirWatcher.Created += OnNewFileCreated;
-            _loggingService.Log("Started handling directory " + _path, MessageTypeEnum.Info);
-        }
+        #endregion
     }
 }

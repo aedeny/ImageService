@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using ImageService.Commands;
+﻿using ImageService.Commands;
 using Infrastructure.Enums;
 using Infrastructure.Logging;
 

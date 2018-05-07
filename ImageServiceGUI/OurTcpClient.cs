@@ -11,16 +11,12 @@ using Infrastructure.Logging;
 
 namespace ImageServiceGUI
 {
-    class OurTcpClientSingleton
+    internal class OurTcpClientSingleton
     {
         private static OurTcpClientSingleton _instance;
-        public event EventHandler LogMsgRecieved;
-        public event EventHandler<DirectoryHandlerClosedEventArgs> DirectoryHandlerRemoved;
-        private IPEndPoint _ep;
         private TcpClient _client;
-        public BinaryWriter Writer { get; set; }
 
-        public BinaryReader Reader { get; set; }
+        private IPEndPoint _ep;
         //private NetworkStream _stream;
 
         private OurTcpClientSingleton()
@@ -28,7 +24,13 @@ namespace ImageServiceGUI
             Start();
         }
 
+        public BinaryWriter Writer { get; set; }
+
+        public BinaryReader Reader { get; set; }
+
         public static OurTcpClientSingleton Instance => _instance ?? (_instance = new OurTcpClientSingleton());
+        public event EventHandler LogMsgRecieved;
+        public event EventHandler<DirectoryHandlerClosedEventArgs> DirectoryHandlerRemoved;
 
         // TODO Put in Task?
         public void Start()
@@ -60,7 +62,7 @@ namespace ImageServiceGUI
         }
 
         /// <summary>
-        /// Parse the msg recieved from the server.
+        ///     Parse the msg recieved from the server.
         /// </summary>
         /// <param name="msg">The message to parse.</param>
         public void ParseMessage(string msg)
@@ -89,13 +91,13 @@ namespace ImageServiceGUI
 
 
         /// <summary>
-        /// Sends the LogViewModel a log msg via event.
+        ///     Sends the LogViewModel a log msg via event.
         /// </summary>
         /// <param name="msg">The message to log.</param>
         /// <param name="messageType">Message type.</param>
         public void Log(string msg, MessageTypeEnum messageType)
         {
-            MessageRecievedEventArgs messageRecievedEventArgs = new MessageRecievedEventArgs()
+            MessageRecievedEventArgs messageRecievedEventArgs = new MessageRecievedEventArgs
             {
                 Message = msg,
                 Status = messageType
@@ -105,7 +107,7 @@ namespace ImageServiceGUI
 
 
         /// <summary>
-        /// Closes the TCP Client.
+        ///     Closes the TCP Client.
         /// </summary>
         public void Close()
         {
@@ -115,7 +117,7 @@ namespace ImageServiceGUI
         public List<Tuple<MessageTypeEnum, string>> GetLogList()
         {
             // Dummy log list
-            return new List<Tuple<MessageTypeEnum, string>>()
+            return new List<Tuple<MessageTypeEnum, string>>
             {
                 new Tuple<MessageTypeEnum, string>(MessageTypeEnum.Warning,
                     "A long time ago in a galaxy far, far away...."),
@@ -125,7 +127,7 @@ namespace ImageServiceGUI
                 new Tuple<MessageTypeEnum, string>(MessageTypeEnum.Warning,
                     "During the battle, Rebel spies managed to steal secret plans to the Empire’s ultimate weapon, the DEATH STAR, an armored space station with enough power to destroy an entire planet."),
                 new Tuple<MessageTypeEnum, string>(MessageTypeEnum.Info,
-                    "Pursued by the Empire’s sinister agents, Princess Leia races home aboard her starship, custodian of the stolen plans that can save her people and restore freedom to the galaxy…."),
+                    "Pursued by the Empire’s sinister agents, Princess Leia races home aboard her starship, custodian of the stolen plans that can save her people and restore freedom to the galaxy….")
             };
         }
     }

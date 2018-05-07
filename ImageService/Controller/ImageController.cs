@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using ImageService.Commands;
 using Infrastructure.Enums;
 using Infrastructure.Logging;
-using ImageService.Model;
 
 namespace ImageService.Controller
 {
@@ -21,10 +20,7 @@ namespace ImageService.Controller
         {
             result = MessageTypeEnum.Failure;
 
-            if (!_commandsDictionary.TryGetValue(commandId, out ICommand currentCommand))
-            {
-                return "No such command";
-            }
+            if (!_commandsDictionary.TryGetValue(commandId, out ICommand currentCommand)) return "No such command";
 
             Task<Tuple<string, MessageTypeEnum>> task = new Task<Tuple<string, MessageTypeEnum>>(() =>
             {
@@ -41,7 +37,7 @@ namespace ImageService.Controller
 
         public void AddCommand(CommandEnum commandEnum, ICommand command)
         {
-            _commandsDictionary.Add(commandEnum,command);
+            _commandsDictionary.Add(commandEnum, command);
         }
     }
 }

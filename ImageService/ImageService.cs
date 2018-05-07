@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -41,26 +40,24 @@ namespace ImageService
 
     public partial class ImageService : ServiceBase
     {
-        private int _eventId = 1;
-        private ImageServer _imageServer;
-        private IImageServiceModel _model;
-        private IImageController _controller;
-        private ILoggingService _loggingService;
-        private ITcpServer _tcpServer;
+        private readonly string _logName = ConfigurationManager.AppSettings["LogName"];
 
         // Gets info from App.config
         private readonly string _sourceName = ConfigurationManager.AppSettings["SourceName"];
-        private readonly string _logName = ConfigurationManager.AppSettings["LogName"];
+        private IImageController _controller;
+        private int _eventId = 1;
+        private ImageServer _imageServer;
+        private ILoggingService _loggingService;
+        private IImageServiceModel _model;
+        private ITcpServer _tcpServer;
 
         public ImageService()
         {
             InitializeComponent();
             eventLog = new EventLog();
             if (!EventLog.SourceExists(_sourceName))
-            {
                 EventLog.CreateEventSource(
                     _sourceName, _logName);
-            }
 
             eventLog.Source = _sourceName;
             eventLog.Log = _logName;
@@ -97,24 +94,19 @@ namespace ImageService
             string outputDir = ConfigurationManager.AppSettings["OutputDir"];
             string handledDirInfo = ConfigurationManager.AppSettings["HandledDir"];
             if (!int.TryParse(ConfigurationManager.AppSettings["ThumbnailSize"], out int thumbnailSize))
-            {
-                // Sets default thumbnail size
                 thumbnailSize = 100;
-            }
 
             _model = new ImageServiceModel(outputDir, thumbnailSize);
-            
+
             _controller = new ImageController();
             _imageServer = new ImageServer(_controller, _loggingService);
             _tcpServer = new TcpServer(8000, _loggingService, new TcpClientHandlerFactory(_controller));
             _controller.AddCommand(CommandEnum.NewFileCommand, new NewFileCommand(_model));
-            _controller.AddCommand(CommandEnum.CloseDirectoryHandlerCommand, new CloseDirectoryHandlerCommand(_imageServer));
+            _controller.AddCommand(CommandEnum.CloseDirectoryHandlerCommand,
+                new CloseDirectoryHandlerCommand(_imageServer));
 
             string[] handeledDirectories = handledDirInfo.Split(';');
-            foreach (string handeledDir in handeledDirectories)
-            {
-                _imageServer.CreateHandler(handeledDir);
-            }
+            foreach (string handeledDir in handeledDirectories) _imageServer.CreateHandler(handeledDir);
         }
 
         protected override void OnStop()

@@ -1,6 +1,4 @@
-﻿using System.Net.Sockets;
-
-namespace ImageService.Communication
+﻿namespace ImageService.Communication
 {
     public interface ITcpClientHandler
     {

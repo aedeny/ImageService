@@ -1,6 +1,6 @@
 ﻿namespace ImageServiceGUI
 {
-    class ConfigDetails
+    internal class ConfigDetails
     {
         public string OutputDirectory { get; set; }
         public string SourceName { get; set; }

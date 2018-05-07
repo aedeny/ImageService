@@ -11,10 +11,10 @@
     <Grid>
         <TabControl>
             <TabItem Name="SettingsTabItem" Header="Settings">
-                <views:SettingsView/>
+                <views:SettingsView />
             </TabItem>
             <TabItem Name="LogsTabItem" Header="Logs">
-                <views:LogView/>
+                <views:LogView />
             </TabItem>
         </TabControl>
 

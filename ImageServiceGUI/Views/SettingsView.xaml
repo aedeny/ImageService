@@ -44,7 +44,8 @@
                            Style="{StaticResource NormalFontStyle}" />
 
             </Grid>
-            <ListBox Grid.Row="2" ItemsSource="{Binding DirectoryHandlers}" SelectedItem="{Binding SelectedDirectoryHandler}">
+            <ListBox Grid.Row="2" ItemsSource="{Binding DirectoryHandlers}"
+                     SelectedItem="{Binding SelectedDirectoryHandler}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
@@ -53,7 +54,8 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            <Button Content="Remove Directory Handler" Grid.Row="1" Style="{StaticResource NormalButtonStyle}" Command="{Binding SubmitRemove}" />
+            <Button Content="Remove Directory Handler" Grid.Row="1" Style="{StaticResource NormalButtonStyle}"
+                    Command="{Binding SubmitRemove}" />
         </Grid>
 
     </Grid>

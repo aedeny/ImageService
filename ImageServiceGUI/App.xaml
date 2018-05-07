@@ -6,41 +6,41 @@
     <Application.Resources>
 
         <Style x:Key="TitleLabelStyle" TargetType="{x:Type Label}">
-            <Setter Property="Background" Value="DarkCyan"></Setter>
+            <Setter Property="Background" Value="DarkCyan" />
             <!--TODO adjust font size to window-->
-            <Setter Property="FontWeight" Value="Bold"></Setter>
-            <Setter Property="FontSize" Value="25"></Setter>
-            <Setter Property="Foreground" Value="Black"></Setter>
-            <Setter Property="VerticalAlignment" Value="Stretch"></Setter>
-            <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
-            <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
-            <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="25" />
+            <Setter Property="Foreground" Value="Black" />
+            <Setter Property="VerticalAlignment" Value="Stretch" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
         </Style>
 
         <!--Change to TextBlock-->
         <Style x:Key="BoldLabelStyle" TargetType="{x:Type Label}">
             <!--TODO adjust font size to window-->
-            <Setter Property="FontWeight" Value="Bold"></Setter>
-            <Setter Property="FontSize" Value="15"></Setter>
-            <Setter Property="Foreground" Value="Black"></Setter>
-            <Setter Property="VerticalAlignment" Value="Stretch"></Setter>
-            <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
-            <Setter Property="HorizontalContentAlignment" Value="Left"></Setter>
-            <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="Foreground" Value="Black" />
+            <Setter Property="VerticalAlignment" Value="Stretch" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
         </Style>
 
         <Style x:Key="NormalFontStyle" TargetType="{x:Type TextBlock}">
             <!--TODO adjust font size to window-->
-            <Setter Property="FontSize" Value="15"></Setter>
-            <Setter Property="Foreground" Value="Black"></Setter>
-            <Setter Property="VerticalAlignment" Value="Center"></Setter>
-            <Setter Property="HorizontalAlignment" Value="Left"></Setter>
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="Foreground" Value="Black" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
         </Style>
 
         <Style x:Key="NormalButtonStyle" TargetType="{x:Type Button}">
-            <Setter Property="FontSize" Value="15"></Setter>
-            <Setter Property="FontWeight" Value="SemiBold"></Setter>
-            <Setter Property="Foreground" Value="Black"></Setter>
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="Black" />
         </Style>
     </Application.Resources>
 </Application>

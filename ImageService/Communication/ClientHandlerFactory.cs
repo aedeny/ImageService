@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Net.Sockets;
 using ImageService.Controller;
 using ImageService.Logger;
 
 namespace ImageService.Communication
 {
-    class TcpClientHandlerFactory : IClientHandlerFactory
+    internal class TcpClientHandlerFactory : IClientHandlerFactory
     {
         private readonly IImageController _imageController;
 
@@ -20,10 +15,7 @@ namespace ImageService.Communication
 
         public ITcpClientHandler Create(TcpClient client, ILoggingService loggingService)
         {
-            return new TcpClientHandler(client,loggingService,_imageController);
+            return new TcpClientHandler(client, loggingService, _imageController);
         }
-
     }
-
-    
 }

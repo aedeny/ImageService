@@ -1,5 +1,5 @@
-﻿using Infrastructure.Logging;
-using ImageService.Model;
+﻿using ImageService.Model;
+using Infrastructure.Logging;
 
 namespace ImageService.Commands
 {

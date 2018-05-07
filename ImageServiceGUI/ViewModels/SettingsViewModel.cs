@@ -12,8 +12,31 @@ using Microsoft.Practices.Prism.Commands;
 
 namespace ImageServiceGUI.ViewModels
 {
-    class SettingsViewModel : INotifyPropertyChanged
+    internal class SettingsViewModel : INotifyPropertyChanged
     {
+        private readonly Dispatcher _uiDispatcher;
+
+        private string _selectedDirectoryHandler;
+
+        public SettingsViewModel()
+        {
+            _uiDispatcher = Application.Current.Dispatcher;
+            Debug.WriteLine("SettingsViewModel c'tor");
+            LogName = "[Log name here]";
+            SourceName = "[Source Name Here]";
+            OutputDirectory = "[Output Directory Here]";
+            ThumbnailSize = 120;
+            DirectoryHandlers = new ObservableCollection<string>
+            {
+                "C:\\Users\\edeny\\Documents\\ex01\\handled_dir1",
+                "All",
+                "GameBoys!!!"
+            };
+            OurTcpClientSingleton.Instance.DirectoryHandlerRemoved += OnDirectoryHandlerSuccessfulyRemoved;
+            SubmitRemove = new DelegateCommand<object>(OnRemove, CanRemove);
+            PropertyChanged += RemoveSelectedHandlerCommand;
+        }
+
         public ObservableCollection<string> DirectoryHandlers { get; }
 
         public string LogName { get; set; }
@@ -24,29 +47,7 @@ namespace ImageServiceGUI.ViewModels
 
         public int ThumbnailSize { get; set; }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
         public ICommand SubmitRemove { get; }
-
-        private string _selectedDirectoryHandler;
-
-        public SettingsViewModel()
-        {
-            Debug.WriteLine("SettingsViewModel c'tor");
-            LogName = "[Log name here]";
-            SourceName = "[Source Name Here]";
-            OutputDirectory = "[Output Directory Here]";
-            ThumbnailSize = 120;
-            DirectoryHandlers = new ObservableCollection<string>()
-            {
-                @"C:\Users\edeny\Documents\ex01\handled_dir1",
-                "All",
-                "GameBoys!!!"
-            };
-            OurTcpClientSingleton.Instance.DirectoryHandlerRemoved += OnDirectoryHandlerSuccessfulyRemoved;
-            SubmitRemove = new DelegateCommand<object>(OnRemove, CanRemove);
-            PropertyChanged += RemoveSelectedHandlerCommand;
-        }
 
         public string SelectedDirectoryHandler
         {
@@ -59,6 +60,8 @@ namespace ImageServiceGUI.ViewModels
             }
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public void NotifyPropertyChanged(string name)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
@@ -66,15 +69,16 @@ namespace ImageServiceGUI.ViewModels
 
 
         /// <summary>
-        /// Raises when a handler is successfuly removed from the Service.
+        ///     Raises when a handler is successfuly removed from the Service.
         /// </summary>
         public void OnDirectoryHandlerSuccessfulyRemoved(object sender, DirectoryHandlerClosedEventArgs eventArgs)
         {
             Debug.WriteLine(eventArgs.DirectoryPath);
-            Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background,
-                new Action(() => DirectoryHandlers.Remove(SelectedDirectoryHandler)));
-            // TODO Fix bug here
-            SelectedDirectoryHandler = null;
+            _uiDispatcher.BeginInvoke(new Action(() =>
+            {
+                DirectoryHandlers.Remove(SelectedDirectoryHandler);
+                SelectedDirectoryHandler = null;
+            }));
         }
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -89,8 +93,8 @@ namespace ImageServiceGUI.ViewModels
         }
 
         /// <summary>
-        /// Asks Service to remove selected directory handler.
-        /// Note: This method doesn't remove the dir handler from the ListBox.
+        ///     Asks Service to remove selected directory handler.
+        ///     Note: This method doesn't remove the dir handler from the ListBox.
         /// </summary>
         /// <param name="obj"></param>
         private void OnRemove(object obj)
