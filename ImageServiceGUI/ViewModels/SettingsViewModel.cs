@@ -3,7 +3,10 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
+using Infrastructure.Enums;
 using Infrastructure.Event;
 using Microsoft.Practices.Prism.Commands;
 
@@ -68,7 +71,9 @@ namespace ImageServiceGUI.ViewModels
         public void OnDirectoryHandlerSuccessfulyRemoved(object sender, DirectoryHandlerClosedEventArgs eventArgs)
         {
             Debug.WriteLine(eventArgs.DirectoryPath);
-            DirectoryHandlers.Remove(eventArgs.DirectoryPath); // TODO Fix bug here
+            Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background,
+                new Action(() => DirectoryHandlers.Remove(SelectedDirectoryHandler)));
+            // TODO Fix bug here
             SelectedDirectoryHandler = null;
         }
 
@@ -91,13 +96,22 @@ namespace ImageServiceGUI.ViewModels
         private void OnRemove(object obj)
         {
             Debug.WriteLine("In OnButtonClicked");
-            OurTcpClientSingleton.Instance.RemoveHandler(SelectedDirectoryHandler);
+            string command = (int) CommandEnum.CloseDirectoryHandlerCommand + ";" + SelectedDirectoryHandler;
+            OurTcpClientSingleton.Instance.Writer.Write(command);
         }
 
         private bool CanRemove(object obj)
         {
             Debug.WriteLine("In CanRemove");
             return !string.IsNullOrEmpty(SelectedDirectoryHandler);
+        }
+
+        /**
+         * Asks the server to send the config details which will later be recieved and sent to the SettingsVM by an event.
+         */
+        public void GetConfigDetails()
+        {
+            OurTcpClientSingleton.Instance.Writer.Write(CommandEnum.ConfigCommand.ToString());
         }
     }
 }

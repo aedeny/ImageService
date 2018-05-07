@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
@@ -19,8 +18,9 @@ namespace ImageServiceGUI
         public event EventHandler<DirectoryHandlerClosedEventArgs> DirectoryHandlerRemoved;
         private IPEndPoint _ep;
         private TcpClient _client;
-        private BinaryWriter _writer;
-        private BinaryReader _reader;
+        public BinaryWriter Writer { get; set; }
+
+        public BinaryReader Reader { get; set; }
         //private NetworkStream _stream;
 
         private OurTcpClientSingleton()
@@ -39,8 +39,8 @@ namespace ImageServiceGUI
 
             Debug.WriteLine(@"TcpClient Connected");
             NetworkStream stream = _client.GetStream();
-            _reader = new BinaryReader(stream);
-            _writer = new BinaryWriter(stream);
+            Reader = new BinaryReader(stream);
+            Writer = new BinaryWriter(stream);
 
             new Task(() =>
             {
@@ -48,7 +48,7 @@ namespace ImageServiceGUI
                 {
                     while (true)
                     {
-                        string commandLine = _reader.ReadString();
+                        string commandLine = Reader.ReadString();
                         ParseMessage(commandLine);
                     }
                 }
@@ -76,16 +76,17 @@ namespace ImageServiceGUI
                     DirectoryHandlerClosedEventArgs args = new DirectoryHandlerClosedEventArgs(parameters[1], "hmm");
                     DirectoryHandlerRemoved?.Invoke(this, args);
                     break;
+                case CommandEnum.NewFileCommand:
+                    break;
+                case CommandEnum.ConfigCommand:
+                    break;
+                case CommandEnum.LogHistoryCommand:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
-        /**
-         * Asks the server to send the config details which will later be recieved and sent to the SettingsVM by an event.
-         */
-        public void GetConfigDetails()
-        {
-            _writer.Write(CommandEnum.ConfigCommand.ToString());
-        }
 
         /// <summary>
         /// Sends the LogViewModel a log msg via event.
@@ -102,16 +103,6 @@ namespace ImageServiceGUI
             LogMsgRecieved?.Invoke(this, messageRecievedEventArgs);
         }
 
-        /// <summary>
-        /// Sends a messageType to the TCP Server to remove the specified handler and wait for a confirmation.
-        /// </summary>
-        /// <param name="handledDirectory"></param>
-        /// <returns></returns>
-        public void RemoveHandler(string handledDirectory)
-        {
-            string command = (int)CommandEnum.CloseDirectoryHandlerCommand + ";" + handledDirectory;
-            _writer.Write(command);
-        }
 
         /// <summary>
         /// Closes the TCP Client.
