@@ -45,6 +45,8 @@ namespace ImageService
 
         // Gets info from App.config
         private readonly string _sourceName = ConfigurationManager.AppSettings["SourceName"];
+
+        //private string kaka = ConfigurationManager.
         private IImageController _controller;
         private int _eventId = 1;
         private ImageServer _imageServer;

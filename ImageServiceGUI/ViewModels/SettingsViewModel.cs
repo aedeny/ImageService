@@ -32,9 +32,12 @@ namespace ImageServiceGUI.ViewModels
                 "All",
                 "GameBoys!!!"
             };
+
             OurTcpClientSingleton.Instance.DirectoryHandlerRemoved += OnDirectoryHandlerSuccessfulyRemoved;
             SubmitRemove = new DelegateCommand<object>(OnRemove, CanRemove);
             PropertyChanged += RemoveSelectedHandlerCommand;
+
+            // CONTINUE HERE KFIR
         }
 
         public ObservableCollection<string> DirectoryHandlers { get; }

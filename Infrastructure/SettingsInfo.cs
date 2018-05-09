@@ -27,7 +27,7 @@ namespace Infrastructure
             };
             return settingInfoJson.ToString();
         }
-
+        
         public static SettingsInfo FromJson(string settingsInfoAsJson)
         {
             SettingsInfo settingsInfo = new SettingsInfo();
