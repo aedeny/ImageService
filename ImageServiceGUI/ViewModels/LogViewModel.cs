@@ -22,7 +22,10 @@ namespace ImageServiceGUI.ViewModels
             BackgroundColor = new SolidColorBrush(Colors.SlateGray);
             OurTcpClientSingleton.Instance.ConnectedToService += OnConnectedToService;
             OurTcpClientSingleton.Instance.LogMsgRecieved += OnLogRecieved;
+
+            // THIS IS WHERE THE MAGIC HAPPENS!!!! LOGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG!
             List<Tuple<MessageTypeEnum, string>> logsList = OurTcpClientSingleton.Instance.GetLogList();
+
             LogList = new List<Tuple<SolidColorBrush, MessageTypeEnum, string>>();
             foreach (Tuple<MessageTypeEnum, string> log in logsList)
                 LogList.Add(

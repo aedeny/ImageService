@@ -17,9 +17,7 @@ namespace ImageServiceGUI
     {
         private static OurTcpClientSingleton _instance;
         private TcpClient _client;
-
         private IPEndPoint _ep;
-        //private NetworkStream _stream;
 
         private OurTcpClientSingleton()
         {
