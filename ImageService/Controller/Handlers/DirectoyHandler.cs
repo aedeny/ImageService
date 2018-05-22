@@ -48,7 +48,7 @@ namespace ImageService.Controller.Handlers
 
             if (!_extenstions.Contains(Path.GetExtension(filePath).ToLower())) return;
 
-            string[] args = {filePath};
+            string[] args = { filePath };
 
             // Notifies the controller about the newly created file
             string msg =
@@ -62,7 +62,7 @@ namespace ImageService.Controller.Handlers
             if (args != null && !args.DirectoryPath.Equals(_path)) return;
             _dirWatcher.Created -= OnNewFileCreated;
 
-            ImageServer imageServer = (ImageServer) sender;
+            ImageServer imageServer = (ImageServer)sender;
             imageServer.CloseDirectoryHandler -= StopHandleDirectory;
             imageServer.CommandRecieved -= OnCommandRecieved;
 
@@ -79,7 +79,7 @@ namespace ImageService.Controller.Handlers
         private readonly FileSystemWatcher _dirWatcher;
         private readonly string _path;
         private readonly Dictionary<CommandEnum, Action<string[]>> _commandsDictionary;
-        private readonly string[] _extenstions = {".jpg", ".jpeg", ".png", ".bmp", ".gif"};
+        private readonly string[] _extenstions = { ".jpg", ".jpeg", ".png", ".bmp", ".gif" };
 
         #endregion
     }

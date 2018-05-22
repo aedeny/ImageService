@@ -13,6 +13,8 @@ using ImageService.Server;
 using Infrastructure.Enums;
 using Infrastructure.Logging;
 using Infrastructure;
+using System.Net.Sockets;
+using System.IO;
 
 namespace ImageService
 {
@@ -52,7 +54,7 @@ namespace ImageService
         private ImageServer _imageServer;
         private ILoggingService _loggingService;
         private IImageServiceModel _model;
-        private ITcpServer _tcpServer;
+        private TcpServer _tcpServer;
         private SettingsInfo _settingsInfo;
 
         public ImageService()
@@ -95,21 +97,25 @@ namespace ImageService
             _loggingService.MsgRecievedEvent += OnMsgEvent;
 
             // Gets info from App.config
-            string outputDir = ConfigurationManager.AppSettings["OutputDir"];
-            string handledDirInfo = ConfigurationManager.AppSettings["HandledDir"];
-            if (!int.TryParse(ConfigurationManager.AppSettings["ThumbnailSize"], out int thumbnailSize))
-                thumbnailSize = 100;
+            //string outputDir = ConfigurationManager.AppSettings["OutputDir"];
+            SetSettingsInfo();
 
-            _model = new ImageServiceModel(outputDir, thumbnailSize);
-
+            _model = new ImageServiceModel(_settingsInfo.OutputDirectory, _settingsInfo.ThumbnailSize);
             _controller = new ImageController();
             _imageServer = new ImageServer(_controller, _loggingService);
+
+            // CREATING THE TCP SERVER KFIR
             _tcpServer = new TcpServer(8000, _loggingService, new TcpClientHandlerFactory(_controller));
+            _tcpServer.Connected += OnConnected;
+
             _controller.AddCommand(CommandEnum.NewFileCommand, new NewFileCommand(_model));
             _controller.AddCommand(CommandEnum.CloseDirectoryHandlerCommand,
                 new CloseDirectoryHandlerCommand(_imageServer));
+            _controller.AddCommand(CommandEnum.ConfigCommand, new SettingsInfoRetrievalCommand());
 
+            string handledDirInfo = ConfigurationManager.AppSettings["HandledDir"];
             string[] handeledDirectories = handledDirInfo.Split(';');
+
             foreach (string handeledDir in handeledDirectories) _imageServer.CreateHandler(handeledDir);
         }
 
@@ -130,6 +136,28 @@ namespace ImageService
         public void OnTimer(object sender, ElapsedEventArgs args)
         {
             eventLog.WriteEntry("Monitoring the System", EventLogEntryType.Information, _eventId++);
+        }
+
+        private void SetSettingsInfo()
+        {
+            _settingsInfo = new SettingsInfo
+            {
+                OutputDirectory = ConfigurationManager.AppSettings["OutputDir"],
+                SourceName = ConfigurationManager.AppSettings["SourceName"],
+                LogName = ConfigurationManager.AppSettings["LogName"],
+                ThumbnailSize = !int.TryParse(ConfigurationManager.AppSettings["ThumbnailSize"], out int thumbnailSize)
+                    ? 100
+                    : thumbnailSize
+            };
+
+        }
+
+        public void OnConnected(object sender, ConnectedEventArgs args)
+        {
+            NetworkStream stream = args.Stream;
+            BinaryWriter writer = new BinaryWriter(stream);
+            string settings = _settingsInfo.ToJson();
+            writer.Write(CommandEnum.ConfigCommand + ";" + settings);
         }
     }
 }

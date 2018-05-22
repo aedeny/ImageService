@@ -22,13 +22,14 @@ namespace ImageServiceGUI.ViewModels
         {
             _uiDispatcher = Application.Current.Dispatcher;
             Debug.WriteLine("SettingsViewModel c'tor");
+
             LogName = "[Log name here]";
             SourceName = "[Source Name Here]";
             OutputDirectory = "[Output Directory Here]";
             ThumbnailSize = 120;
             DirectoryHandlers = new ObservableCollection<string>
             {
-                "C:\\Users\\edeny\\Documents\\ex01\\handled_dir1",
+                @"C:\Users\ventu\Desktop\Image\Handler",
                 "All",
                 "GameBoys!!!"
             };
@@ -37,7 +38,7 @@ namespace ImageServiceGUI.ViewModels
             SubmitRemove = new DelegateCommand<object>(OnRemove, CanRemove);
             PropertyChanged += RemoveSelectedHandlerCommand;
 
-            // CONTINUE HERE KFIR
+            OurTcpClientSingleton.Instance.ConfigurationReceived += OnConfigurationReceived;
         }
 
         public ObservableCollection<string> DirectoryHandlers { get; }
@@ -70,12 +71,35 @@ namespace ImageServiceGUI.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
+        /// <summary>
+        ///     Raises when configuration was successfuly received.
+        /// </summary>
+        public void OnConfigurationReceived(object sender, ConfigurationReceivedEventArgs eventArgs)
+        {
+            Debug.WriteLine("In OnConfigurationReceived");
+            _uiDispatcher.BeginInvoke(new Action(() =>
+            {
+                SetSettings(SettingsInfo.FromJson(eventArgs.Args));
+            }));
+        }
+
+        private void SetSettings(SettingsInfo settingsInfo)
+        {
+            Debug.WriteLine("In SetSettings");
+            Debug.WriteLine("In SetSettings");
+            Debug.WriteLine("In SetSettings");
+            LogName = settingsInfo.LogName;
+            SourceName = settingsInfo.SourceName;
+            OutputDirectory = settingsInfo.OutputDirectory;
+            ThumbnailSize = settingsInfo.ThumbnailSize;
+        }
 
         /// <summary>
         ///     Raises when a handler is successfuly removed from the Service.
         /// </summary>
         public void OnDirectoryHandlerSuccessfulyRemoved(object sender, DirectoryHandlerClosedEventArgs eventArgs)
         {
+            Debug.WriteLine("In OnDirectoryHandlerSuccessfulyRemoved");
             Debug.WriteLine(eventArgs.DirectoryPath);
             _uiDispatcher.BeginInvoke(new Action(() =>
             {
@@ -102,7 +126,7 @@ namespace ImageServiceGUI.ViewModels
         /// <param name="obj"></param>
         private void OnRemove(object obj)
         {
-            Debug.WriteLine("In OnButtonClicked");
+            Debug.WriteLine("In OnRemove");
             string command = (int) CommandEnum.CloseDirectoryHandlerCommand + ";" + SelectedDirectoryHandler;
             OurTcpClientSingleton.Instance.Writer.Write(command);
         }
@@ -111,14 +135,6 @@ namespace ImageServiceGUI.ViewModels
         {
             Debug.WriteLine("In CanRemove");
             return !string.IsNullOrEmpty(SelectedDirectoryHandler);
-        }
-
-        /**
-         * Asks the server to send the config details which will later be recieved and sent to the SettingsVM by an event.
-         */
-        public void GetConfigDetails()
-        {
-            OurTcpClientSingleton.Instance.Writer.Write(CommandEnum.ConfigCommand.ToString());
-        }
+        }   
     }
 }

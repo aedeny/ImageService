@@ -82,7 +82,7 @@ namespace ImageServiceGUI
                 case CommandEnum.NewFileCommand:
                     break;
                 case CommandEnum.ConfigCommand:
-                    ConfigurationReceivedEventArgs creArgs = new ConfigurationReceivedEventArgs(parameters.Skip(1).ToArray());
+                    ConfigurationReceivedEventArgs creArgs = new ConfigurationReceivedEventArgs(parameters.Skip(1).ToString());
                     ConfigurationReceived?.Invoke(this, creArgs);
                     break;
                 case CommandEnum.LogHistoryCommand:

@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
-
+using System.IO;
 
 namespace Infrastructure
 {
@@ -10,13 +10,12 @@ namespace Infrastructure
         public string LogName { get; set; }
         public int ThumbnailSize { get; set; }
 
-        public static string OutputDirectoryJsonName;
-        public static string SourceNameJsonName;
-        public static string LogNameJsonName;
-        public static string ThumbnailSizeJsonName;
+        public static string OutputDirectoryJsonName = "kaka";
+        public static string SourceNameJsonName = "kaka2";
+        public static string LogNameJsonName = "kaka3";
+        public static string ThumbnailSizeJsonName = "kaka4";
 
-
-        public string ToJson()
+    public string ToJson()
         {
             JObject settingInfoJson = new JObject
             {
@@ -25,14 +24,15 @@ namespace Infrastructure
                 [LogNameJsonName] = LogName,
                 [ThumbnailSizeJsonName] = ThumbnailSize
             };
+
             return settingInfoJson.ToString();
         }
         
         public static SettingsInfo FromJson(string settingsInfoAsJson)
         {
             SettingsInfo settingsInfo = new SettingsInfo();
-
             JObject settingInfoJson = JObject.Parse(settingsInfoAsJson);
+
             settingsInfo.OutputDirectory = (string) settingInfoJson[OutputDirectoryJsonName];
             settingsInfo.SourceName = (string) settingInfoJson[SourceNameJsonName];
             settingsInfo.LogName = (string) settingInfoJson[LogNameJsonName];

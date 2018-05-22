@@ -9,9 +9,9 @@ namespace Infrastructure.Event
     // WHICH ARGS ARE NEEDED?
     public class ConfigurationReceivedEventArgs : EventArgs
     {
-        public string[] Args { get; set; }
+        public string Args { get; set; }
 
-        public ConfigurationReceivedEventArgs(string[] args)
+        public ConfigurationReceivedEventArgs(string args)
         {
             Args = args;
         }
