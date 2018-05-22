@@ -33,6 +33,8 @@ namespace ImageServiceGUI.ViewModels
         }
 
         public ObservableCollection<string> DirectoryHandlers { get; }
+        private string _outputDirectory, _logName, _sourceName;
+        private int _thumbnailSize;
 
         public string OutputDirectory
         {
