@@ -34,9 +34,6 @@ namespace ImageServiceGUI.ViewModels
 
         public ObservableCollection<string> DirectoryHandlers { get; }
 
-        private string _logName, _sourceName, _outputDirectory;
-        private int _thumbnailSize;
-
         public string OutputDirectory
         {
             get => _outputDirectory;
@@ -76,10 +73,6 @@ namespace ImageServiceGUI.ViewModels
                 NotifyPropertyChanged("SourceName");
             }
         }
-
-        //public string OutputDirectory { get; set; }
-
-        //public int ThumbnailSize { get; set; }
 
         public ICommand SubmitRemove { get; }
 

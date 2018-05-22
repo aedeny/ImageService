@@ -92,7 +92,7 @@ namespace ImageServiceGUI
         public void ParseMessage(string msg)
         {
             string[] parameters = msg.Split('|');
-            CommandEnum command = (CommandEnum)Enum.Parse(typeof(CommandEnum), parameters[0]);
+            CommandEnum command = (CommandEnum) Enum.Parse(typeof(CommandEnum), parameters[0]);
 
             switch (command)
             {
