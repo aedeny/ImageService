@@ -53,30 +53,30 @@ namespace ImageServiceGUI.ViewModels
 
         public string OutputDirectory
         {
-            get => _outputDirectory;
+            get => m_outputDirectory;
             set
             {
-                _outputDirectory = value;
+                m_outputDirectory = value;
                 NotifyPropertyChanged("OutputDirectory");
             }
         }
 
         public int ThumbnailSize
         {
-            get => _thumbnailSize;
+            get => m_thumbnailSize;
             set
             {
-                _thumbnailSize = value;
+                m_thumbnailSize = value;
                 NotifyPropertyChanged("ThumbnailSize");
             }
         }
 
         public string LogName
         {
-            get => _logName;
+            get => m_logName;
             set
             {
-                _logName = value;
+                m_logName = value;
                 NotifyPropertyChanged("LogName");
             }
         }
@@ -85,10 +85,10 @@ namespace ImageServiceGUI.ViewModels
 
         public string SourceName
         {
-            get => _sourceName;
+            get => m_sourceName;
             set
             {
-                _sourceName = value;
+                m_sourceName = value;
                 NotifyPropertyChanged("SourceName");
             }
         }
@@ -139,13 +139,6 @@ namespace ImageServiceGUI.ViewModels
             SourceName = settingsInfo.SourceName;
             OutputDirectory = settingsInfo.OutputDirectory;
             ThumbnailSize = settingsInfo.ThumbnailSize;
-
-            string[] handlers = settingsInfo.HandledDir.Split(';');
-
-            foreach (string handler in handlers)
-            {
-                DirectoryHandlers.Add(handler);
-            }
         }
 
         /// <summary>
@@ -181,7 +174,7 @@ namespace ImageServiceGUI.ViewModels
         private void OnRemove(object obj)
         {
             Debug.WriteLine("In OnRemove");
-            string command = (int) CommandEnum.CloseDirectoryHandlerCommand + "|" + SelectedDirectoryHandler;
+            string command = (int) CommandEnum.CloseDirectoryHandlerCommand + ";" + SelectedDirectoryHandler;
             OurTcpClientSingleton.Instance.Writer.Write(command);
         }
 

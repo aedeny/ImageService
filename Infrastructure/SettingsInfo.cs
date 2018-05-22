@@ -9,24 +9,20 @@ namespace Infrastructure
         public string SourceName { get; set; }
         public string LogName { get; set; }
         public int ThumbnailSize { get; set; }
-        public string HandledDir { get; set; }
 
-        public static string OutputDirectoryJsonName = "OutputDirectory";
-        public static string SourceNameJsonName = "SourceName";
-        public static string LogNameJsonName = "LogName";
-        public static string ThumbnailSizeJsonName = "ThumbnailSize";
-        public static string HandledDirJsonName = "HandledDir";
-        // HandledDir
+        public static string OutputDirectoryJsonName = "kaka";
+        public static string SourceNameJsonName = "kaka2";
+        public static string LogNameJsonName = "kaka3";
+        public static string ThumbnailSizeJsonName = "kaka4";
 
-        public string ToJson()
+    public string ToJson()
         {
             JObject settingInfoJson = new JObject
             {
                 [OutputDirectoryJsonName] = OutputDirectory,
                 [SourceNameJsonName] = SourceName,
                 [LogNameJsonName] = LogName,
-                [ThumbnailSizeJsonName] = ThumbnailSize,
-                [HandledDirJsonName] = HandledDir
+                [ThumbnailSizeJsonName] = ThumbnailSize
             };
 
             return settingInfoJson.ToString();
@@ -41,7 +37,6 @@ namespace Infrastructure
             settingsInfo.SourceName = (string) settingInfoJson[SettingsInfo.SourceNameJsonName];
             settingsInfo.LogName = (string) settingInfoJson[SettingsInfo.LogNameJsonName];
             settingsInfo.ThumbnailSize = (int) settingInfoJson[SettingsInfo.ThumbnailSizeJsonName];
-            settingsInfo.HandledDir = (string) settingInfoJson[SettingsInfo.HandledDirJsonName];
 
             return settingsInfo;
         }

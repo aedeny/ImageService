@@ -9,13 +9,11 @@ namespace ImageServiceGUI
         public string SourceName { get; set; }
         public string LogName { get; set; }
         public int ThumbnailSize { get; set; }
-        public string HandledDir { get; set; }
 
-        public static string OutputDirectoryJsonName = "OutputDirectory";
-        public static string SourceNameJsonName = "SourceName";
-        public static string LogNameJsonName = "LogName";
-        public static string ThumbnailSizeJsonName = "ThumbnailSize";
-        public static string HandledDirJsonName = "HandledDir";
+        public static string OutputDirectoryJsonName = "kaka";
+        public static string SourceNameJsonName = "kaka2";
+        public static string LogNameJsonName = "kaka3";
+        public static string ThumbnailSizeJsonName = "kaka4";
 
         public string ToJson()
         {
@@ -24,8 +22,7 @@ namespace ImageServiceGUI
                 [OutputDirectoryJsonName] = OutputDirectory,
                 [SourceNameJsonName] = SourceName,
                 [LogNameJsonName] = LogName,
-                [ThumbnailSizeJsonName] = ThumbnailSize,
-                [HandledDirJsonName] = HandledDir
+                [ThumbnailSizeJsonName] = ThumbnailSize
             };
             return settingInfoJson.ToString();
         }
@@ -39,7 +36,6 @@ namespace ImageServiceGUI
             settingsInfo.SourceName = (string) settingInfoJson[SourceNameJsonName];
             settingsInfo.LogName = (string) settingInfoJson[LogNameJsonName];
             settingsInfo.ThumbnailSize = (int) settingInfoJson[ThumbnailSizeJsonName];
-            settingsInfo.HandledDir = (string)settingInfoJson[SettingsInfo.HandledDirJsonName];
 
             return settingsInfo;
         }

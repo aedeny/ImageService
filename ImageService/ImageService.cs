@@ -138,27 +138,26 @@ namespace ImageService
             eventLog.WriteEntry("Monitoring the System", EventLogEntryType.Information, _eventId++);
         }
 
-        private void SetSettingsInfo() => _settingsInfo = new SettingsInfo
+        private void SetSettingsInfo()
         {
-            OutputDirectory = ConfigurationManager.AppSettings["OutputDir"],
-            SourceName = ConfigurationManager.AppSettings["SourceName"],
-            LogName = ConfigurationManager.AppSettings["LogName"],
-            HandledDir = ConfigurationManager.AppSettings["HandledDir"],
-            ThumbnailSize = !int.TryParse(ConfigurationManager.AppSettings["ThumbnailSize"], out int thumbnailSize)
+            _settingsInfo = new SettingsInfo
+            {
+                OutputDirectory = ConfigurationManager.AppSettings["OutputDir"],
+                SourceName = ConfigurationManager.AppSettings["SourceName"],
+                LogName = ConfigurationManager.AppSettings["LogName"],
+                ThumbnailSize = !int.TryParse(ConfigurationManager.AppSettings["ThumbnailSize"], out int thumbnailSize)
                     ? 100
                     : thumbnailSize
-        };
+            };
+
+        }
 
         public void OnConnected(object sender, ConnectedEventArgs args)
         {
             NetworkStream stream = args.Stream;
             BinaryWriter writer = new BinaryWriter(stream);
-
             string settings = _settingsInfo.ToJson();
-            writer.Write(CommandEnum.ConfigCommand + "|" + settings);
-
-
-
+            writer.Write(CommandEnum.ConfigCommand + ";" + settings);
             writer.Flush();
         }
     }
