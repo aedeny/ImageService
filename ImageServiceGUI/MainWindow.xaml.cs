@@ -8,8 +8,6 @@
         public MainWindow()
         {
             InitializeComponent();
-            //SettingsViewModel settingsViewModel = new SettingsViewModel();
-            //LogViewModel logViewModel = new LogViewModel();
         }
     }
 }

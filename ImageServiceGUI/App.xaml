@@ -6,7 +6,6 @@
     <Application.Resources>
 
         <Style x:Key="TitleLabelStyle" TargetType="{x:Type Label}">
-            <Setter Property="Background" Value="DarkCyan" />
             <!--TODO adjust font size to window-->
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="FontSize" Value="25" />
