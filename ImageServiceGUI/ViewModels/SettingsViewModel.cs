@@ -23,10 +23,10 @@ namespace ImageServiceGUI.ViewModels
             _uiDispatcher = Application.Current.Dispatcher;
             Debug.WriteLine("SettingsViewModel c'tor");
 
-            LogName = "[Log name here]";
-            SourceName = "[Source Name Here]";
-            OutputDirectory = "[Output Directory Here]";
-            ThumbnailSize = 120;
+            // LogName = "[Log name here]";
+            // SourceName = "[Source Name Here]";
+            // OutputDirectory = "[Output Directory Here]";
+            // ThumbnailSize = 120;
             DirectoryHandlers = new ObservableCollection<string>
             {
                 @"C:\Users\ventu\Desktop\Image\Handler",
@@ -43,13 +43,52 @@ namespace ImageServiceGUI.ViewModels
 
         public ObservableCollection<string> DirectoryHandlers { get; }
 
-        public string LogName { get; set; }
+        private string m_logName, m_sourceName, m_outputDirectory;
+        private int m_thumbnailSize;
 
-        public string SourceName { get; set; }
+        public string OutputDirectory
+        {
+            get => m_outputDirectory;
+            set
+            {
+                m_outputDirectory = value;
+                NotifyPropertyChanged("OutputDirectory");
+            }
+        }
 
-        public string OutputDirectory { get; set; }
+        public int ThumbnailSize
+        {
+            get => m_thumbnailSize;
+            set
+            {
+                m_thumbnailSize = value;
+                NotifyPropertyChanged("ThumbnailSize");
+            }
+        }
 
-        public int ThumbnailSize { get; set; }
+        public string LogName
+        {
+            get => m_logName;
+            set
+            {
+                m_logName = value;
+                NotifyPropertyChanged("LogName");
+            }
+        }
+
+        public string SourceName
+        {
+            get => m_sourceName;
+            set
+            {
+                m_sourceName = value;
+                NotifyPropertyChanged("SourceName");
+            }
+        }
+
+        //public string OutputDirectory { get; set; }
+
+        //public int ThumbnailSize { get; set; }
 
         public ICommand SubmitRemove { get; }
 

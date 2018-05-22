@@ -157,7 +157,8 @@ namespace ImageService
             NetworkStream stream = args.Stream;
             BinaryWriter writer = new BinaryWriter(stream);
             string settings = _settingsInfo.ToJson();
-            writer.Write(CommandEnum.ConfigCommand + ";" + settings);
+            writer.Write("2" + ";" + settings);
+            writer.Flush();
         }
     }
 }

@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
 using System.Threading.Tasks;
 using Infrastructure.Enums;
 using Infrastructure.Event;
@@ -47,6 +48,7 @@ namespace ImageServiceGUI
 
             new Task(() =>
             {
+                Thread.Sleep(1000);
                 try
                 {
                     while (true)
@@ -82,7 +84,7 @@ namespace ImageServiceGUI
                 case CommandEnum.NewFileCommand:
                     break;
                 case CommandEnum.ConfigCommand:
-                    ConfigurationReceivedEventArgs creArgs = new ConfigurationReceivedEventArgs(parameters.Skip(1).ToString());
+                    ConfigurationReceivedEventArgs creArgs = new ConfigurationReceivedEventArgs(parameters[1]);
                     ConfigurationReceived?.Invoke(this, creArgs);
                     break;
                 case CommandEnum.LogHistoryCommand:

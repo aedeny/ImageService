@@ -33,10 +33,10 @@ namespace Infrastructure
             SettingsInfo settingsInfo = new SettingsInfo();
             JObject settingInfoJson = JObject.Parse(settingsInfoAsJson);
 
-            settingsInfo.OutputDirectory = (string) settingInfoJson[OutputDirectoryJsonName];
-            settingsInfo.SourceName = (string) settingInfoJson[SourceNameJsonName];
-            settingsInfo.LogName = (string) settingInfoJson[LogNameJsonName];
-            settingsInfo.ThumbnailSize = (int) settingInfoJson[ThumbnailSizeJsonName];
+            settingsInfo.OutputDirectory = (string) settingInfoJson[SettingsInfo.OutputDirectoryJsonName];
+            settingsInfo.SourceName = (string) settingInfoJson[SettingsInfo.SourceNameJsonName];
+            settingsInfo.LogName = (string) settingInfoJson[SettingsInfo.LogNameJsonName];
+            settingsInfo.ThumbnailSize = (int) settingInfoJson[SettingsInfo.ThumbnailSizeJsonName];
 
             return settingsInfo;
         }

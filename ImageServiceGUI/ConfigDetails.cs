@@ -10,10 +10,10 @@ namespace ImageServiceGUI
         public string LogName { get; set; }
         public int ThumbnailSize { get; set; }
 
-        public static string OutputDirectoryJsonName;
-        public static string SourceNameJsonName;
-        public static string LogNameJsonName;
-        public static string ThumbnailSizeJsonName;
+        public static string OutputDirectoryJsonName = "kaka";
+        public static string SourceNameJsonName = "kaka2";
+        public static string LogNameJsonName = "kaka3";
+        public static string ThumbnailSizeJsonName = "kaka4";
 
         public string ToJson()
         {
