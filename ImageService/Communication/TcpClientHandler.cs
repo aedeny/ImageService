@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using ImageService.Controller;
 using ImageService.Logger;
 using Infrastructure.Enums;
-using Infrastructure.Event;
 using Infrastructure.Logging;
 
 namespace ImageService.Communication
@@ -37,10 +36,10 @@ namespace ImageService.Communication
                     {
                         string commandLine = _reader.ReadString();
                         _loggingService.Log(@"Got command:" + commandLine, MessageTypeEnum.Info);
-                        string[] parameters = commandLine.Split(';');
+                        string[] parameters = commandLine.Split('|');
                         string retval = _imageController.ExecuteCommand((CommandEnum)int.Parse(parameters[0]),
                             parameters.Skip(1).ToArray(), out MessageTypeEnum _);
-                        if (retval != null) _writer.Write(parameters[0] + ";" + retval);
+                        if (retval != null) _writer.Write(parameters[0] + "|" + retval);
                     }
                 }
                 catch (Exception e)

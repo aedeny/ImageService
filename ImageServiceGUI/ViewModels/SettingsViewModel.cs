@@ -139,6 +139,13 @@ namespace ImageServiceGUI.ViewModels
             SourceName = settingsInfo.SourceName;
             OutputDirectory = settingsInfo.OutputDirectory;
             ThumbnailSize = settingsInfo.ThumbnailSize;
+
+            string[] handlers = settingsInfo.HandledDir.Split(';');
+
+            foreach (string handler in handlers)
+            {
+                DirectoryHandlers.Add(handler);
+            }
         }
 
         /// <summary>
@@ -174,7 +181,7 @@ namespace ImageServiceGUI.ViewModels
         private void OnRemove(object obj)
         {
             Debug.WriteLine("In OnRemove");
-            string command = (int) CommandEnum.CloseDirectoryHandlerCommand + ";" + SelectedDirectoryHandler;
+            string command = (int) CommandEnum.CloseDirectoryHandlerCommand + "|" + SelectedDirectoryHandler;
             OurTcpClientSingleton.Instance.Writer.Write(command);
         }
 

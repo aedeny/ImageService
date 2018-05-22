@@ -93,8 +93,9 @@ namespace ImageServiceGUI
         /// <param name="msg">The message to parse.</param>
         public void ParseMessage(string msg)
         {
-            string[] parameters = msg.Split(';');
-            CommandEnum command = (CommandEnum) int.Parse(parameters[0]);
+            string[] parameters = msg.Split('|');
+            CommandEnum command = (CommandEnum) Enum.Parse(typeof(CommandEnum), parameters[0]);
+
             switch (command)
             {
                 case CommandEnum.NewLogCommand:
