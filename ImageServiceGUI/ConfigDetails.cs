@@ -15,7 +15,6 @@ namespace ImageServiceGUI
         public static string LogNameJsonName;
         public static string ThumbnailSizeJsonName;
 
-
         public string ToJson()
         {
             JObject settingInfoJson = new JObject

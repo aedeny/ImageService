@@ -59,6 +59,7 @@
     <Compile Include="Commands\NewFileCommand.cs" />
     <Compile Include="Commands\SettingsInfoRetrievalCommand.cs" />
     <Compile Include="Communication\ClientHandlerFactory.cs" />
+    <Compile Include="Communication\ConnectedEventArgs.cs" />
     <Compile Include="Communication\IClientHandlerFactory.cs" />
     <Compile Include="Communication\ITcpClientHandler.cs" />
     <Compile Include="Communication\ITcpServer.cs" />

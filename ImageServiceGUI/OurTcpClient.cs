@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
@@ -25,12 +26,12 @@ namespace ImageServiceGUI
         }
 
         public BinaryWriter Writer { get; set; }
-
         public BinaryReader Reader { get; set; }
 
         public static OurTcpClientSingleton Instance => _instance ?? (_instance = new OurTcpClientSingleton());
         public event EventHandler LogMsgRecieved;
         public event EventHandler<DirectoryHandlerClosedEventArgs> DirectoryHandlerRemoved;
+        public event EventHandler<ConfigurationReceivedEventArgs> ConfigurationReceived;
 
         // TODO Put in Task?
         public void Start()
@@ -75,12 +76,14 @@ namespace ImageServiceGUI
                     Log(parameters[1], (MessageTypeEnum) int.Parse(parameters[2]));
                     break;
                 case CommandEnum.CloseDirectoryHandlerCommand:
-                    DirectoryHandlerClosedEventArgs args = new DirectoryHandlerClosedEventArgs(parameters[1], "hmm");
-                    DirectoryHandlerRemoved?.Invoke(this, args);
+                    DirectoryHandlerClosedEventArgs dhceArgs = new DirectoryHandlerClosedEventArgs(parameters[1], "hmm");
+                    DirectoryHandlerRemoved?.Invoke(this, dhceArgs);
                     break;
                 case CommandEnum.NewFileCommand:
                     break;
                 case CommandEnum.ConfigCommand:
+                    ConfigurationReceivedEventArgs creArgs = new ConfigurationReceivedEventArgs(parameters.Skip(1).ToString());
+                    ConfigurationReceived?.Invoke(this, creArgs);
                     break;
                 case CommandEnum.LogHistoryCommand:
                     break;
