@@ -10,7 +10,6 @@ namespace ImageServiceGUI.Views
     {
         public SettingsView()
         {
-            Debug.WriteLine("SettingView");
             InitializeComponent();
             DataContext = new SettingsViewModel();
         }

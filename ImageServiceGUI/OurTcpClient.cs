@@ -23,24 +23,47 @@ namespace ImageServiceGUI
 
         private OurTcpClientSingleton()
         {
-            Start();
+            Connected = false;
+            ConnectToService();
         }
 
         public BinaryWriter Writer { get; set; }
         public BinaryReader Reader { get; set; }
 
         public static OurTcpClientSingleton Instance => _instance ?? (_instance = new OurTcpClientSingleton());
+        public bool Connected { get; private set; }
+
         public event EventHandler LogMsgRecieved;
+        public event EventHandler ConnectedToService;
         public event EventHandler<DirectoryHandlerClosedEventArgs> DirectoryHandlerRemoved;
         public event EventHandler<ConfigurationReceivedEventArgs> ConfigurationReceived;
 
         // TODO Put in Task?
-        public void Start()
+        public void ConnectToService()
         {
             _ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8000);
             _client = new TcpClient();
-            _client.Connect(_ep);
 
+            Task c = Task.Run(() =>
+            {
+                while (!Connected)
+                {
+                    Thread.Sleep(100);
+                    try
+                    {
+                        _client.Connect(_ep);
+                        Connected = true;
+                    }
+                    catch (SocketException) { }
+                }
+
+                ConnectedToService?.Invoke(this, null);
+                Listen();
+            });
+        }
+
+        private void Listen()
+        {
             Debug.WriteLine(@"TcpClient Connected");
             NetworkStream stream = _client.GetStream();
             Reader = new BinaryReader(stream);
@@ -78,7 +101,8 @@ namespace ImageServiceGUI
                     Log(parameters[1], (MessageTypeEnum) int.Parse(parameters[2]));
                     break;
                 case CommandEnum.CloseDirectoryHandlerCommand:
-                    DirectoryHandlerClosedEventArgs dhceArgs = new DirectoryHandlerClosedEventArgs(parameters[1], "hmm");
+                    DirectoryHandlerClosedEventArgs
+                        dhceArgs = new DirectoryHandlerClosedEventArgs(parameters[1], "hmm");
                     DirectoryHandlerRemoved?.Invoke(this, dhceArgs);
                     break;
                 case CommandEnum.NewFileCommand:

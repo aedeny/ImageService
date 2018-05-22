@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Threading;
 using Infrastructure.Enums;
 using Infrastructure.Event;
@@ -14,19 +15,25 @@ namespace ImageServiceGUI.ViewModels
 {
     internal class SettingsViewModel : INotifyPropertyChanged
     {
+        private const string WaitingForConnection = "Waiting for connection...";
         private readonly Dispatcher _uiDispatcher;
-
+        private string _logName;
+        private string _outputDirectory;
         private string _selectedDirectoryHandler;
+        private string _sourceName;
+        private int _thumbnailSize;
 
         public SettingsViewModel()
         {
-            _uiDispatcher = Application.Current.Dispatcher;
             Debug.WriteLine("SettingsViewModel c'tor");
 
-            // LogName = "[Log name here]";
-            // SourceName = "[Source Name Here]";
-            // OutputDirectory = "[Output Directory Here]";
-            // ThumbnailSize = 120;
+            // Initializes parameters
+            _logName = WaitingForConnection;
+            _sourceName = WaitingForConnection;
+            _outputDirectory = WaitingForConnection;
+            BackgroundColor = new SolidColorBrush(Colors.SlateGray);
+            _uiDispatcher = Application.Current.Dispatcher;
+
             DirectoryHandlers = new ObservableCollection<string>
             {
                 @"C:\Users\ventu\Desktop\Image\Handler",
@@ -34,6 +41,7 @@ namespace ImageServiceGUI.ViewModels
                 "GameBoys!!!"
             };
 
+            OurTcpClientSingleton.Instance.ConnectedToService += OnConnectedToService;
             OurTcpClientSingleton.Instance.DirectoryHandlerRemoved += OnDirectoryHandlerSuccessfulyRemoved;
             SubmitRemove = new DelegateCommand<object>(OnRemove, CanRemove);
             PropertyChanged += RemoveSelectedHandlerCommand;
@@ -43,52 +51,47 @@ namespace ImageServiceGUI.ViewModels
 
         public ObservableCollection<string> DirectoryHandlers { get; }
 
-        private string m_logName, m_sourceName, m_outputDirectory;
-        private int m_thumbnailSize;
-
         public string OutputDirectory
         {
-            get => m_outputDirectory;
+            get => _outputDirectory;
             set
             {
-                m_outputDirectory = value;
+                _outputDirectory = value;
                 NotifyPropertyChanged("OutputDirectory");
             }
         }
 
         public int ThumbnailSize
         {
-            get => m_thumbnailSize;
+            get => _thumbnailSize;
             set
             {
-                m_thumbnailSize = value;
+                _thumbnailSize = value;
                 NotifyPropertyChanged("ThumbnailSize");
             }
         }
 
         public string LogName
         {
-            get => m_logName;
+            get => _logName;
             set
             {
-                m_logName = value;
+                _logName = value;
                 NotifyPropertyChanged("LogName");
             }
         }
 
+        public SolidColorBrush BackgroundColor { get; set; }
+
         public string SourceName
         {
-            get => m_sourceName;
+            get => _sourceName;
             set
             {
-                m_sourceName = value;
+                _sourceName = value;
                 NotifyPropertyChanged("SourceName");
             }
         }
-
-        //public string OutputDirectory { get; set; }
-
-        //public int ThumbnailSize { get; set; }
 
         public ICommand SubmitRemove { get; }
 
@@ -116,16 +119,21 @@ namespace ImageServiceGUI.ViewModels
         public void OnConfigurationReceived(object sender, ConfigurationReceivedEventArgs eventArgs)
         {
             Debug.WriteLine("In OnConfigurationReceived");
+            _uiDispatcher.BeginInvoke(new Action(() => { SetSettings(SettingsInfo.FromJson(eventArgs.Args)); }));
+        }
+
+        public void OnConnectedToService(object sender, EventArgs eventArgs)
+        {
+            Debug.WriteLine("In SettingsViewModel->OnConnectedToService");
             _uiDispatcher.BeginInvoke(new Action(() =>
             {
-                SetSettings(SettingsInfo.FromJson(eventArgs.Args));
+                BackgroundColor = new SolidColorBrush(Colors.DarkCyan);
+                NotifyPropertyChanged("BackgroundColor");
             }));
         }
 
         private void SetSettings(SettingsInfo settingsInfo)
         {
-            Debug.WriteLine("In SetSettings");
-            Debug.WriteLine("In SetSettings");
             Debug.WriteLine("In SetSettings");
             LogName = settingsInfo.LogName;
             SourceName = settingsInfo.SourceName;
@@ -174,6 +182,6 @@ namespace ImageServiceGUI.ViewModels
         {
             Debug.WriteLine("In CanRemove");
             return !string.IsNullOrEmpty(SelectedDirectoryHandler);
-        }   
+        }
     }
 }
