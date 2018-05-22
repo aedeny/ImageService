@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Threading;
 using Infrastructure.Enums;
 using Infrastructure.Event;
@@ -17,6 +18,12 @@ namespace ImageServiceGUI.ViewModels
         private readonly Dispatcher _uiDispatcher;
 
         private string _selectedDirectoryHandler;
+        private const string WaitingForConnection = "Waiting for connection...";
+        public ObservableCollection<string> DirectoryHandlers { get; }
+        private string _outputDirectory = WaitingForConnection;
+        private string _logName = WaitingForConnection;
+        private string _sourceName = WaitingForConnection;
+        private int _thumbnailSize;
 
         public SettingsViewModel()
         {
@@ -24,7 +31,9 @@ namespace ImageServiceGUI.ViewModels
             Debug.WriteLine("SettingsViewModel c'tor");
 
             DirectoryHandlers = new ObservableCollection<string>();
-
+            _uiDispatcher = Application.Current.Dispatcher;
+            BackgroundColor = new SolidColorBrush(Colors.SlateGray);
+            OurTcpClientSingleton.Instance.ConnectedToService += OnConnectedToService;
             OurTcpClientSingleton.Instance.DirectoryHandlerRemoved += OnDirectoryHandlerSuccessfulyRemoved;
             SubmitRemove = new DelegateCommand<object>(OnRemove, CanRemove);
             PropertyChanged += RemoveSelectedHandlerCommand;
@@ -32,9 +41,17 @@ namespace ImageServiceGUI.ViewModels
             OurTcpClientSingleton.Instance.ConfigurationReceived += OnConfigurationReceived;
         }
 
-        public ObservableCollection<string> DirectoryHandlers { get; }
-        private string _outputDirectory, _logName, _sourceName;
-        private int _thumbnailSize;
+        public SolidColorBrush BackgroundColor { get; set; }
+
+        private void OnConnectedToService(object sender, EventArgs e)
+        {
+            Debug.WriteLine("In SettingsViewModel->OnConnectedToService");
+            _uiDispatcher.BeginInvoke(new Action(() =>
+            {
+                BackgroundColor = new SolidColorBrush(Colors.DarkCyan);
+                NotifyPropertyChanged("BackgroundColor");
+            }));
+        }
 
         public string OutputDirectory
         {
@@ -102,10 +119,7 @@ namespace ImageServiceGUI.ViewModels
         public void OnConfigurationReceived(object sender, ConfigurationReceivedEventArgs eventArgs)
         {
             Debug.WriteLine("In OnConfigurationReceived");
-            _uiDispatcher.BeginInvoke(new Action(() =>
-            {
-                SetSettings(SettingsInfo.FromJson(eventArgs.Args));
-            }));
+            _uiDispatcher.BeginInvoke(new Action(() => { SetSettings(SettingsInfo.FromJson(eventArgs.Args)); }));
         }
 
         private void SetSettings(SettingsInfo settingsInfo)
@@ -164,6 +178,6 @@ namespace ImageServiceGUI.ViewModels
         {
             Debug.WriteLine("In CanRemove");
             return !string.IsNullOrEmpty(SelectedDirectoryHandler);
-        }   
+        }
     }
 }
