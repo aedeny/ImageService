@@ -23,16 +23,12 @@ namespace ImageServiceGUI.ViewModels
             _uiDispatcher = Application.Current.Dispatcher;
             Debug.WriteLine("SettingsViewModel c'tor");
 
-            // LogName = "[Log name here]";
-            // SourceName = "[Source Name Here]";
-            // OutputDirectory = "[Output Directory Here]";
-            // ThumbnailSize = 120;
-            DirectoryHandlers = new ObservableCollection<string>
-            {
-                @"C:\Users\ventu\Desktop\Image\Handler",
-                "All",
-                "GameBoys!!!"
-            };
+            DirectoryHandlers = new ObservableCollection<string>();
+            //{
+            //    @"C:\Users\ventu\Desktop\Image\Handler",
+            //    "All",
+            //    "GameBoys!!!"
+            //};
 
             OurTcpClientSingleton.Instance.DirectoryHandlerRemoved += OnDirectoryHandlerSuccessfulyRemoved;
             SubmitRemove = new DelegateCommand<object>(OnRemove, CanRemove);
@@ -43,45 +39,45 @@ namespace ImageServiceGUI.ViewModels
 
         public ObservableCollection<string> DirectoryHandlers { get; }
 
-        private string m_logName, m_sourceName, m_outputDirectory;
-        private int m_thumbnailSize;
+        private string _logName, _sourceName, _outputDirectory;
+        private int _thumbnailSize;
 
         public string OutputDirectory
         {
-            get => m_outputDirectory;
+            get => _outputDirectory;
             set
             {
-                m_outputDirectory = value;
+                _outputDirectory = value;
                 NotifyPropertyChanged("OutputDirectory");
             }
         }
 
         public int ThumbnailSize
         {
-            get => m_thumbnailSize;
+            get => _thumbnailSize;
             set
             {
-                m_thumbnailSize = value;
+                _thumbnailSize = value;
                 NotifyPropertyChanged("ThumbnailSize");
             }
         }
 
         public string LogName
         {
-            get => m_logName;
+            get => _logName;
             set
             {
-                m_logName = value;
+                _logName = value;
                 NotifyPropertyChanged("LogName");
             }
         }
 
         public string SourceName
         {
-            get => m_sourceName;
+            get => _sourceName;
             set
             {
-                m_sourceName = value;
+                _sourceName = value;
                 NotifyPropertyChanged("SourceName");
             }
         }
@@ -124,13 +120,17 @@ namespace ImageServiceGUI.ViewModels
 
         private void SetSettings(SettingsInfo settingsInfo)
         {
-            Debug.WriteLine("In SetSettings");
-            Debug.WriteLine("In SetSettings");
-            Debug.WriteLine("In SetSettings");
             LogName = settingsInfo.LogName;
             SourceName = settingsInfo.SourceName;
             OutputDirectory = settingsInfo.OutputDirectory;
             ThumbnailSize = settingsInfo.ThumbnailSize;
+
+            string[] handlers = settingsInfo.HandledDir.Split(';');
+
+            foreach (string handler in handlers)
+            {
+                DirectoryHandlers.Add(handler);
+            }
         }
 
         /// <summary>
@@ -166,7 +166,7 @@ namespace ImageServiceGUI.ViewModels
         private void OnRemove(object obj)
         {
             Debug.WriteLine("In OnRemove");
-            string command = (int) CommandEnum.CloseDirectoryHandlerCommand + ";" + SelectedDirectoryHandler;
+            string command = (int) CommandEnum.CloseDirectoryHandlerCommand + "|" + SelectedDirectoryHandler;
             OurTcpClientSingleton.Instance.Writer.Write(command);
         }
 
