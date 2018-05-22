@@ -29,19 +29,19 @@ namespace Infrastructure
 
             return settingInfoJson.ToString();
         }
-        
-        //public static SettingsInfo FromJson(string settingsInfoAsJson)
-        //{
-        //    SettingsInfo settingsInfo = new SettingsInfo();
-        //    JObject settingInfoJson = JObject.Parse(settingsInfoAsJson);
 
-        //    settingsInfo.OutputDirectory = (string) settingInfoJson[SettingsInfo.OutputDirectoryJsonName];
-        //    settingsInfo.SourceName = (string) settingInfoJson[SettingsInfo.SourceNameJsonName];
-        //    settingsInfo.LogName = (string) settingInfoJson[SettingsInfo.LogNameJsonName];
-        //    settingsInfo.ThumbnailSize = (int) settingInfoJson[SettingsInfo.ThumbnailSizeJsonName];
-        //    settingsInfo.HandledDir = (string) settingInfoJson[SettingsInfo.HandledDirJsonName];
+        public static SettingsInfo FromJson(string settingsInfoAsJson)
+        {
+            SettingsInfo settingsInfo = new SettingsInfo();
+            JObject settingInfoJson = JObject.Parse(settingsInfoAsJson);
 
-        //    return settingsInfo;
-        //}
+            settingsInfo.OutputDirectory = (string)settingInfoJson[SettingsInfo.OutputDirectoryJsonName];
+            settingsInfo.SourceName = (string)settingInfoJson[SettingsInfo.SourceNameJsonName];
+            settingsInfo.LogName = (string)settingInfoJson[SettingsInfo.LogNameJsonName];
+            settingsInfo.ThumbnailSize = (int)settingInfoJson[SettingsInfo.ThumbnailSizeJsonName];
+            settingsInfo.HandledDir = (string)settingInfoJson[SettingsInfo.HandledDirJsonName];
+
+            return settingsInfo;
+        }
     }
 }
