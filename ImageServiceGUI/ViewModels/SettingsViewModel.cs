@@ -24,11 +24,6 @@ namespace ImageServiceGUI.ViewModels
             Debug.WriteLine("SettingsViewModel c'tor");
 
             DirectoryHandlers = new ObservableCollection<string>();
-            //{
-            //    @"C:\Users\ventu\Desktop\Image\Handler",
-            //    "All",
-            //    "GameBoys!!!"
-            //};
 
             OurTcpClientSingleton.Instance.DirectoryHandlerRemoved += OnDirectoryHandlerSuccessfulyRemoved;
             SubmitRemove = new DelegateCommand<object>(OnRemove, CanRemove);

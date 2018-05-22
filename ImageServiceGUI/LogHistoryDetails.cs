@@ -2,7 +2,7 @@
 
 namespace ImageServiceGUI
 {
-    internal class SettingsInfo
+    internal class LogHistoryInfo
     {
         public string OutputDirectory { get; set; }
         public string SourceName { get; set; }
@@ -29,18 +29,18 @@ namespace ImageServiceGUI
         //    return settingInfoJson.ToString();
         //}
 
-        public static SettingsInfo FromJson(string settingsInfoAsJson)
+        public static LogHistoryInfo FromJson(string logHistoryInfoAsJson)
         {
-            SettingsInfo settingsInfo = new SettingsInfo();
+            LogHistoryInfo logHistoryInfo = new LogHistoryInfo();
 
-            JObject settingInfoJson = JObject.Parse(settingsInfoAsJson);
-            settingsInfo.OutputDirectory = (string) settingInfoJson[OutputDirectoryJsonName];
-            settingsInfo.SourceName = (string) settingInfoJson[SourceNameJsonName];
-            settingsInfo.LogName = (string) settingInfoJson[LogNameJsonName];
-            settingsInfo.ThumbnailSize = (int) settingInfoJson[ThumbnailSizeJsonName];
-            settingsInfo.HandledDir = (string)settingInfoJson[SettingsInfo.HandledDirJsonName];
+            JObject logHistoryInfoJson = JObject.Parse(logHistoryInfoAsJson);
+            logHistoryInfo.OutputDirectory = (string)logHistoryInfoJson[OutputDirectoryJsonName];
+            logHistoryInfo.SourceName = (string)logHistoryInfoJson[SourceNameJsonName];
+            logHistoryInfo.LogName = (string)logHistoryInfoJson[LogNameJsonName];
+            logHistoryInfo.ThumbnailSize = (int)logHistoryInfoJson[ThumbnailSizeJsonName];
+            logHistoryInfo.HandledDir = (string)logHistoryInfoJson[HandledDirJsonName];
 
-            return settingsInfo;
+            return logHistoryInfo;
         }
     }
 }

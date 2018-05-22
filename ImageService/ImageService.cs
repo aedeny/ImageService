@@ -96,8 +96,6 @@ namespace ImageService
             _loggingService = new LoggingService();
             _loggingService.MsgRecievedEvent += OnMsgEvent;
 
-            // Gets info from App.config
-            //string outputDir = ConfigurationManager.AppSettings["OutputDir"];
             SetSettingsInfo();
 
             _model = new ImageServiceModel(_settingsInfo.OutputDirectory, _settingsInfo.ThumbnailSize);
