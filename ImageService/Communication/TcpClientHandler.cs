@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using ImageService.Controller;
 using ImageService.Logger;
 using Infrastructure.Enums;
-using Infrastructure.Event;
 using Infrastructure.Logging;
 
 namespace ImageService.Communication
