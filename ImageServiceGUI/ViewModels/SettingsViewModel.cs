@@ -36,10 +36,10 @@ namespace ImageServiceGUI.ViewModels
 
         public string OutputDirectory
         {
-            get => m_outputDirectory;
+            get => _outputDirectory;
             set
             {
-                m_outputDirectory = value;
+                _outputDirectory = value;
                 NotifyPropertyChanged("OutputDirectory");
             }
         }
@@ -49,7 +49,7 @@ namespace ImageServiceGUI.ViewModels
             get => _thumbnailSize;
             set
             {
-                m_thumbnailSize = value;
+                _thumbnailSize = value;
                 NotifyPropertyChanged("ThumbnailSize");
             }
         }
@@ -59,17 +59,17 @@ namespace ImageServiceGUI.ViewModels
             get => _logName;
             set
             {
-                m_logName = value;
+                _logName = value;
                 NotifyPropertyChanged("LogName");
             }
         }
 
         public string SourceName
         {
-            get => m_sourceName;
+            get => _sourceName;
             set
             {
-                m_sourceName = value;
+                _sourceName = value;
                 NotifyPropertyChanged("SourceName");
             }
         }

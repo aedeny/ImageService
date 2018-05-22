@@ -16,18 +16,18 @@ namespace ImageServiceGUI
         public static string ThumbnailSizeJsonName = "ThumbnailSize";
         public static string HandledDirJsonName = "HandledDir";
 
-        //public string ToJson()
-        //{
-        //    JObject settingInfoJson = new JObject
-        //    {
-        //        [OutputDirectoryJsonName] = OutputDirectory,
-        //        [SourceNameJsonName] = SourceName,
-        //        [LogNameJsonName] = LogName,
-        //        [ThumbnailSizeJsonName] = ThumbnailSize,
-        //        [HandledDirJsonName] = HandledDir
-        //    };
-        //    return settingInfoJson.ToString();
-        //}
+        public string ToJson()
+        {
+            JObject settingInfoJson = new JObject
+            {
+                [OutputDirectoryJsonName] = OutputDirectory,
+                [SourceNameJsonName] = SourceName,
+                [LogNameJsonName] = LogName,
+                [ThumbnailSizeJsonName] = ThumbnailSize,
+                [HandledDirJsonName] = HandledDir
+            };
+            return settingInfoJson.ToString();
+        }
 
         public static SettingsInfo FromJson(string settingsInfoAsJson)
         {
