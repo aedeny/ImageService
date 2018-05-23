@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
@@ -52,7 +51,9 @@ namespace ImageServiceGUI
                         _client.Connect(_ep);
                         Connected = true;
                     }
-                    catch (SocketException) { }
+                    catch (SocketException)
+                    {
+                    }
                 }
 
                 ConnectedToService?.Invoke(this, null);

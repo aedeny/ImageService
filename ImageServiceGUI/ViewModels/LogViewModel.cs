@@ -14,7 +14,6 @@ namespace ImageServiceGUI.ViewModels
     internal class LogViewModel : INotifyPropertyChanged
     {
         private readonly Dispatcher _uiDispatcher;
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public LogViewModel()
         {
@@ -35,6 +34,7 @@ namespace ImageServiceGUI.ViewModels
 
         public SolidColorBrush BackgroundColor { get; set; }
         public List<Tuple<SolidColorBrush, MessageTypeEnum, string>> LogList { get; set; }
+        public event PropertyChangedEventHandler PropertyChanged;
 
 
         private void OnConnectedToService(object sender, EventArgs e)

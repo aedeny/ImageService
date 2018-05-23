@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
@@ -14,9 +13,6 @@ namespace ImageService.Communication
         private readonly ILoggingService _loggingService;
         private readonly int _port;
         private TcpListener _listener;
-
-        //KFIR
-        public event EventHandler<ConnectedEventArgs> Connected;
 
         public TcpServer(int port, ILoggingService loggingService, IClientHandlerFactory clientHandlerFactory)
         {
@@ -37,7 +33,6 @@ namespace ImageService.Communication
             Task task = new Task(() =>
             {
                 while (true)
-                {
                     try
                     {
                         TcpClient client = _listener.AcceptTcpClient(); // Listen for new clietns
@@ -45,19 +40,27 @@ namespace ImageService.Communication
                         _loggingService.Log("Got new connection", MessageTypeEnum.Info); // Log the new connection
                         OnConnected(client.GetStream()); // Invoke the event OnClientConnected
 
-                        ITcpClientHandler ch = _clientHandlerFactory.Create(client, _loggingService); // Create client handler
+                        ITcpClientHandler
+                            ch = _clientHandlerFactory.Create(client, _loggingService); // Create client handler
                         ch.HandleClient(); // Start handle client
                     }
                     catch (SocketException)
                     {
                         break;
                     }
-                } // End of while
 
                 _loggingService.Log("Server stopped", MessageTypeEnum.Info);
             });
             task.Start();
         }
+
+        public void Stop()
+        {
+            _listener.Stop();
+        }
+
+        //KFIR
+        public event EventHandler<ConnectedEventArgs> Connected;
 
         public void OnConnected(NetworkStream stream)
         {
@@ -65,13 +68,8 @@ namespace ImageService.Communication
             {
                 Stream = stream
             };
-            
-            Connected?.Invoke(this, args);
-        }
 
-        public void Stop()
-        {
-            _listener.Stop();
+            Connected?.Invoke(this, args);
         }
     }
 }

@@ -1,4 +1,6 @@
 ﻿namespace ImageServiceGUI.Model
 {
-    internal class LogModel : ILogModel { }
+    internal class LogModel : ILogModel
+    {
+    }
 }

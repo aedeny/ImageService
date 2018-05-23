@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Configuration;
 using System.Diagnostics;
+using System.IO;
+using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.ServiceProcess;
 using System.Timers;
@@ -10,11 +12,10 @@ using ImageService.Controller;
 using ImageService.Logger;
 using ImageService.Model;
 using ImageService.Server;
-using Infrastructure.Enums;
-using Infrastructure.Logging;
 using Infrastructure;
-using System.Net.Sockets;
-using System.IO;
+using Infrastructure.Enums;
+using Infrastructure.Event;
+using Infrastructure.Logging;
 
 namespace ImageService
 {
@@ -54,9 +55,9 @@ namespace ImageService
         private ImageServer _imageServer;
         private ILoggingService _loggingService;
         private IImageServiceModel _model;
-        private TcpServer _tcpServer;
         private SettingsInfo _settingsInfo;
         private NetworkStream _stream;
+        private TcpServer _tcpServer;
         private BinaryWriter _writer;
 
         public ImageService()
@@ -105,9 +106,9 @@ namespace ImageService
             _loggingService = new LoggingService();
             _loggingService.MsgRecievedEvent += OnMsgEvent;
 
-
             _controller = new ImageController();
             _imageServer = new ImageServer(_controller, _loggingService);
+            _imageServer.DirectoryHandlerClosed += OnDirectoryHandlerClosed;
 
             SetSettingsInfo();
 
@@ -121,6 +122,15 @@ namespace ImageService
             _controller.AddCommand(CommandEnum.CloseDirectoryHandlerCommand,
                 new CloseDirectoryHandlerCommand(_imageServer));
             _controller.AddCommand(CommandEnum.ConfigCommand, new SettingsInfoRetrievalCommand());
+        }
+
+        private void OnDirectoryHandlerClosed(object sender, DirectoryHandlerClosedEventArgs e)
+        {
+            eventLog.WriteEntry("In OnDirectoryHandlerClosed");
+            if (e == null)
+                _settingsInfo.HandledDirectories.Clear();
+            else
+                _settingsInfo.HandledDirectories.Remove(e.DirectoryPath);
         }
 
         protected override void OnStop()
@@ -149,21 +159,21 @@ namespace ImageService
                 OutputDirectory = ConfigurationManager.AppSettings["OutputDir"],
                 SourceName = ConfigurationManager.AppSettings["SourceName"],
                 LogName = ConfigurationManager.AppSettings["LogName"],
-                // HandledDir = ConfigurationManager.AppSettings["HandledDir"],
+                // HandledDirectories = ConfigurationManager.AppSettings["HandledDirectories"],
                 ThumbnailSize = !int.TryParse(ConfigurationManager.AppSettings["ThumbnailSize"], out int thumbnailSize)
                     ? 100
                     : thumbnailSize
             };
 
-            string handledDirInfo = ConfigurationManager.AppSettings["HandledDir"];
+            string handledDirInfo = ConfigurationManager.AppSettings["HandledDirectories"];
             string[] handeledDirectories = handledDirInfo.Split(';');
 
             foreach (string handeledDir in handeledDirectories)
             {
-                _settingsInfo.HandledDir.Add(handeledDir);
+                _settingsInfo.HandledDirectories.Add(handeledDir);
                 _imageServer.CreateHandler(handeledDir);
             }
-        } 
+        }
 
         public void OnConnected(object sender, ConnectedEventArgs args)
         {

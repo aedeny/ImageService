@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using ImageServiceGUI.ViewModels;
+﻿using ImageServiceGUI.ViewModels;
 
 namespace ImageServiceGUI.Views
 {

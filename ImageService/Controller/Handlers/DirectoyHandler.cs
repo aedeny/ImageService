@@ -48,7 +48,7 @@ namespace ImageService.Controller.Handlers
 
             if (!_extenstions.Contains(Path.GetExtension(filePath).ToLower())) return;
 
-            string[] args = { filePath };
+            string[] args = {filePath};
 
             // Notifies the controller about the newly created file
             string msg =
@@ -57,17 +57,17 @@ namespace ImageService.Controller.Handlers
             _loggingService.Log(msg, result);
         }
 
-        public void StopHandleDirectory(object sender, DirectoryHandlerClosedEventArgs args)
+        public void OnDirectoryHandlerClosed(object sender, DirectoryHandlerClosedEventArgs args)
         {
             if (args != null && !args.DirectoryPath.Equals(_path)) return;
             _dirWatcher.Created -= OnNewFileCreated;
 
-            ImageServer imageServer = (ImageServer)sender;
-            imageServer.CloseDirectoryHandler -= StopHandleDirectory;
+            ImageServer imageServer = (ImageServer) sender;
+            imageServer.DirectoryHandlerClosed -= OnDirectoryHandlerClosed;
             imageServer.CommandRecieved -= OnCommandRecieved;
 
             DirectoryHandlerClosedEventHandler?.Invoke(this,
-                new DirectoryHandlerClosedEventArgs(_path, "in StopHandleDirectory"));
+                new DirectoryHandlerClosedEventArgs(_path, "in OnDirectoryHandlerClosed"));
             _loggingService.Log("Stopped handling directory " + _path, MessageTypeEnum.Info);
             if (args != null) args.Closed = true;
         }
@@ -79,7 +79,7 @@ namespace ImageService.Controller.Handlers
         private readonly FileSystemWatcher _dirWatcher;
         private readonly string _path;
         private readonly Dictionary<CommandEnum, Action<string[]>> _commandsDictionary;
-        private readonly string[] _extenstions = { ".jpg", ".jpeg", ".png", ".bmp", ".gif" };
+        private readonly string[] _extenstions = {".jpg", ".jpeg", ".png", ".bmp", ".gif"};
 
         #endregion
     }

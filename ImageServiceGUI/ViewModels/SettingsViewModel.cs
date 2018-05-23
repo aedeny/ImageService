@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -7,6 +8,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using Infrastructure;
 using Infrastructure.Enums;
 using Infrastructure.Event;
 using Microsoft.Practices.Prism.Commands;
@@ -15,13 +17,12 @@ namespace ImageServiceGUI.ViewModels
 {
     internal class SettingsViewModel : INotifyPropertyChanged
     {
+        private const string WaitingForConnection = "Waiting for connection...";
         private readonly Dispatcher _uiDispatcher;
+        private string _logName = WaitingForConnection;
+        private string _outputDirectory = WaitingForConnection;
 
         private string _selectedDirectoryHandler;
-        private const string WaitingForConnection = "Waiting for connection...";
-        public ObservableCollection<string> DirectoryHandlers { get; }
-        private string _outputDirectory = WaitingForConnection;
-        private string _logName = WaitingForConnection;
         private string _sourceName = WaitingForConnection;
         private int _thumbnailSize;
 
@@ -41,17 +42,9 @@ namespace ImageServiceGUI.ViewModels
             OurTcpClientSingleton.Instance.ConfigurationReceived += OnConfigurationReceived;
         }
 
-        public SolidColorBrush BackgroundColor { get; set; }
+        public ObservableCollection<string> DirectoryHandlers { get; }
 
-        private void OnConnectedToService(object sender, EventArgs e)
-        {
-            Debug.WriteLine("In SettingsViewModel->OnConnectedToService");
-            _uiDispatcher.BeginInvoke(new Action(() =>
-            {
-                BackgroundColor = new SolidColorBrush(Colors.DarkCyan);
-                NotifyPropertyChanged("BackgroundColor");
-            }));
-        }
+        public SolidColorBrush BackgroundColor { get; set; }
 
         public string OutputDirectory
         {
@@ -108,6 +101,16 @@ namespace ImageServiceGUI.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        private void OnConnectedToService(object sender, EventArgs e)
+        {
+            Debug.WriteLine("In SettingsViewModel->OnConnectedToService");
+            _uiDispatcher.BeginInvoke(new Action(() =>
+            {
+                BackgroundColor = new SolidColorBrush(Colors.DarkCyan);
+                NotifyPropertyChanged("BackgroundColor");
+            }));
+        }
+
         public void NotifyPropertyChanged(string name)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
@@ -129,13 +132,9 @@ namespace ImageServiceGUI.ViewModels
             OutputDirectory = settingsInfo.OutputDirectory;
             ThumbnailSize = settingsInfo.ThumbnailSize;
 
-            // string[] handlers = settingsInfo.HandledDir.Split(';');
-            string[] handlers = settingsInfo.HandledDir.ToObject<string[]>();
+            List<string> handlers = settingsInfo.HandledDirectories;
 
-            foreach (string handler in handlers)
-            {
-                DirectoryHandlers.Add(handler);
-            }
+            foreach (string handler in handlers) DirectoryHandlers.Add(handler);
         }
 
         /// <summary>
