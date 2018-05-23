@@ -33,6 +33,7 @@ namespace ImageService.Communication
             //    ch.Write(CommandEnum.CloseDirectoryHandlerCommand + "|" + directoryPath);
             //}
         }
+
         public void Start()
         {
             IPEndPoint ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), _port);
