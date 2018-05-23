@@ -128,9 +128,16 @@ namespace ImageService
         {
             eventLog.WriteEntry("In OnDirectoryHandlerClosed");
             if (e == null)
+            {
                 _settingsInfo.HandledDirectories.Clear();
+            }
             else
+            {
                 _settingsInfo.HandledDirectories.Remove(e.DirectoryPath);
+                _tcpServer.RemoveDirHandlerFromAllGuis(e.DirectoryPath);
+            }
+                
+
         }
 
         protected override void OnStop()

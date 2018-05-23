@@ -148,6 +148,7 @@ namespace ImageServiceGUI.ViewModels
             {
                 DirectoryHandlers.Remove(SelectedDirectoryHandler);
                 SelectedDirectoryHandler = null;
+                // NotifyPropertyChanged("DirectoryHandlers");
             }));
         }
 

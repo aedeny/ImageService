@@ -98,7 +98,6 @@ namespace ImageServiceGUI
             switch (command)
             {
                 case CommandEnum.NewLogCommand:
-                    // Log(parameters[1], (MessageTypeEnum) int.Parse(parameters[2]));
                     Log(parameters[1], MessageTypeEnum.Failure);
                     break;
                 case CommandEnum.CloseDirectoryHandlerCommand:

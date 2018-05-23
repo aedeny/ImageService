@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using ImageService.Logger;
+using Infrastructure.Enums;
 using Infrastructure.Logging;
 
 namespace ImageService.Communication
@@ -13,15 +15,24 @@ namespace ImageService.Communication
         private readonly ILoggingService _loggingService;
         private readonly int _port;
         private TcpListener _listener;
+        private List<ITcpClientHandler> _clientHandlersList;
 
         public TcpServer(int port, ILoggingService loggingService, IClientHandlerFactory clientHandlerFactory)
         {
             _clientHandlerFactory = clientHandlerFactory;
             _port = port;
             _loggingService = loggingService;
+            _clientHandlersList = new List<ITcpClientHandler>();
             Start();
         }
 
+        public void RemoveDirHandlerFromAllGuis(string directoryPath)
+        {
+            //foreach (ITcpClientHandler ch in _clientHandlersList)
+            //{
+            //    ch.Write(CommandEnum.CloseDirectoryHandlerCommand + "|" + directoryPath);
+            //}
+        }
         public void Start()
         {
             IPEndPoint ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), _port);
@@ -42,6 +53,7 @@ namespace ImageService.Communication
 
                         ITcpClientHandler
                             ch = _clientHandlerFactory.Create(client, _loggingService); // Create client handler
+                        _clientHandlersList.Add(ch);
                         ch.HandleClient(); // Start handle client
                     }
                     catch (SocketException)
@@ -61,6 +73,8 @@ namespace ImageService.Communication
 
         //KFIR
         public event EventHandler<ConnectedEventArgs> Connected;
+
+
 
         public void OnConnected(NetworkStream stream)
         {
