@@ -129,7 +129,8 @@ namespace ImageServiceGUI.ViewModels
             OutputDirectory = settingsInfo.OutputDirectory;
             ThumbnailSize = settingsInfo.ThumbnailSize;
 
-            string[] handlers = settingsInfo.HandledDir.Split(';');
+            // string[] handlers = settingsInfo.HandledDir.Split(';');
+            string[] handlers = settingsInfo.HandledDir.ToObject<string[]>();
 
             foreach (string handler in handlers)
             {

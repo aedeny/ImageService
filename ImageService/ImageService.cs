@@ -56,6 +56,8 @@ namespace ImageService
         private IImageServiceModel _model;
         private TcpServer _tcpServer;
         private SettingsInfo _settingsInfo;
+        private NetworkStream _stream;
+        private BinaryWriter _writer;
 
         public ImageService()
         {
@@ -67,6 +69,13 @@ namespace ImageService
 
             eventLog.Source = _sourceName;
             eventLog.Log = _logName;
+            eventLog.EnableRaisingEvents = true;
+        }
+
+        // KFIRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+        public void OnEntryWritten(object sender, EntryWrittenEventArgs e)
+        {
+            _writer.Write(CommandEnum.NewLogCommand + "|" + e.Entry.Message + "|" + e.Entry.EntryType);
         }
 
         protected override void OnStart(string[] args)
@@ -96,11 +105,13 @@ namespace ImageService
             _loggingService = new LoggingService();
             _loggingService.MsgRecievedEvent += OnMsgEvent;
 
+
+            _controller = new ImageController();
+            _imageServer = new ImageServer(_controller, _loggingService);
+
             SetSettingsInfo();
 
             _model = new ImageServiceModel(_settingsInfo.OutputDirectory, _settingsInfo.ThumbnailSize);
-            _controller = new ImageController();
-            _imageServer = new ImageServer(_controller, _loggingService);
 
             // CREATING THE TCP SERVER KFIR
             _tcpServer = new TcpServer(8000, _loggingService, new TcpClientHandlerFactory(_controller));
@@ -110,11 +121,6 @@ namespace ImageService
             _controller.AddCommand(CommandEnum.CloseDirectoryHandlerCommand,
                 new CloseDirectoryHandlerCommand(_imageServer));
             _controller.AddCommand(CommandEnum.ConfigCommand, new SettingsInfoRetrievalCommand());
-
-            string handledDirInfo = ConfigurationManager.AppSettings["HandledDir"];
-            string[] handeledDirectories = handledDirInfo.Split(';');
-
-            foreach (string handeledDir in handeledDirectories) _imageServer.CreateHandler(handeledDir);
         }
 
         protected override void OnStop()
@@ -136,28 +142,39 @@ namespace ImageService
             eventLog.WriteEntry("Monitoring the System", EventLogEntryType.Information, _eventId++);
         }
 
-        private void SetSettingsInfo() => _settingsInfo = new SettingsInfo
+        private void SetSettingsInfo()
         {
-            OutputDirectory = ConfigurationManager.AppSettings["OutputDir"],
-            SourceName = ConfigurationManager.AppSettings["SourceName"],
-            LogName = ConfigurationManager.AppSettings["LogName"],
-            HandledDir = ConfigurationManager.AppSettings["HandledDir"],
-            ThumbnailSize = !int.TryParse(ConfigurationManager.AppSettings["ThumbnailSize"], out int thumbnailSize)
+            _settingsInfo = new SettingsInfo
+            {
+                OutputDirectory = ConfigurationManager.AppSettings["OutputDir"],
+                SourceName = ConfigurationManager.AppSettings["SourceName"],
+                LogName = ConfigurationManager.AppSettings["LogName"],
+                // HandledDir = ConfigurationManager.AppSettings["HandledDir"],
+                ThumbnailSize = !int.TryParse(ConfigurationManager.AppSettings["ThumbnailSize"], out int thumbnailSize)
                     ? 100
                     : thumbnailSize
-        };
+            };
+
+            string handledDirInfo = ConfigurationManager.AppSettings["HandledDir"];
+            string[] handeledDirectories = handledDirInfo.Split(';');
+
+            foreach (string handeledDir in handeledDirectories)
+            {
+                _settingsInfo.HandledDir.Add(handeledDir);
+                _imageServer.CreateHandler(handeledDir);
+            }
+        } 
 
         public void OnConnected(object sender, ConnectedEventArgs args)
         {
-            NetworkStream stream = args.Stream;
-            BinaryWriter writer = new BinaryWriter(stream);
+            _stream = args.Stream;
+            _writer = new BinaryWriter(_stream);
 
             string settings = _settingsInfo.ToJson();
-            writer.Write(CommandEnum.ConfigCommand + "|" + settings);
+            _writer.Write(CommandEnum.ConfigCommand + "|" + settings);
+            _writer.Flush();
 
-
-
-            writer.Flush();
+            eventLog.EntryWritten += OnEntryWritten;
         }
     }
 }
