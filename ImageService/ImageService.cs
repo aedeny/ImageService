@@ -77,6 +77,7 @@ namespace ImageService
         public void OnEntryWritten(object sender, EntryWrittenEventArgs e)
         {
             _writer.Write(CommandEnum.NewLogCommand + "|" + e.Entry.Message + "|" + e.Entry.EntryType);
+            _writer.Flush();
         }
 
         protected override void OnStart(string[] args)
@@ -166,7 +167,6 @@ namespace ImageService
                 OutputDirectory = ConfigurationManager.AppSettings["OutputDir"],
                 SourceName = ConfigurationManager.AppSettings["SourceName"],
                 LogName = ConfigurationManager.AppSettings["LogName"],
-                // HandledDirectories = ConfigurationManager.AppSettings["HandledDirectories"],
                 ThumbnailSize = !int.TryParse(ConfigurationManager.AppSettings["ThumbnailSize"], out int thumbnailSize)
                     ? 100
                     : thumbnailSize

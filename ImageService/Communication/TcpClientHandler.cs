@@ -42,7 +42,10 @@ namespace ImageService.Communication
 
                         // THIS SHOULD BE CHANGED
                         // ALL CLIENTS SHOULD BE NOTIFIED
-                        if (retval != null) _writer.Write(parameters[0] + "|" + retval);
+                        if (retval == null) continue;
+
+                        _writer.Write(parameters[0] + "|" + retval);
+                        _writer.Flush();
                     }
                 }
                 catch (Exception e)
