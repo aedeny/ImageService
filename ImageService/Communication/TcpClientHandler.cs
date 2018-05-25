@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Sockets;
@@ -54,6 +55,7 @@ namespace ImageService.Communication
                 }
                 catch (Exception e)
                 {
+                    Debug.WriteLine(e);
                     _loggingService.Log("Client Closed", MessageTypeEnum.Failure);
                 }
             }).Start();
