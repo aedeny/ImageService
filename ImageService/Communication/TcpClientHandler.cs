@@ -17,6 +17,7 @@ namespace ImageService.Communication
         private readonly BinaryReader _reader;
         private readonly BinaryWriter _writer;
 
+
         public TcpClientHandler(TcpClient tcpClient, ILoggingService loggingService, IImageController imageController)
         {
             _loggingService = loggingService;
@@ -25,6 +26,8 @@ namespace ImageService.Communication
             _reader = new BinaryReader(stream);
             _writer = new BinaryWriter(stream);
         }
+
+        public event EventHandler GuiClientClosed;
 
         public void HandleClient()
         {
@@ -51,7 +54,7 @@ namespace ImageService.Communication
                 }
                 catch (Exception e)
                 {
-                    _loggingService.Log(e.StackTrace, MessageTypeEnum.Failure);
+                    _loggingService.Log("Client Closed", MessageTypeEnum.Failure);
                 }
             }).Start();
         }

@@ -39,16 +39,18 @@ namespace ImageService.Communication
                 while (true)
                     try
                     {
-                        TcpClient client = _listener.AcceptTcpClient(); // Listen for new clietns
+                        // Listens for new clients.
+                        TcpClient client = _listener.AcceptTcpClient();
 
-                        _loggingService.Log("Got new connection", MessageTypeEnum.Info); // Log the new connection
-                        OnConnected(client.GetStream()); // Invoke the event OnClientConnected
+                        _loggingService.Log("Got new connection", MessageTypeEnum.Info);
+                        OnConnected(client.GetStream());
 
                         ITcpClientHandler
-                            ch = _clientHandlerFactory.Create(client, _loggingService); // Create client handler
+                            ch = _clientHandlerFactory.Create(client, _loggingService);
 
                         _clientHandlersList.Add(ch);
-                        ch.HandleClient(); // Start handle client
+                        ch.GuiClientClosed += (sender, args) => _clientHandlersList.Remove((ITcpClientHandler) sender);
+                        ch.HandleClient();
                     }
                     catch (SocketException)
                     {
