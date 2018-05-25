@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -41,6 +40,8 @@ namespace ImageServiceGUI.ViewModels
 
             OurTcpClientSingleton.Instance.ConfigurationReceived += OnConfigurationReceived;
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public ObservableCollection<string> DirectoryHandlers { get; }
 
@@ -99,8 +100,6 @@ namespace ImageServiceGUI.ViewModels
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
         private void OnConnectedToService(object sender, EventArgs e)
         {
             Debug.WriteLine("In SettingsViewModel->OnConnectedToService");
@@ -146,7 +145,7 @@ namespace ImageServiceGUI.ViewModels
             Debug.WriteLine(eventArgs.DirectoryPath);
             _uiDispatcher.BeginInvoke(new Action(() =>
             {
-                DirectoryHandlers.Remove(SelectedDirectoryHandler);
+                DirectoryHandlers.Remove(eventArgs.DirectoryPath);
                 SelectedDirectoryHandler = null;
                 NotifyPropertyChanged("DirectoryHandlers");
             }));

@@ -32,9 +32,10 @@ namespace ImageServiceGUI.ViewModels
                         log.Item2));
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public SolidColorBrush BackgroundColor { get; set; }
         public List<Tuple<SolidColorBrush, MessageTypeEnum, string>> LogList { get; set; }
-        public event PropertyChangedEventHandler PropertyChanged;
 
 
         private void OnConnectedToService(object sender, EventArgs e)

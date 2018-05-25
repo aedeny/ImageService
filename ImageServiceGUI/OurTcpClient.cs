@@ -51,9 +51,7 @@ namespace ImageServiceGUI
                         _client.Connect(_ep);
                         Connected = true;
                     }
-                    catch (SocketException)
-                    {
-                    }
+                    catch (SocketException) { }
                 }
 
                 ConnectedToService?.Invoke(this, null);
@@ -76,6 +74,7 @@ namespace ImageServiceGUI
                     while (true)
                     {
                         string commandLine = Reader.ReadString();
+                        Debug.WriteLine("Got: " + commandLine);
                         ParseMessage(commandLine);
                     }
                 }
@@ -103,6 +102,7 @@ namespace ImageServiceGUI
                 case CommandEnum.CloseDirectoryHandlerCommand:
                     DirectoryHandlerClosedEventArgs
                         dhceArgs = new DirectoryHandlerClosedEventArgs(parameters[1], "hmm");
+
                     DirectoryHandlerRemoved?.Invoke(this, dhceArgs);
                     break;
                 case CommandEnum.NewFileCommand:
@@ -131,6 +131,7 @@ namespace ImageServiceGUI
                 Message = msg,
                 Status = messageType
             };
+
             LogMsgRecieved?.Invoke(this, messageRecievedEventArgs);
         }
 

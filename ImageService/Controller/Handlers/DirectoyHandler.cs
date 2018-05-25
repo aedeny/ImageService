@@ -21,6 +21,7 @@ namespace ImageService.Controller.Handlers
                 EnableRaisingEvents = true,
                 IncludeSubdirectories = true
             };
+
             _path = path;
             _commandsDictionary = new Dictionary<CommandEnum, Action<string[]>>();
         }
@@ -68,6 +69,7 @@ namespace ImageService.Controller.Handlers
 
             DirectoryHandlerClosedEventHandler?.Invoke(this,
                 new DirectoryHandlerClosedEventArgs(_path, "in OnDirectoryHandlerClosed"));
+
             _loggingService.Log("Stopped handling directory " + _path, MessageTypeEnum.Info);
             if (args != null) args.Closed = true;
         }

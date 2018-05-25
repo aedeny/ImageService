@@ -44,13 +44,5 @@ namespace ImageService.Server
         private readonly ILoggingService _loggingService;
 
         #endregion
-
-        //public void Parser(string command)
-        //{
-        //    CommandEnum cid = (CommandEnum) Convert.ToInt16(command.Split(';')[0]);
-        //    string[] args = command.Split(';').Skip(1).ToArray();
-
-        //    _controller.ExecuteCommand(cid, args, out MessageTypeEnum _);
-        //}
     }
 }

@@ -1,6 +1,4 @@
 ﻿namespace ImageServiceGUI.Model
 {
-    internal interface ISettingsModel
-    {
-    }
+    internal interface ISettingsModel { }
 }

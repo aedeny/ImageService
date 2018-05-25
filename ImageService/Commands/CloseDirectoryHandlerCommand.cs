@@ -17,6 +17,7 @@ namespace ImageService.Commands
         {
             DirectoryHandlerClosedEventArgs directoryHandlerClosedEventArgs =
                 new DirectoryHandlerClosedEventArgs(args[0], "Close");
+
             string s = _imageServer.CloseHandler(directoryHandlerClosedEventArgs, out result);
             return directoryHandlerClosedEventArgs.Closed ? s : null;
         }

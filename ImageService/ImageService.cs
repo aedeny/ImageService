@@ -90,6 +90,7 @@ namespace ImageService
                 // 60 seconds
                 Interval = 60000
             };
+
             timer.Elapsed += OnTimer;
             timer.Start();
 
@@ -99,6 +100,7 @@ namespace ImageService
                 dwCurrentState = ServiceState.ServiceStartPending,
                 dwWaitHint = 100000
             };
+
             SetServiceStatus(ServiceHandle, ref serviceStatus);
 
             // Updates the service state to Running.  
@@ -122,6 +124,7 @@ namespace ImageService
             _controller.AddCommand(CommandEnum.NewFileCommand, new NewFileCommand(_model));
             _controller.AddCommand(CommandEnum.CloseDirectoryHandlerCommand,
                 new CloseDirectoryHandlerCommand(_imageServer));
+
             _controller.AddCommand(CommandEnum.ConfigCommand, new SettingsInfoRetrievalCommand());
         }
 
@@ -137,8 +140,6 @@ namespace ImageService
                 _settingsInfo.HandledDirectories.Remove(e.DirectoryPath);
                 _tcpServer.RemoveDirHandlerFromAllGuis(e.DirectoryPath);
             }
-                
-
         }
 
         protected override void OnStop()

@@ -14,6 +14,7 @@ namespace ImageService.Logger
                 Message = message,
                 Status = type
             };
+
             MsgRecievedEvent?.Invoke(this, msgRecievedArgs);
         }
     }

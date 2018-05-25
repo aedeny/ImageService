@@ -39,6 +39,7 @@ namespace ImageService.Model
 
                 string pathSuffix = dateTime.Year + "\\" + dateTime.Month + "\\" +
                                     Path.GetFileNameWithoutExtension(path);
+
                 string outputFilePath = _outputFolder + "\\" + pathSuffix;
                 string extension = Path.GetExtension(path);
 

@@ -10,6 +10,7 @@ namespace ImageService
             {
                 new ImageService()
             };
+
             ServiceBase.Run(servicesToRun);
         }
     }

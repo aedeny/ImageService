@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
@@ -13,10 +12,10 @@ namespace ImageService.Communication
     public class TcpServer : ITcpServer
     {
         private readonly IClientHandlerFactory _clientHandlerFactory;
+        private readonly List<ITcpClientHandler> _clientHandlersList;
         private readonly ILoggingService _loggingService;
         private readonly int _port;
         private TcpListener _listener;
-        private List<ITcpClientHandler> _clientHandlersList;
 
         public TcpServer(int port, ILoggingService loggingService, IClientHandlerFactory clientHandlerFactory)
         {
@@ -25,14 +24,6 @@ namespace ImageService.Communication
             _loggingService = loggingService;
             _clientHandlersList = new List<ITcpClientHandler>();
             Start();
-        }
-
-        public void RemoveDirHandlerFromAllGuis(string directoryPath)
-        {
-            foreach (ITcpClientHandler ch in _clientHandlersList)
-            {
-                ch.Write(CommandEnum.CloseDirectoryHandlerCommand + "|" + directoryPath);
-            }
         }
 
         public void Start()
@@ -55,6 +46,7 @@ namespace ImageService.Communication
 
                         ITcpClientHandler
                             ch = _clientHandlerFactory.Create(client, _loggingService); // Create client handler
+
                         _clientHandlersList.Add(ch);
                         ch.HandleClient(); // Start handle client
                     }
@@ -65,6 +57,7 @@ namespace ImageService.Communication
 
                 _loggingService.Log("Server stopped", MessageTypeEnum.Info);
             });
+
             task.Start();
         }
 
@@ -73,9 +66,14 @@ namespace ImageService.Communication
             _listener.Stop();
         }
 
+        public void RemoveDirHandlerFromAllGuis(string directoryPath)
+        {
+            foreach (ITcpClientHandler ch in _clientHandlersList)
+                ch.Write(CommandEnum.CloseDirectoryHandlerCommand + "|" + directoryPath);
+        }
+
         //KFIR
         public event EventHandler<ConnectedEventArgs> Connected;
-
 
 
         public void OnConnected(NetworkStream stream)
