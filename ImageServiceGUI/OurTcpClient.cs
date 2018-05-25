@@ -102,7 +102,6 @@ namespace ImageServiceGUI
                 case CommandEnum.CloseDirectoryHandlerCommand:
                     DirectoryHandlerClosedEventArgs
                         dhceArgs = new DirectoryHandlerClosedEventArgs(parameters[1], "hmm");
-
                     DirectoryHandlerRemoved?.Invoke(this, dhceArgs);
                     break;
                 case CommandEnum.NewFileCommand:

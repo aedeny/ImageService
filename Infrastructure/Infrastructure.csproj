@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Event\ConfigurationReceivedEventArgs.cs" />
+    <Compile Include="LogHistory.cs" />
     <Compile Include="SettingsInfo.cs" />
     <Compile Include="Enums\CommandEnum.cs" />
     <Compile Include="Event\CommandRecievedEventArgs.cs" />
