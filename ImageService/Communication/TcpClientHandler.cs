@@ -54,6 +54,7 @@ namespace ImageService.Communication
                 }
                 catch (Exception e)
                 {
+                    GuiClientClosed?.Invoke(this,null);
                     _loggingService.Log("Client Closed", MessageTypeEnum.Failure);
                 }
             }).Start();
