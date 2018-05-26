@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Configuration;
 using System.Diagnostics;
-using System.IO;
-using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.ServiceProcess;
-using System.Timers;
+using System.Threading;
+using System.Threading.Tasks;
 using ImageService.Commands;
 using ImageService.Communication;
 using ImageService.Controller;
@@ -16,6 +15,7 @@ using Infrastructure;
 using Infrastructure.Enums;
 using Infrastructure.Event;
 using Infrastructure.Logging;
+using Timer = System.Timers.Timer;
 
 namespace ImageService
 {
@@ -51,14 +51,11 @@ namespace ImageService
 
         //private string kaka = ConfigurationManager.
         private IImageController _controller;
-        private int _eventId = 1;
         private ImageServer _imageServer;
         private ILoggingService _loggingService;
         private IImageServiceModel _model;
         private SettingsInfo _settingsInfo;
-        private NetworkStream _stream;
         private TcpServer _tcpServer;
-        private BinaryWriter _writer;
 
         public ImageService()
         {
@@ -73,25 +70,20 @@ namespace ImageService
             eventLog.EnableRaisingEvents = true;
         }
 
-        public void OnLogEntryWritten(object sender, EntryWrittenEventArgs e)
-        {
-            _writer.Write(CommandEnum.NewLogCommand + "|" + e.Entry.Message + "|" + e.Entry.EntryType);
-            _writer.Flush();
-        }
-
         protected override void OnStart(string[] args)
         {
             #region Other
 
-            eventLog.WriteEntry("In OnStart");
+            eventLog.WriteEntry("In OnStart", EventLogEntryType.Information);
             // Sets up a timer to trigger every minute.  
             Timer timer = new Timer
             {
-                Interval = 60000
+                // TODO change back to 60000 before "release"
+                Interval = 10000
             };
 
             timer.Elapsed += (sender, eventArgs) =>
-                eventLog.WriteEntry("Monitoring the System", EventLogEntryType.Information, _eventId++);
+                eventLog.WriteEntry("Monitoring the System", EventLogEntryType.Information);
 
             timer.Start();
 
@@ -123,7 +115,7 @@ namespace ImageService
             // Creates TCP server
             _tcpServer = new TcpServer(8000, _loggingService, new TcpClientHandlerFactory(_controller));
             _tcpServer.NewClientConnected += OnNewClientConnected;
-
+            eventLog.EntryWritten += _tcpServer.OnLogEntryWritten;
             _controller.AddCommand(CommandEnum.NewFileCommand, new NewFileCommand(_model));
             _controller.AddCommand(CommandEnum.CloseDirectoryHandlerCommand,
                 new CloseDirectoryHandlerCommand(_imageServer));
@@ -133,7 +125,7 @@ namespace ImageService
 
         private void OnDirectoryHandlerClosed(object sender, DirectoryHandlerClosedEventArgs e)
         {
-            eventLog.WriteEntry("In OnDirectoryHandlerClosed");
+            eventLog.WriteEntry("In OnDirectoryHandlerClosed", EventLogEntryType.Information);
             if (e == null)
             {
                 _settingsInfo.HandledDirectories.Clear();
@@ -147,7 +139,7 @@ namespace ImageService
 
         protected override void OnStop()
         {
-            eventLog.WriteEntry("In OnStop");
+            eventLog.WriteEntry("In OnStop", EventLogEntryType.Information);
             _imageServer.Close();
         }
 
@@ -182,16 +174,28 @@ namespace ImageService
             }
         }
 
+
         public void OnNewClientConnected(object sender, NewClientConnectedEventArgs args)
         {
-            _stream = args.Stream;
-            _writer = new BinaryWriter(_stream);
-
             string settings = _settingsInfo.ToJson();
-            _writer.Write(CommandEnum.ConfigCommand + "|" + settings);
-            _writer.Flush();
+            args.ClientHandler.Write(CommandEnum.ConfigCommand + "|" + settings);
 
-            eventLog.EntryWritten += OnLogEntryWritten;
+            // TODO Send log entries in one big batch instead of writing n times
+            Task.Run(() =>
+            {
+                int numOfEntriesWritten = 0;
+                foreach (EventLogEntry logEntry in eventLog.Entries)
+                {
+                    if (numOfEntriesWritten >= 5)
+                        break;
+
+                    args.ClientHandler.Write(CommandEnum.NewLogCommand + "|" + logEntry.Message + "|" +
+                                             logEntry.EntryType);
+
+                    Thread.Sleep(500);
+                    numOfEntriesWritten++;
+                }
+            });
         }
     }
 }

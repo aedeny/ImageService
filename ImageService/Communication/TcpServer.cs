@@ -43,10 +43,10 @@ namespace ImageService.Communication
                         TcpClient client = _listener.AcceptTcpClient();
 
                         _loggingService.Log("Got new connection", EventLogEntryType.Information);
-                        NewClientConnected?.Invoke(this, new NewClientConnectedEventArgs {Stream = client.GetStream()});
                         ITcpClientHandler
                             ch = _clientHandlerFactory.Create(client, _loggingService);
 
+                        NewClientConnected?.Invoke(this, new NewClientConnectedEventArgs {ClientHandler = ch});
                         _clientHandlersList.Add(ch);
                         ch.GuiClientClosed += (sender, args) => _clientHandlersList.Remove((ITcpClientHandler) sender);
                         ch.HandleClient();
@@ -71,6 +71,12 @@ namespace ImageService.Communication
         {
             foreach (ITcpClientHandler ch in _clientHandlersList)
                 ch.Write(CommandEnum.CloseDirectoryHandlerCommand + "|" + directoryPath);
+        }
+
+        public void OnLogEntryWritten(object sender, EntryWrittenEventArgs e)
+        {
+            foreach (ITcpClientHandler ch in _clientHandlersList)
+                ch.Write(CommandEnum.NewLogCommand + "|" + e.Entry.Message + "|" + e.Entry.EntryType);
         }
     }
 }

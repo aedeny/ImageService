@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
@@ -24,7 +25,7 @@ namespace ImageServiceGUI.ViewModels
 
             List<Tuple<EventLogEntryType, string>> logsList = GuiTcpClientSingleton.Instance.GetLogList();
 
-            LogList = new List<Tuple<SolidColorBrush, EventLogEntryType, string>>();
+            LogList = new ObservableCollection<Tuple<SolidColorBrush, EventLogEntryType, string>>();
             foreach (Tuple<EventLogEntryType, string> log in logsList)
                 LogList.Add(
                     new Tuple<SolidColorBrush, EventLogEntryType, string>(MessageTypeColor(log.Item1), log.Item1,
@@ -34,7 +35,7 @@ namespace ImageServiceGUI.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
 
         public SolidColorBrush BackgroundColor { get; set; }
-        public List<Tuple<SolidColorBrush, EventLogEntryType, string>> LogList { get; set; }
+        public ObservableCollection<Tuple<SolidColorBrush, EventLogEntryType, string>> LogList { get; set; }
 
         /// <summary>
         ///     Adds a new log entry to the GUI's list.
@@ -45,7 +46,8 @@ namespace ImageServiceGUI.ViewModels
         {
             _uiDispatcher.BeginInvoke(new Action(() =>
             {
-                LogList.Add(new Tuple<SolidColorBrush, EventLogEntryType, string>(MessageTypeColor(e.EventLogEntryType),
+                LogList.Insert(0, new Tuple<SolidColorBrush, EventLogEntryType, string>(
+                    MessageTypeColor(e.EventLogEntryType),
                     e.EventLogEntryType, e.Message));
 
                 NotifyPropertyChanged("LogList");
@@ -63,9 +65,9 @@ namespace ImageServiceGUI.ViewModels
             }));
         }
 
-        public void NotifyPropertyChanged(string name)
+        public void NotifyPropertyChanged(string propertyName)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
 
@@ -79,6 +81,10 @@ namespace ImageServiceGUI.ViewModels
                     return new SolidColorBrush(Colors.Green);
                 case EventLogEntryType.Warning:
                     return new SolidColorBrush(Colors.Yellow);
+                case EventLogEntryType.SuccessAudit:
+                    return new SolidColorBrush(Colors.White);
+                case EventLogEntryType.FailureAudit:
+                    return new SolidColorBrush(Colors.White);
                 default:
                     return new SolidColorBrush(Colors.White);
             }

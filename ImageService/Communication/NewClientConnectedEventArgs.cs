@@ -1,9 +1,7 @@
-﻿using System.Net.Sockets;
-
-namespace ImageService.Communication
+﻿namespace ImageService.Communication
 {
     public class NewClientConnectedEventArgs
     {
-        public NetworkStream Stream { get; set; }
+        public ITcpClientHandler ClientHandler { get; set; }
     }
 }

@@ -35,7 +35,6 @@ namespace ImageServiceGUI
         public event EventHandler<DirectoryHandlerClosedEventArgs> DirectoryHandlerRemoved;
         public event EventHandler<ConfigurationReceivedEventArgs> ConfigurationReceived;
 
-        // TODO Put in Task?
         public void ConnectToService()
         {
             _ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8000);
@@ -97,6 +96,7 @@ namespace ImageServiceGUI
             switch (command)
             {
                 case CommandEnum.NewLogCommand:
+                    Debug.WriteLine("ParseMessage::NewLogCommand");
                     Log(parameters[1], (EventLogEntryType) Enum.Parse(typeof(EventLogEntryType), parameters[2]));
                     break;
                 case CommandEnum.CloseDirectoryHandlerCommand:
@@ -122,14 +122,14 @@ namespace ImageServiceGUI
         /// <summary>
         ///     Sends the LogViewModel a log msg via event.
         /// </summary>
-        /// <param name="msg">The message to log.</param>
-        /// <param name="messageType">Message type.</param>
-        public void Log(string msg, EventLogEntryType messageType)
+        /// <param name="message">The message to log.</param>
+        /// <param name="logEntryType">Message type.</param>
+        public void Log(string message, EventLogEntryType logEntryType)
         {
             MessageRecievedEventArgs messageRecievedEventArgs = new MessageRecievedEventArgs
             {
-                Message = msg,
-                EventLogEntryType = messageType
+                Message = message,
+                EventLogEntryType = logEntryType
             };
 
             LogMessageRecieved?.Invoke(this, messageRecievedEventArgs);
@@ -146,19 +146,8 @@ namespace ImageServiceGUI
 
         public List<Tuple<EventLogEntryType, string>> GetLogList()
         {
-            // Dummy log list
-            return new List<Tuple<EventLogEntryType, string>>
-            {
-                new Tuple<EventLogEntryType, string>(EventLogEntryType.Warning,
-                    "A long time ago in a galaxy far, far away...."),
-                new Tuple<EventLogEntryType, string>(EventLogEntryType.Information, "It is a period of civil war."),
-                new Tuple<EventLogEntryType, string>(EventLogEntryType.Error,
-                    "Rebel spaceships, striking from a hidden base, have won their first victory against the evil Galactic Empire."),
-                new Tuple<EventLogEntryType, string>(EventLogEntryType.Warning,
-                    "During the battle, Rebel spies managed to steal secret plans to the Empire’s ultimate weapon, the DEATH STAR, an armored space station with enough power to destroy an entire planet."),
-                new Tuple<EventLogEntryType, string>(EventLogEntryType.Information,
-                    "Pursued by the Empire’s sinister agents, Princess Leia races home aboard her starship, custodian of the stolen plans that can save her people and restore freedom to the galaxy….")
-            };
+            // TODO Ask service for log entries.
+            return new List<Tuple<EventLogEntryType, string>>();
         }
     }
 }
