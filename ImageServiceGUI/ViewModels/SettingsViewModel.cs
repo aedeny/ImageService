@@ -33,12 +33,12 @@ namespace ImageServiceGUI.ViewModels
             DirectoryHandlers = new ObservableCollection<string>();
             _uiDispatcher = Application.Current.Dispatcher;
             BackgroundColor = new SolidColorBrush(Colors.SlateGray);
-            OurTcpClientSingleton.Instance.ConnectedToService += OnConnectedToService;
-            OurTcpClientSingleton.Instance.DirectoryHandlerRemoved += OnDirectoryHandlerSuccessfulyRemoved;
+            GuiTcpClientSingleton.Instance.ConnectedToService += OnConnectedToService;
+            GuiTcpClientSingleton.Instance.DirectoryHandlerRemoved += OnDirectoryHandlerSuccessfulyRemoved;
             SubmitRemove = new DelegateCommand<object>(OnRemove, CanRemove);
             PropertyChanged += RemoveSelectedHandlerCommand;
 
-            OurTcpClientSingleton.Instance.ConfigurationReceived += OnConfigurationReceived;
+            GuiTcpClientSingleton.Instance.ConfigurationReceived += OnConfigurationReceived;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -166,7 +166,7 @@ namespace ImageServiceGUI.ViewModels
         {
             Debug.WriteLine("In OnRemove");
             string command = (int) CommandEnum.CloseDirectoryHandlerCommand + "|" + SelectedDirectoryHandler;
-            OurTcpClientSingleton.Instance.Writer.Write(command);
+            GuiTcpClientSingleton.Instance.Writer.Write(command);
         }
 
         private bool CanRemove(object obj)

@@ -2,7 +2,7 @@
 
 namespace ImageService.Communication
 {
-    public class ConnectedEventArgs
+    public class NewClientConnectedEventArgs
     {
         public NetworkStream Stream { get; set; }
     }

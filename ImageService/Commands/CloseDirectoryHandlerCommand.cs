@@ -1,6 +1,6 @@
-﻿using ImageService.Server;
+﻿using System.Diagnostics;
+using ImageService.Server;
 using Infrastructure.Event;
-using Infrastructure.Logging;
 
 namespace ImageService.Commands
 {
@@ -13,7 +13,7 @@ namespace ImageService.Commands
             _imageServer = imageServer;
         }
 
-        public string Execute(string[] args, out MessageTypeEnum result)
+        public string Execute(string[] args, out EventLogEntryType result)
         {
             DirectoryHandlerClosedEventArgs directoryHandlerClosedEventArgs =
                 new DirectoryHandlerClosedEventArgs(args[0], "Close");

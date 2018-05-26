@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Diagnostics;
 using ImageService.Controller;
 using ImageService.Controller.Handlers;
 using ImageService.Logger;
 using Infrastructure.Event;
-using Infrastructure.Logging;
 
 namespace ImageService.Server
 {
@@ -28,10 +28,10 @@ namespace ImageService.Server
             DirectoryHandlerClosed?.Invoke(this, null);
         }
 
-        public string CloseHandler(DirectoryHandlerClosedEventArgs args, out MessageTypeEnum result)
+        public string CloseHandler(DirectoryHandlerClosedEventArgs args, out EventLogEntryType result)
         {
             DirectoryHandlerClosed?.Invoke(this, args);
-            result = MessageTypeEnum.Info;
+            result = EventLogEntryType.Information;
 
             return args.DirectoryPath;
         }

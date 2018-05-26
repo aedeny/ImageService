@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using ImageService.Commands;
 using Infrastructure.Enums;
-using Infrastructure.Logging;
 
 namespace ImageService.Controller
 {
@@ -16,20 +16,20 @@ namespace ImageService.Controller
             _commandsDictionary = new Dictionary<CommandEnum, ICommand>();
         }
 
-        public string ExecuteCommand(CommandEnum commandId, string[] args, out MessageTypeEnum result)
+        public string ExecuteCommand(CommandEnum commandId, string[] args, out EventLogEntryType result)
         {
-            result = MessageTypeEnum.Failure;
+            result = EventLogEntryType.Error;
 
             if (!_commandsDictionary.TryGetValue(commandId, out ICommand currentCommand)) return "No such command";
 
-            Task<Tuple<string, MessageTypeEnum>> task = new Task<Tuple<string, MessageTypeEnum>>(() =>
+            Task<Tuple<string, EventLogEntryType>> task = new Task<Tuple<string, EventLogEntryType>>(() =>
             {
-                string s = currentCommand.Execute(args, out MessageTypeEnum temp);
+                string s = currentCommand.Execute(args, out EventLogEntryType temp);
                 return Tuple.Create(s, temp);
             });
 
             task.Start();
-            Tuple<string, MessageTypeEnum> tuple = task.Result;
+            Tuple<string, EventLogEntryType> tuple = task.Result;
             result = tuple.Item2;
 
             return tuple.Item1;

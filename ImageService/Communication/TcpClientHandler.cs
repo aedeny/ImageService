@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Sockets;
@@ -6,7 +7,6 @@ using System.Threading.Tasks;
 using ImageService.Controller;
 using ImageService.Logger;
 using Infrastructure.Enums;
-using Infrastructure.Logging;
 
 namespace ImageService.Communication
 {
@@ -38,11 +38,11 @@ namespace ImageService.Communication
                     while (true)
                     {
                         string commandLine = _reader.ReadString();
-                        _loggingService.Log(@"Got command:" + commandLine, MessageTypeEnum.Info);
+                        _loggingService.Log(@"Command Recieved: " + commandLine, EventLogEntryType.Information);
                         string[] parameters = commandLine.Split('|');
                         string retval = _imageController.ExecuteCommand(
                             (CommandEnum) Enum.Parse(typeof(CommandEnum), parameters[0]),
-                            parameters.Skip(1).ToArray(), out MessageTypeEnum _);
+                            parameters.Skip(1).ToArray(), out EventLogEntryType _);
 
                         // THIS SHOULD BE CHANGED
                         // ALL CLIENTS SHOULD BE NOTIFIED
@@ -52,10 +52,10 @@ namespace ImageService.Communication
                         _writer.Flush();
                     }
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    GuiClientClosed?.Invoke(this,null);
-                    _loggingService.Log("Client Closed", MessageTypeEnum.Failure);
+                    GuiClientClosed?.Invoke(this, null);
+                    _loggingService.Log("Client Closed", EventLogEntryType.Error);
                 }
             }).Start();
         }

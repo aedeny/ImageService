@@ -19,23 +19,38 @@ namespace ImageServiceGUI.ViewModels
         {
             _uiDispatcher = Application.Current.Dispatcher;
             BackgroundColor = new SolidColorBrush(Colors.SlateGray);
-            OurTcpClientSingleton.Instance.ConnectedToService += OnConnectedToService;
-            OurTcpClientSingleton.Instance.LogMsgRecieved += OnLogRecieved;
+            GuiTcpClientSingleton.Instance.ConnectedToService += OnConnectedToService;
+            GuiTcpClientSingleton.Instance.LogMessageRecieved += OnLogMessageRecieved;
 
-            // THIS IS WHERE THE MAGIC HAPPENS!!!! LOGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG!
-            List<Tuple<MessageTypeEnum, string>> logsList = OurTcpClientSingleton.Instance.GetLogList();
+            List<Tuple<EventLogEntryType, string>> logsList = GuiTcpClientSingleton.Instance.GetLogList();
 
-            LogList = new List<Tuple<SolidColorBrush, MessageTypeEnum, string>>();
-            foreach (Tuple<MessageTypeEnum, string> log in logsList)
+            LogList = new List<Tuple<SolidColorBrush, EventLogEntryType, string>>();
+            foreach (Tuple<EventLogEntryType, string> log in logsList)
                 LogList.Add(
-                    new Tuple<SolidColorBrush, MessageTypeEnum, string>(MessageTypeColor(log.Item1), log.Item1,
+                    new Tuple<SolidColorBrush, EventLogEntryType, string>(MessageTypeColor(log.Item1), log.Item1,
                         log.Item2));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public SolidColorBrush BackgroundColor { get; set; }
-        public List<Tuple<SolidColorBrush, MessageTypeEnum, string>> LogList { get; set; }
+        public List<Tuple<SolidColorBrush, EventLogEntryType, string>> LogList { get; set; }
+
+        /// <summary>
+        ///     Adds a new log entry to the GUI's list.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnLogMessageRecieved(object sender, MessageRecievedEventArgs e)
+        {
+            _uiDispatcher.BeginInvoke(new Action(() =>
+            {
+                LogList.Add(new Tuple<SolidColorBrush, EventLogEntryType, string>(MessageTypeColor(e.EventLogEntryType),
+                    e.EventLogEntryType, e.Message));
+
+                NotifyPropertyChanged("LogList");
+            }));
+        }
 
 
         private void OnConnectedToService(object sender, EventArgs e)
@@ -53,20 +68,16 @@ namespace ImageServiceGUI.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
-        public void OnLogRecieved(object obj, EventArgs e)
-        {
-            // TODO Add log msg to view
-        }
 
-        public SolidColorBrush MessageTypeColor(MessageTypeEnum messageType)
+        public SolidColorBrush MessageTypeColor(EventLogEntryType messageType)
         {
             switch (messageType)
             {
-                case MessageTypeEnum.Failure:
+                case EventLogEntryType.Error:
                     return new SolidColorBrush(Colors.Red);
-                case MessageTypeEnum.Info:
+                case EventLogEntryType.Information:
                     return new SolidColorBrush(Colors.Green);
-                case MessageTypeEnum.Warning:
+                case EventLogEntryType.Warning:
                     return new SolidColorBrush(Colors.Yellow);
                 default:
                     return new SolidColorBrush(Colors.White);

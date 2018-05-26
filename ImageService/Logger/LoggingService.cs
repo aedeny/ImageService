@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Infrastructure.Logging;
 
 namespace ImageService.Logger
@@ -7,12 +8,12 @@ namespace ImageService.Logger
     {
         public event EventHandler<MessageRecievedEventArgs> MsgRecievedEvent;
 
-        public void Log(string message, MessageTypeEnum type)
+        public void Log(string message, EventLogEntryType type)
         {
             MessageRecievedEventArgs msgRecievedArgs = new MessageRecievedEventArgs
             {
                 Message = message,
-                Status = type
+                EventLogEntryType = type
             };
 
             MsgRecievedEvent?.Invoke(this, msgRecievedArgs);

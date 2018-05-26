@@ -1,9 +1,9 @@
-﻿using Infrastructure.Logging;
+﻿using System.Diagnostics;
 
 namespace ImageService.Model
 {
     public interface IImageServiceModel
     {
-        string AddFile(string path, out MessageTypeEnum result);
+        string AddFile(string path, out EventLogEntryType result);
     }
 }

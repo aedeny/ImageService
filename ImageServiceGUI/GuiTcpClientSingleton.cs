@@ -12,13 +12,13 @@ using Infrastructure.Logging;
 
 namespace ImageServiceGUI
 {
-    internal class OurTcpClientSingleton
+    internal class GuiTcpClientSingleton
     {
-        private static OurTcpClientSingleton _instance;
+        private static GuiTcpClientSingleton _instance;
         private TcpClient _client;
         private IPEndPoint _ep;
 
-        private OurTcpClientSingleton()
+        private GuiTcpClientSingleton()
         {
             Connected = false;
             ConnectToService();
@@ -27,10 +27,10 @@ namespace ImageServiceGUI
         public BinaryWriter Writer { get; set; }
         public BinaryReader Reader { get; set; }
 
-        public static OurTcpClientSingleton Instance => _instance ?? (_instance = new OurTcpClientSingleton());
+        public static GuiTcpClientSingleton Instance => _instance ?? (_instance = new GuiTcpClientSingleton());
         public bool Connected { get; private set; }
 
-        public event EventHandler LogMsgRecieved;
+        public event EventHandler<MessageRecievedEventArgs> LogMessageRecieved;
         public event EventHandler ConnectedToService;
         public event EventHandler<DirectoryHandlerClosedEventArgs> DirectoryHandlerRemoved;
         public event EventHandler<ConfigurationReceivedEventArgs> ConfigurationReceived;
@@ -97,11 +97,12 @@ namespace ImageServiceGUI
             switch (command)
             {
                 case CommandEnum.NewLogCommand:
-                    Log(parameters[1], MessageTypeEnum.Failure);
+                    Log(parameters[1], (EventLogEntryType) Enum.Parse(typeof(EventLogEntryType), parameters[2]));
                     break;
                 case CommandEnum.CloseDirectoryHandlerCommand:
                     DirectoryHandlerClosedEventArgs
                         dhceArgs = new DirectoryHandlerClosedEventArgs(parameters[1], "hmm");
+
                     DirectoryHandlerRemoved?.Invoke(this, dhceArgs);
                     break;
                 case CommandEnum.NewFileCommand:
@@ -123,15 +124,15 @@ namespace ImageServiceGUI
         /// </summary>
         /// <param name="msg">The message to log.</param>
         /// <param name="messageType">Message type.</param>
-        public void Log(string msg, MessageTypeEnum messageType)
+        public void Log(string msg, EventLogEntryType messageType)
         {
             MessageRecievedEventArgs messageRecievedEventArgs = new MessageRecievedEventArgs
             {
                 Message = msg,
-                Status = messageType
+                EventLogEntryType = messageType
             };
 
-            LogMsgRecieved?.Invoke(this, messageRecievedEventArgs);
+            LogMessageRecieved?.Invoke(this, messageRecievedEventArgs);
         }
 
 
@@ -143,19 +144,19 @@ namespace ImageServiceGUI
             _client.Close();
         }
 
-        public List<Tuple<MessageTypeEnum, string>> GetLogList()
+        public List<Tuple<EventLogEntryType, string>> GetLogList()
         {
             // Dummy log list
-            return new List<Tuple<MessageTypeEnum, string>>
+            return new List<Tuple<EventLogEntryType, string>>
             {
-                new Tuple<MessageTypeEnum, string>(MessageTypeEnum.Warning,
+                new Tuple<EventLogEntryType, string>(EventLogEntryType.Warning,
                     "A long time ago in a galaxy far, far away...."),
-                new Tuple<MessageTypeEnum, string>(MessageTypeEnum.Info, "It is a period of civil war."),
-                new Tuple<MessageTypeEnum, string>(MessageTypeEnum.Failure,
+                new Tuple<EventLogEntryType, string>(EventLogEntryType.Information, "It is a period of civil war."),
+                new Tuple<EventLogEntryType, string>(EventLogEntryType.Error,
                     "Rebel spaceships, striking from a hidden base, have won their first victory against the evil Galactic Empire."),
-                new Tuple<MessageTypeEnum, string>(MessageTypeEnum.Warning,
+                new Tuple<EventLogEntryType, string>(EventLogEntryType.Warning,
                     "During the battle, Rebel spies managed to steal secret plans to the Empire’s ultimate weapon, the DEATH STAR, an armored space station with enough power to destroy an entire planet."),
-                new Tuple<MessageTypeEnum, string>(MessageTypeEnum.Info,
+                new Tuple<EventLogEntryType, string>(EventLogEntryType.Information,
                     "Pursued by the Empire’s sinister agents, Princess Leia races home aboard her starship, custodian of the stolen plans that can save her people and restore freedom to the galaxy….")
             };
         }

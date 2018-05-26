@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using Infrastructure.Logging;
 
 namespace ImageService.Model
 {
@@ -16,9 +16,9 @@ namespace ImageService.Model
             _thumbnailSize = thumbnailSize;
         }
 
-        public string AddFile(string path, out MessageTypeEnum result)
+        public string AddFile(string path, out EventLogEntryType result)
         {
-            result = MessageTypeEnum.Failure;
+            result = EventLogEntryType.Error;
 
             try
             {
@@ -68,7 +68,7 @@ namespace ImageService.Model
                 // Copies file to output folder
                 File.Copy(path, outputFilePath, true);
 
-                result = MessageTypeEnum.Info;
+                result = EventLogEntryType.Information;
                 return outputFilePath;
             }
             catch (Exception e)

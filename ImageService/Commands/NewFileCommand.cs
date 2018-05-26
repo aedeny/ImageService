@@ -1,5 +1,5 @@
-﻿using ImageService.Model;
-using Infrastructure.Logging;
+﻿using System.Diagnostics;
+using ImageService.Model;
 
 namespace ImageService.Commands
 {
@@ -12,7 +12,7 @@ namespace ImageService.Commands
             _model = model;
         }
 
-        public string Execute(string[] args, out MessageTypeEnum result)
+        public string Execute(string[] args, out EventLogEntryType result)
         {
             return _model.AddFile(args[0], out result);
         }

@@ -73,8 +73,7 @@ namespace ImageService
             eventLog.EnableRaisingEvents = true;
         }
 
-        // KFIRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
-        public void OnEntryWritten(object sender, EntryWrittenEventArgs e)
+        public void OnLogEntryWritten(object sender, EntryWrittenEventArgs e)
         {
             _writer.Write(CommandEnum.NewLogCommand + "|" + e.Entry.Message + "|" + e.Entry.EntryType);
             _writer.Flush();
@@ -82,16 +81,18 @@ namespace ImageService
 
         protected override void OnStart(string[] args)
         {
-            eventLog.WriteEntry("In OnStart");
+            #region Other
 
+            eventLog.WriteEntry("In OnStart");
             // Sets up a timer to trigger every minute.  
             Timer timer = new Timer
             {
-                // 60 seconds
                 Interval = 60000
             };
 
-            timer.Elapsed += OnTimer;
+            timer.Elapsed += (sender, eventArgs) =>
+                eventLog.WriteEntry("Monitoring the System", EventLogEntryType.Information, _eventId++);
+
             timer.Start();
 
             // Updates the service state to Start Pending.  
@@ -107,19 +108,21 @@ namespace ImageService
             serviceStatus.dwCurrentState = ServiceState.ServiceRunning;
             SetServiceStatus(ServiceHandle, ref serviceStatus);
             _loggingService = new LoggingService();
-            _loggingService.MsgRecievedEvent += OnMsgEvent;
+            _loggingService.MsgRecievedEvent += OnMessegeEvent;
+
+            #endregion
 
             _controller = new ImageController();
             _imageServer = new ImageServer(_controller, _loggingService);
             _imageServer.DirectoryHandlerClosed += OnDirectoryHandlerClosed;
 
-            SetSettingsInfo();
+            InitializeSettingsInfo();
 
             _model = new ImageServiceModel(_settingsInfo.OutputDirectory, _settingsInfo.ThumbnailSize);
 
-            // CREATING THE TCP SERVER KFIR
+            // Creates TCP server
             _tcpServer = new TcpServer(8000, _loggingService, new TcpClientHandlerFactory(_controller));
-            _tcpServer.Connected += OnConnected;
+            _tcpServer.NewClientConnected += OnNewClientConnected;
 
             _controller.AddCommand(CommandEnum.NewFileCommand, new NewFileCommand(_model));
             _controller.AddCommand(CommandEnum.CloseDirectoryHandlerCommand,
@@ -148,20 +151,16 @@ namespace ImageService
             _imageServer.Close();
         }
 
-        private void OnMsgEvent(object sender, MessageRecievedEventArgs args)
+        private void OnMessegeEvent(object sender, MessageRecievedEventArgs args)
         {
-            eventLog.WriteEntry(args.Message);
+            eventLog.WriteEntry(args.Message, args.EventLogEntryType);
         }
 
         [DllImport("advapi32.dll", SetLastError = true)]
         private static extern bool SetServiceStatus(IntPtr handle, ref ServiceStatus serviceStatus);
 
-        public void OnTimer(object sender, ElapsedEventArgs args)
-        {
-            eventLog.WriteEntry("Monitoring the System", EventLogEntryType.Information, _eventId++);
-        }
 
-        private void SetSettingsInfo()
+        private void InitializeSettingsInfo()
         {
             _settingsInfo = new SettingsInfo
             {
@@ -183,7 +182,7 @@ namespace ImageService
             }
         }
 
-        public void OnConnected(object sender, ConnectedEventArgs args)
+        public void OnNewClientConnected(object sender, NewClientConnectedEventArgs args)
         {
             _stream = args.Stream;
             _writer = new BinaryWriter(_stream);
@@ -192,7 +191,7 @@ namespace ImageService
             _writer.Write(CommandEnum.ConfigCommand + "|" + settings);
             _writer.Flush();
 
-            eventLog.EntryWritten += OnEntryWritten;
+            eventLog.EntryWritten += OnLogEntryWritten;
         }
     }
 }

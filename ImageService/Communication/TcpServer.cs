@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using ImageService.Logger;
 using Infrastructure.Enums;
-using Infrastructure.Logging;
 
 namespace ImageService.Communication
 {
@@ -32,9 +32,9 @@ namespace ImageService.Communication
             _listener = new TcpListener(ep);
 
             _listener.Start();
-            _loggingService.Log("Waiting for connections...", MessageTypeEnum.Info);
+            _loggingService.Log("Waiting for connections...", EventLogEntryType.Information);
 
-            Task task = new Task(() =>
+            Task.Run(() =>
             {
                 while (true)
                     try
@@ -42,9 +42,8 @@ namespace ImageService.Communication
                         // Listens for new clients.
                         TcpClient client = _listener.AcceptTcpClient();
 
-                        _loggingService.Log("Got new connection", MessageTypeEnum.Info);
-                        OnConnected(client.GetStream());
-
+                        _loggingService.Log("Got new connection", EventLogEntryType.Information);
+                        NewClientConnected?.Invoke(this, new NewClientConnectedEventArgs {Stream = client.GetStream()});
                         ITcpClientHandler
                             ch = _clientHandlerFactory.Create(client, _loggingService);
 
@@ -57,10 +56,8 @@ namespace ImageService.Communication
                         break;
                     }
 
-                _loggingService.Log("Server stopped", MessageTypeEnum.Info);
+                _loggingService.Log("Server stopped", EventLogEntryType.Information);
             });
-
-            task.Start();
         }
 
         public void Stop()
@@ -68,24 +65,12 @@ namespace ImageService.Communication
             _listener.Stop();
         }
 
+        public event EventHandler<NewClientConnectedEventArgs> NewClientConnected;
+
         public void RemoveDirHandlerFromAllGuis(string directoryPath)
         {
             foreach (ITcpClientHandler ch in _clientHandlersList)
                 ch.Write(CommandEnum.CloseDirectoryHandlerCommand + "|" + directoryPath);
-        }
-
-        //KFIR
-        public event EventHandler<ConnectedEventArgs> Connected;
-
-
-        public void OnConnected(NetworkStream stream)
-        {
-            ConnectedEventArgs args = new ConnectedEventArgs
-            {
-                Stream = stream
-            };
-
-            Connected?.Invoke(this, args);
         }
     }
 }

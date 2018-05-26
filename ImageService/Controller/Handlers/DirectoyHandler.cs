@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using ImageService.Logger;
 using ImageService.Server;
 using Infrastructure.Enums;
 using Infrastructure.Event;
-using Infrastructure.Logging;
 
 namespace ImageService.Controller.Handlers
 {
@@ -39,12 +39,12 @@ namespace ImageService.Controller.Handlers
         public void StartHandleDirectory(string dirPath)
         {
             _dirWatcher.Created += OnNewFileCreated;
-            _loggingService.Log("Started handling directory " + _path, MessageTypeEnum.Info);
+            _loggingService.Log("Started handling directory " + _path, EventLogEntryType.Information);
         }
 
         private void OnNewFileCreated(object sender, FileSystemEventArgs e)
         {
-            _loggingService.Log("OnNewFileCreated: " + e.FullPath, MessageTypeEnum.Info);
+            _loggingService.Log("OnNewFileCreated: " + e.FullPath, EventLogEntryType.Information);
             string filePath = new FileInfo(e.FullPath).FullName;
 
             if (!_extenstions.Contains(Path.GetExtension(filePath).ToLower())) return;
@@ -53,7 +53,7 @@ namespace ImageService.Controller.Handlers
 
             // Notifies the controller about the newly created file
             string msg =
-                _imageController.ExecuteCommand(CommandEnum.NewFileCommand, args, out MessageTypeEnum result);
+                _imageController.ExecuteCommand(CommandEnum.NewFileCommand, args, out EventLogEntryType result);
 
             _loggingService.Log(msg, result);
         }
@@ -70,7 +70,7 @@ namespace ImageService.Controller.Handlers
             DirectoryHandlerClosedEventHandler?.Invoke(this,
                 new DirectoryHandlerClosedEventArgs(_path, "in OnDirectoryHandlerClosed"));
 
-            _loggingService.Log("Stopped handling directory " + _path, MessageTypeEnum.Info);
+            _loggingService.Log("Stopped handling directory " + _path, EventLogEntryType.Information);
             if (args != null) args.Closed = true;
         }
 

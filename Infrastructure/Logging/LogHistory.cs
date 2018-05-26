@@ -1,18 +1,18 @@
 ﻿using System.Collections.Generic;
-using System.Runtime.Remoting.Messaging;
 using Newtonsoft.Json.Linq;
 
-namespace Infrastructure
+namespace Infrastructure.Logging
 {
     public class LogHistory
     {
         public static string LogEntriesJsonName = "LogEntries";
-        public List<string> LogEntries { get; set; }
 
         public LogHistory()
         {
             LogEntries = new List<string>();
         }
+
+        public List<string> LogEntries { get; set; }
 
         public string ToJson()
         {
