@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
@@ -9,6 +10,8 @@ using System.Threading.Tasks;
 using Infrastructure.Enums;
 using Infrastructure.Event;
 using Infrastructure.Logging;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace ImageServiceGUI
 {
@@ -111,6 +114,14 @@ namespace ImageServiceGUI
                     ConfigurationReceived?.Invoke(this, creArgs);
                     break;
                 case CommandEnum.LogHistoryCommand:
+                    string jsonMsg = msg.Replace(CommandEnum.LogHistoryCommand + "|", "");
+                    JObject logHistoryJson = JObject.Parse(jsonMsg);
+                    List<Tuple<string, EventLogEntryType>> entries = logHistoryJson["LOGS"].ToObject<List<Tuple<string, EventLogEntryType>>>();
+                    
+                    foreach (Tuple<string, EventLogEntryType> logEntry in entries)
+                    {
+                        Log(logEntry.Item1, logEntry.Item2);
+                    }
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

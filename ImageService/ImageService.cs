@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.ServiceProcess;
 using System.Threading;
@@ -15,6 +17,8 @@ using Infrastructure;
 using Infrastructure.Enums;
 using Infrastructure.Event;
 using Infrastructure.Logging;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Timer = System.Timers.Timer;
 
 namespace ImageService
@@ -201,19 +205,37 @@ namespace ImageService
             // TODO Send log entries in one big batch instead of writing n times
             Task.Run(() =>
             {
-                int numOfEntriesWritten = 0;
+                List<Tuple<string, EventLogEntryType>> entries = new List<Tuple<string, EventLogEntryType>>();
+
                 foreach (EventLogEntry logEntry in eventLog.Entries)
                 {
-                    if (numOfEntriesWritten >= 5)
-                        break;
-
-                    args.ClientHandler.Write(CommandEnum.NewLogCommand + "|" + logEntry.Message + "|" +
-                                             logEntry.EntryType);
-
-                    Thread.Sleep(500);
-                    numOfEntriesWritten++;
+                    entries.Add(new Tuple<string, EventLogEntryType>(logEntry.Message, logEntry.EntryType));
                 }
+
+                JObject logHistoryJson = new JObject
+                {
+                    ["LOGS"] = JArray.FromObject(entries)
+                };
+
+                args.ClientHandler.Write(CommandEnum.LogHistoryCommand + "|" + logHistoryJson);
             });
         }
     }
 }
+
+//JObject logHistoryJson = new JObject
+//{
+//[LogEntriesJsonName] = JArray.FromObject(LogEntries)
+//};
+
+//return logHistoryJson.ToString();
+//}
+
+//public static LogHistory FromJson(string logHistoryAsJson)
+//{
+//LogHistory logHistory = new LogHistory();
+
+//JObject logHistoryJson = JObject.Parse(logHistoryAsJson);
+//logHistory.LogEntries = logHistoryJson[LogEntriesJsonName].ToObject<List<string>>();
+
+//return logHistory;

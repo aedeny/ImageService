@@ -5,6 +5,12 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
 
+        <!-- default Viewbox -->
+        <Style TargetType="{x:Type Viewbox}">
+            <Setter Property="VerticalAlignment" Value="Top" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+        </Style>
+
         <Style x:Key="TitleLabelStyle" TargetType="{x:Type Label}">
             <!--TODO adjust font size to window-->
             <Setter Property="FontWeight" Value="Bold" />
