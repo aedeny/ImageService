@@ -38,14 +38,11 @@ namespace ImageService.Communication
                     while (true)
                     {
                         string commandLine = _reader.ReadString();
-                        _loggingService.Log(@"Command Recieved: " + commandLine, EventLogEntryType.Information);
                         string[] parameters = commandLine.Split('|');
                         string retval = _imageController.ExecuteCommand(
                             (CommandEnum) Enum.Parse(typeof(CommandEnum), parameters[0]),
                             parameters.Skip(1).ToArray(), out EventLogEntryType _);
 
-                        // THIS SHOULD BE CHANGED
-                        // ALL CLIENTS SHOULD BE NOTIFIED
                         if (retval == null) continue;
 
                         _writer.Write(parameters[0] + "|" + retval);

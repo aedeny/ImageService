@@ -65,7 +65,7 @@ namespace ImageServiceGUI
             Reader = new BinaryReader(stream);
             Writer = new BinaryWriter(stream);
 
-            new Task(() =>
+            Task.Run(() =>
             {
                 Thread.Sleep(1000);
                 try
@@ -73,7 +73,7 @@ namespace ImageServiceGUI
                     while (true)
                     {
                         string commandLine = Reader.ReadString();
-                        Debug.WriteLine("Got: " + commandLine);
+                        Debug.WriteLine("Command Recieved: " + commandLine);
                         ParseMessage(commandLine);
                     }
                 }
@@ -81,7 +81,7 @@ namespace ImageServiceGUI
                 {
                     Debug.WriteLine(e.StackTrace);
                 }
-            }).Start();
+            });
         }
 
         /// <summary>
@@ -96,7 +96,6 @@ namespace ImageServiceGUI
             switch (command)
             {
                 case CommandEnum.NewLogCommand:
-                    Debug.WriteLine("ParseMessage::NewLogCommand");
                     Log(parameters[1], (EventLogEntryType) Enum.Parse(typeof(EventLogEntryType), parameters[2]));
                     break;
                 case CommandEnum.CloseDirectoryHandlerCommand:

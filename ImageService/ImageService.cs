@@ -78,12 +78,11 @@ namespace ImageService
             // Sets up a timer to trigger every minute.  
             Timer timer = new Timer
             {
-                // TODO change back to 60000 before "release"
-                Interval = 10000
+                Interval = 60000
             };
 
             timer.Elapsed += (sender, eventArgs) =>
-                eventLog.WriteEntry("Monitoring the System", EventLogEntryType.Information);
+                eventLog.WriteEntry("Monitoring the System...", EventLogEntryType.Information);
 
             timer.Start();
 

@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
@@ -31,6 +32,7 @@ namespace ImageServiceGUI.ViewModels
             Debug.WriteLine("SettingsViewModel c'tor");
 
             DirectoryHandlers = new ObservableCollection<string>();
+            BindingOperations.EnableCollectionSynchronization(DirectoryHandlers, DirectoryHandlers);
             _uiDispatcher = Application.Current.Dispatcher;
             BackgroundColor = new SolidColorBrush(Colors.SlateGray);
             GuiTcpClientSingleton.Instance.ConnectedToService += OnConnectedToService;
@@ -95,7 +97,6 @@ namespace ImageServiceGUI.ViewModels
             set
             {
                 _selectedDirectoryHandler = value;
-                Debug.WriteLine(_selectedDirectoryHandler);
                 NotifyPropertyChanged("SelectedDirectoryHandler");
             }
         }
