@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
-using System.IO;
 using System.Runtime.InteropServices;
 using System.ServiceProcess;
-using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using ImageService.Commands;
 using ImageService.Communication;
 using ImageService.Controller;
@@ -17,9 +16,7 @@ using Infrastructure;
 using Infrastructure.Enums;
 using Infrastructure.Event;
 using Infrastructure.Logging;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Timer = System.Timers.Timer;
 
 namespace ImageService
 {
@@ -202,15 +199,12 @@ namespace ImageService
             string settings = _settingsInfo.ToJson();
             args.ClientHandler.Write(CommandEnum.ConfigCommand + "|" + settings);
 
-            // TODO Send log entries in one big batch instead of writing n times
             Task.Run(() =>
             {
                 List<Tuple<string, EventLogEntryType>> entries = new List<Tuple<string, EventLogEntryType>>();
 
                 foreach (EventLogEntry logEntry in eventLog.Entries)
-                {
                     entries.Add(new Tuple<string, EventLogEntryType>(logEntry.Message, logEntry.EntryType));
-                }
 
                 JObject logHistoryJson = new JObject
                 {
@@ -222,20 +216,3 @@ namespace ImageService
         }
     }
 }
-
-//JObject logHistoryJson = new JObject
-//{
-//[LogEntriesJsonName] = JArray.FromObject(LogEntries)
-//};
-
-//return logHistoryJson.ToString();
-//}
-
-//public static LogHistory FromJson(string logHistoryAsJson)
-//{
-//LogHistory logHistory = new LogHistory();
-
-//JObject logHistoryJson = JObject.Parse(logHistoryAsJson);
-//logHistory.LogEntries = logHistoryJson[LogEntriesJsonName].ToObject<List<string>>();
-
-//return logHistory;

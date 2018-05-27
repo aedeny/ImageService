@@ -27,14 +27,8 @@ namespace ImageServiceGUI.ViewModels
             GuiTcpClientSingleton.Instance.ConnectedToService += OnClientConnectedToService;
             GuiTcpClientSingleton.Instance.LogMessageRecieved += OnLogMessageRecieved;
 
-            List<Tuple<EventLogEntryType, string>> logsList = GuiTcpClientSingleton.Instance.GetLogList();
-
             LogList = new ObservableCollection<Tuple<SolidColorBrush, EventLogEntryType, string>>();
             BindingOperations.EnableCollectionSynchronization(LogList, LogList);
-            foreach (Tuple<EventLogEntryType, string> log in logsList)
-                LogList.Add(
-                    new Tuple<SolidColorBrush, EventLogEntryType, string>(GetMessageTypeColor(log.Item1), log.Item1,
-                        log.Item2));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
