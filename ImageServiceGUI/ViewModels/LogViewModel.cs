@@ -17,11 +17,14 @@ namespace ImageServiceGUI.ViewModels
     {
         private readonly Dispatcher _uiDispatcher;
 
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="LogViewModel" /> class.
+        /// </summary>
         public LogViewModel()
         {
             _uiDispatcher = Application.Current.Dispatcher;
             BackgroundColor = new SolidColorBrush(Colors.SlateGray);
-            GuiTcpClientSingleton.Instance.ConnectedToService += OnConnectedToService;
+            GuiTcpClientSingleton.Instance.ConnectedToService += OnClientConnectedToService;
             GuiTcpClientSingleton.Instance.LogMessageRecieved += OnLogMessageRecieved;
 
             List<Tuple<EventLogEntryType, string>> logsList = GuiTcpClientSingleton.Instance.GetLogList();
@@ -30,7 +33,7 @@ namespace ImageServiceGUI.ViewModels
             BindingOperations.EnableCollectionSynchronization(LogList, LogList);
             foreach (Tuple<EventLogEntryType, string> log in logsList)
                 LogList.Add(
-                    new Tuple<SolidColorBrush, EventLogEntryType, string>(MessageTypeColor(log.Item1), log.Item1,
+                    new Tuple<SolidColorBrush, EventLogEntryType, string>(GetMessageTypeColor(log.Item1), log.Item1,
                         log.Item2));
         }
 
@@ -39,17 +42,18 @@ namespace ImageServiceGUI.ViewModels
         public SolidColorBrush BackgroundColor { get; set; }
         public ObservableCollection<Tuple<SolidColorBrush, EventLogEntryType, string>> LogList { get; set; }
 
+
         /// <summary>
-        ///     Adds a new log entry to the GUI's list.
+        ///     Called when a log message is recieved. Adds a new log entry to the GUI's list.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="MessageRecievedEventArgs" /> instance containing the event data.</param>
         private void OnLogMessageRecieved(object sender, MessageRecievedEventArgs e)
         {
             _uiDispatcher.BeginInvoke(new Action(() =>
             {
                 LogList.Insert(0, new Tuple<SolidColorBrush, EventLogEntryType, string>(
-                    MessageTypeColor(e.EventLogEntryType),
+                    GetMessageTypeColor(e.EventLogEntryType),
                     e.EventLogEntryType, e.Message));
 
                 NotifyPropertyChanged("LogList");
@@ -57,9 +61,14 @@ namespace ImageServiceGUI.ViewModels
         }
 
 
-        private void OnConnectedToService(object sender, EventArgs e)
+        /// <summary>
+        ///     Called when client is connected to service.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
+        private void OnClientConnectedToService(object sender, EventArgs e)
         {
-            Debug.WriteLine("In LogViewModel->OnConnectedToService");
+            Debug.WriteLine("In LogViewModel->OnClientConnectedToService");
             _uiDispatcher.BeginInvoke(new Action(() =>
             {
                 BackgroundColor = new SolidColorBrush(Colors.DarkCyan);
@@ -73,7 +82,12 @@ namespace ImageServiceGUI.ViewModels
         }
 
 
-        public SolidColorBrush MessageTypeColor(EventLogEntryType messageType)
+        /// <summary>
+        ///     Gets the color of the message type.
+        /// </summary>
+        /// <param name="messageType">Type of the message.</param>
+        /// <returns></returns>
+        public SolidColorBrush GetMessageTypeColor(EventLogEntryType messageType)
         {
             switch (messageType)
             {
@@ -84,9 +98,9 @@ namespace ImageServiceGUI.ViewModels
                 case EventLogEntryType.Warning:
                     return new SolidColorBrush(Colors.Yellow);
                 case EventLogEntryType.SuccessAudit:
-                    return new SolidColorBrush(Colors.White);
+                    return new SolidColorBrush(Colors.Green);
                 case EventLogEntryType.FailureAudit:
-                    return new SolidColorBrush(Colors.White);
+                    return new SolidColorBrush(Colors.Red);
                 default:
                     return new SolidColorBrush(Colors.White);
             }

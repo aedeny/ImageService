@@ -6,7 +6,7 @@ namespace ImageService.Logger
 {
     public class LoggingService : ILoggingService
     {
-        public event EventHandler<MessageRecievedEventArgs> MsgRecievedEvent;
+        public event EventHandler<MessageRecievedEventArgs> MessageRecieved;
 
         public void Log(string message, EventLogEntryType type)
         {
@@ -16,7 +16,7 @@ namespace ImageService.Logger
                 EventLogEntryType = type
             };
 
-            MsgRecievedEvent?.Invoke(this, msgRecievedArgs);
+            MessageRecieved?.Invoke(this, msgRecievedArgs);
         }
     }
 }

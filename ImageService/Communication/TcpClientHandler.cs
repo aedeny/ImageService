@@ -18,6 +18,12 @@ namespace ImageService.Communication
         private readonly BinaryWriter _writer;
 
 
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="TcpClientHandler" /> class.
+        /// </summary>
+        /// <param name="tcpClient">The TCP client.</param>
+        /// <param name="loggingService">The logging service.</param>
+        /// <param name="imageController">The image controller.</param>
         public TcpClientHandler(TcpClient tcpClient, ILoggingService loggingService, IImageController imageController)
         {
             _loggingService = loggingService;
@@ -27,8 +33,14 @@ namespace ImageService.Communication
             _writer = new BinaryWriter(stream);
         }
 
+        /// <summary>
+        ///     Occurs when GUI client closed.
+        /// </summary>
         public event EventHandler GuiClientClosed;
 
+        /// <summary>
+        ///     Handles the client.
+        /// </summary>
         public void HandleClient()
         {
             new Task(() =>
@@ -57,6 +69,10 @@ namespace ImageService.Communication
             }).Start();
         }
 
+        /// <summary>
+        ///     Writes the specified string to the client.
+        /// </summary>
+        /// <param name="s">The string.</param>
         public void Write(string s)
         {
             _writer.Write(s);

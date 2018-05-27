@@ -26,6 +26,9 @@ namespace ImageServiceGUI.ViewModels
         private string _sourceName = WaitingForConnection;
         private int _thumbnailSize;
 
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="SettingsViewModel" /> class.
+        /// </summary>
         public SettingsViewModel()
         {
             _uiDispatcher = Application.Current.Dispatcher;
@@ -35,12 +38,12 @@ namespace ImageServiceGUI.ViewModels
             BindingOperations.EnableCollectionSynchronization(DirectoryHandlers, DirectoryHandlers);
             _uiDispatcher = Application.Current.Dispatcher;
             BackgroundColor = new SolidColorBrush(Colors.SlateGray);
-            GuiTcpClientSingleton.Instance.ConnectedToService += OnConnectedToService;
+            GuiTcpClientSingleton.Instance.ConnectedToService += OnClientConnectedToService;
             GuiTcpClientSingleton.Instance.DirectoryHandlerRemoved += OnDirectoryHandlerSuccessfulyRemoved;
             SubmitRemove = new DelegateCommand<object>(OnRemove, CanRemove);
-            PropertyChanged += RemoveSelectedHandlerCommand;
+            PropertyChanged += RemoveSelectedHandler;
 
-            GuiTcpClientSingleton.Instance.ConfigurationReceived += OnConfigurationReceived;
+            GuiTcpClientSingleton.Instance.ConfigurationReceived += OnSettingsInfoReceived;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -101,9 +104,14 @@ namespace ImageServiceGUI.ViewModels
             }
         }
 
-        private void OnConnectedToService(object sender, EventArgs e)
+        /// <summary>
+        ///     Called when a client is connected to service.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
+        private void OnClientConnectedToService(object sender, EventArgs e)
         {
-            Debug.WriteLine("In SettingsViewModel->OnConnectedToService");
+            Debug.WriteLine("In SettingsViewModel->OnClientConnectedToService");
             _uiDispatcher.BeginInvoke(new Action(() =>
             {
                 BackgroundColor = new SolidColorBrush(Colors.DarkCyan);
@@ -116,16 +124,23 @@ namespace ImageServiceGUI.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
+
         /// <summary>
-        ///     Raises when configuration was successfuly received.
+        ///     Called when the settings information is received.
         /// </summary>
-        public void OnConfigurationReceived(object sender, ConfigurationReceivedEventArgs eventArgs)
+        /// <param name="sender">The sender.</param>
+        /// <param name="eventArgs">The <see cref="ConfigurationReceivedEventArgs" /> instance containing the event data.</param>
+        public void OnSettingsInfoReceived(object sender, ConfigurationReceivedEventArgs eventArgs)
         {
-            Debug.WriteLine("In OnConfigurationReceived");
-            _uiDispatcher.BeginInvoke(new Action(() => { SetSettings(SettingsInfo.FromJson(eventArgs.Args)); }));
+            Debug.WriteLine("In OnSettingsInfoReceived");
+            _uiDispatcher.BeginInvoke(new Action(() => { SetSettingsInfo(SettingsInfo.FromJson(eventArgs.Args)); }));
         }
 
-        private void SetSettings(SettingsInfo settingsInfo)
+        /// <summary>
+        ///     Sets the settings information.
+        /// </summary>
+        /// <param name="settingsInfo">The settings information.</param>
+        private void SetSettingsInfo(SettingsInfo settingsInfo)
         {
             LogName = settingsInfo.LogName;
             SourceName = settingsInfo.SourceName;
@@ -138,8 +153,10 @@ namespace ImageServiceGUI.ViewModels
         }
 
         /// <summary>
-        ///     Raises when a handler is successfuly removed from the Service.
+        ///     Called when a directory handler is successfuly removed.
         /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="eventArgs">The <see cref="DirectoryHandlerClosedEventArgs" /> instance containing the event data.</param>
         public void OnDirectoryHandlerSuccessfulyRemoved(object sender, DirectoryHandlerClosedEventArgs eventArgs)
         {
             Debug.WriteLine("In OnDirectoryHandlerSuccessfulyRemoved");
@@ -152,17 +169,24 @@ namespace ImageServiceGUI.ViewModels
             }));
         }
 
-        public void RemoveSelectedHandlerCommand(object sender, PropertyChangedEventArgs args)
+        /// <summary>
+        ///     Removes the selected handler.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="args">The <see cref="PropertyChangedEventArgs" /> instance containing the event data.</param>
+        public void RemoveSelectedHandler(object sender, PropertyChangedEventArgs args)
         {
             DelegateCommand<object> command = SubmitRemove as DelegateCommand<object>;
             command?.RaiseCanExecuteChanged();
         }
 
+
         /// <summary>
+        ///     Called when the remove button is clicked.
         ///     Asks Service to remove selected directory handler.
         ///     Note: This method doesn't remove the dir handler from the ListBox.
         /// </summary>
-        /// <param name="obj"></param>
+        /// <param name="obj">The object.</param>
         private void OnRemove(object obj)
         {
             Debug.WriteLine("In OnRemove");
@@ -170,6 +194,13 @@ namespace ImageServiceGUI.ViewModels
             GuiTcpClientSingleton.Instance.Writer.Write(command);
         }
 
+        /// <summary>
+        ///     Determines whether this instance can remove the specified object.
+        /// </summary>
+        /// <param name="obj">The object.</param>
+        /// <returns>
+        ///     <c>true</c> if this instance can remove the specified object; otherwise, <c>false</c>.
+        /// </returns>
         private bool CanRemove(object obj)
         {
             Debug.WriteLine("In CanRemove");

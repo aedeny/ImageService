@@ -99,7 +99,7 @@ namespace ImageService
             serviceStatus.dwCurrentState = ServiceState.ServiceRunning;
             SetServiceStatus(ServiceHandle, ref serviceStatus);
             _loggingService = new LoggingService();
-            _loggingService.MsgRecievedEvent += OnMessegeEvent;
+            _loggingService.MessageRecieved += OnMessegeRecieved;
 
             #endregion
 
@@ -115,16 +115,22 @@ namespace ImageService
             _tcpServer = new TcpServer(8000, _loggingService, new TcpClientHandlerFactory(_controller));
             _tcpServer.NewClientConnected += OnNewClientConnected;
             eventLog.EntryWritten += _tcpServer.OnLogEntryWritten;
+
             _controller.AddCommand(CommandEnum.NewFileCommand, new NewFileCommand(_model));
             _controller.AddCommand(CommandEnum.CloseDirectoryHandlerCommand,
                 new CloseDirectoryHandlerCommand(_imageServer));
-
-            _controller.AddCommand(CommandEnum.ConfigCommand, new SettingsInfoRetrievalCommand());
         }
 
+        /// <summary>
+        ///     Called when a directory handler is closed.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="DirectoryHandlerClosedEventArgs" /> instance containing the event data.</param>
         private void OnDirectoryHandlerClosed(object sender, DirectoryHandlerClosedEventArgs e)
         {
             eventLog.WriteEntry("In OnDirectoryHandlerClosed", EventLogEntryType.Information);
+
+            // 'e' being 'null' means to remove all handlers.
             if (e == null)
             {
                 _settingsInfo.HandledDirectories.Clear();
@@ -142,7 +148,12 @@ namespace ImageService
             _imageServer.Close();
         }
 
-        private void OnMessegeEvent(object sender, MessageRecievedEventArgs args)
+        /// <summary>
+        ///     Called when a messege is recieved.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="args">The <see cref="MessageRecievedEventArgs" /> instance containing the event data.</param>
+        private void OnMessegeRecieved(object sender, MessageRecievedEventArgs args)
         {
             eventLog.WriteEntry(args.Message, args.EventLogEntryType);
         }
@@ -151,6 +162,9 @@ namespace ImageService
         private static extern bool SetServiceStatus(IntPtr handle, ref ServiceStatus serviceStatus);
 
 
+        /// <summary>
+        ///     Initializes the settings information.
+        /// </summary>
         private void InitializeSettingsInfo()
         {
             _settingsInfo = new SettingsInfo
@@ -174,6 +188,11 @@ namespace ImageService
         }
 
 
+        /// <summary>
+        ///     Called when a new client is connected Sends settings information and last log entries.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="args">The <see cref="NewClientConnectedEventArgs" /> instance containing the event data.</param>
         public void OnNewClientConnected(object sender, NewClientConnectedEventArgs args)
         {
             string settings = _settingsInfo.ToJson();

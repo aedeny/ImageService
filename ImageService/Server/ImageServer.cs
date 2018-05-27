@@ -9,6 +9,9 @@ namespace ImageService.Server
 {
     public class ImageServer
     {
+        private readonly IImageController _controller;
+        private readonly ILoggingService _loggingService;
+
         public ImageServer(IImageController controller, ILoggingService loggingService)
         {
             _controller = controller;
@@ -18,7 +21,7 @@ namespace ImageService.Server
         public void CreateHandler(string path)
         {
             DirectoyHandler dh = new DirectoyHandler(_controller, _loggingService, path);
-            dh.StartHandleDirectory(path);
+            dh.HandleDirectory(path);
             CommandRecieved += dh.OnCommandRecieved;
             DirectoryHandlerClosed += dh.OnDirectoryHandlerClosed;
         }
@@ -36,13 +39,8 @@ namespace ImageService.Server
             return args.DirectoryPath;
         }
 
-        #region Members
 
         public event EventHandler<DirectoryHandlerClosedEventArgs> DirectoryHandlerClosed;
         public event EventHandler<CommandRecievedEventArgs> CommandRecieved;
-        private readonly IImageController _controller;
-        private readonly ILoggingService _loggingService;
-
-        #endregion
     }
 }

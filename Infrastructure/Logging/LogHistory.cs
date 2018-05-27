@@ -5,6 +5,7 @@ namespace Infrastructure.Logging
 {
     public class LogHistory
     {
+        // TODO Use this class or remove it.
         public static string LogEntriesJsonName = "LogEntries";
 
         public LogHistory()
