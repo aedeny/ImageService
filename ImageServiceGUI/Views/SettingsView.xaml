@@ -65,7 +65,7 @@
                 </ListBox.ItemTemplate>
             </ListBox>
             <Button Content="Remove Directory Handler" Grid.Row="1" Style="{StaticResource NormalButtonStyle}"
-                    Command="{Binding SubmitRemove}" />
+                    Command="{Binding SubmitRemoveCommand}" />
         </Grid>
 
     </Grid>

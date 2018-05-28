@@ -51,9 +51,7 @@ namespace ImageServiceGUI
                         _client.Connect(_ep);
                         Connected = true;
                     }
-                    catch (SocketException)
-                    {
-                    }
+                    catch (SocketException) { }
                 }
 
                 ConnectedToService?.Invoke(this, null);
