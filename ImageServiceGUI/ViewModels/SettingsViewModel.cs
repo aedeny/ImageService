@@ -46,8 +46,6 @@ namespace ImageServiceGUI.ViewModels
             GuiTcpClientSingleton.Instance.ConfigurationReceived += OnSettingsInfoReceived;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
         public ObservableCollection<string> DirectoryHandlers { get; }
 
         public SolidColorBrush BackgroundColor { get; set; }
@@ -103,6 +101,8 @@ namespace ImageServiceGUI.ViewModels
                 NotifyPropertyChanged("SelectedDirectoryHandler");
             }
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
         ///     Called when a client is connected to service.

@@ -30,28 +30,28 @@
                     <ColumnDefinition Width="611*" />
                 </Grid.ColumnDefinitions>
                 <Viewbox Grid.Row="0">
-                    <Label Content="Output Directory" Style="{StaticResource BoldLabelStyle}"/>
+                    <Label Content="Output Directory" Style="{StaticResource BoldLabelStyle}" />
                 </Viewbox>
                 <Viewbox Grid.Row="1" Grid.Column="0">
-                <Label Content="Source Name" Style="{StaticResource BoldLabelStyle}" />
+                    <Label Content="Source Name" Style="{StaticResource BoldLabelStyle}" />
                 </Viewbox>
                 <Viewbox Grid.Row="2" Grid.Column="0">
-                <Label Content="Log Name" Style="{StaticResource BoldLabelStyle}"  />
+                    <Label Content="Log Name" Style="{StaticResource BoldLabelStyle}" />
                 </Viewbox>
                 <Viewbox Grid.Row="3" Grid.Column="0">
-                <Label Content="Thumbnail Size" Style="{StaticResource BoldLabelStyle}"/>
+                    <Label Content="Thumbnail Size" Style="{StaticResource BoldLabelStyle}" />
                 </Viewbox>
                 <Viewbox Grid.Column="1" Grid.Row="0">
-                <TextBlock Text="{Binding OutputDirectory}" Style="{StaticResource NormalFontStyle}" />
+                    <TextBlock Text="{Binding OutputDirectory}" Style="{StaticResource NormalFontStyle}" />
                 </Viewbox>
                 <Viewbox Grid.Column="1" Grid.Row="1">
-                <TextBlock Text="{Binding SourceName}" Style="{StaticResource NormalFontStyle}" />
+                    <TextBlock Text="{Binding SourceName}" Style="{StaticResource NormalFontStyle}" />
                 </Viewbox>
                 <Viewbox Grid.Column="1" Grid.Row="2">
-                <TextBlock Text="{Binding LogName}" Style="{StaticResource NormalFontStyle}" />
+                    <TextBlock Text="{Binding LogName}" Style="{StaticResource NormalFontStyle}" />
                 </Viewbox>
                 <Viewbox Grid.Column="1" Grid.Row="3">
-                <TextBlock Text="{Binding ThumbnailSize}" Style="{StaticResource NormalFontStyle}" />
+                    <TextBlock Text="{Binding ThumbnailSize}" Style="{StaticResource NormalFontStyle}" />
                 </Viewbox>
             </Grid>
             <ListBox Grid.Row="2" ItemsSource="{Binding DirectoryHandlers}"

@@ -261,3 +261,5 @@ paket-files/
 __pycache__/
 *.pyc
 /ap_ex01
+/ImageServiceGUI/Properties/Annotations1.cs
+/ImageServiceGUI/Properties
