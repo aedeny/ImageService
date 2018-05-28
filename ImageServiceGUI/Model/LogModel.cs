@@ -38,7 +38,7 @@ namespace ImageServiceGUI.Model
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private SolidColorBrush GetMessageTypeColor(EventLogEntryType messageType)
+        private static SolidColorBrush GetMessageTypeColor(EventLogEntryType messageType)
         {
             switch (messageType)
             {
