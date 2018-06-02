@@ -1,0 +1,669 @@
+commit bcaa88f3b5af1bbe8c8abfb869ca7fc02732a930
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Mon May 28 19:08:52 2018 +0300
+
+    Cleaned up code.
+
+commit f0b7a5bf3fbfbd64da024893059c7fb5de3fbff3
+Author: Kfir Ventura <kfir.ventura@live.biu.ac.il>
+Date:   Mon May 28 17:02:35 2018 +0300
+
+    Log & Settings are now complete. MVVM is finished.
+
+commit 1a63b557db3421d0f73d39ad92d09b74a868c46c
+Merge: 353047d 240d877
+Author: Kfir Ventura <kfir.ventura@live.biu.ac.il>
+Date:   Mon May 28 16:31:51 2018 +0300
+
+    Log stuff.
+
+commit 353047dd1106cf07fa4ba7e4d1a4109d0246fc93
+Author: Kfir Ventura <kfir.ventura@live.biu.ac.il>
+Date:   Mon May 28 16:30:23 2018 +0300
+
+    Log changes.
+
+commit 240d8774e0777e9622f59f9cea08c84595737744
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Mon May 28 15:11:07 2018 +0300
+
+    Reformatted SettingsViewModel into SettingsViewModel and SettingsModel.
+
+commit dc3a402b515ad60d24bd8e84999e7b4b4330fcf3
+Author: Kfir Ventura <kfir.ventura@live.biu.ac.il>
+Date:   Sun May 27 19:46:53 2018 +0300
+
+    Cosmetic changes.
+
+commit 90b549562b3f9c33715cd559b1351f10e7093774
+Author: Kfir Ventura <kfir.ventura@live.biu.ac.il>
+Date:   Sun May 27 18:39:06 2018 +0300
+
+    Log History is a thing now. Yeah.
+
+commit fc1ad705c819ea39811acdd8ad14b7c985bd7421
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Sun May 27 12:28:24 2018 +0300
+
+    Added docs and cleaned up code.
+
+commit 3c8195a3a44cda81fd0c030ea4a199737e418f0f
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Sun May 27 11:19:11 2018 +0300
+
+    Fixed settings irresponsive. Thee are still some bugs left.
+
+commit e7f0a374a909dc072fcaea19454ad25ba86b4307
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Sat May 26 17:52:18 2018 +0300
+
+    Log somewhat works. There are many threading issues which make the settings tab irresponsive to changes.
+
+commit 7f8adb4a4ed11f382890179623999264e52687f6
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Sat May 26 13:19:19 2018 +0300
+
+    * Some Log changes.
+    * Changed custom "MessageTypeEnum" to built-in "EventLogEntryType".
+
+commit b82e29efaeeed22625a5b22a89aa966ca1cf55e3
+Author: Kfir Ventura <kfir.ventura@live.biu.ac.il>
+Date:   Fri May 25 17:59:05 2018 +0300
+
+    Log stuff...
+
+commit f7bd82bed446629ba3ccfe67e96c8bfe85bc612b
+Merge: d2d86bf d068a8d
+Author: Kfir Ventura <kfir.ventura@live.biu.ac.il>
+Date:   Fri May 25 13:33:21 2018 +0300
+
+    Added debug messages.
+
+commit d068a8d021fa3c38c5160ddfe5b38ad9ffafd332
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Fri May 25 16:19:46 2018 +0300
+
+    App.config remove from git
+
+commit d6ec4e17ebc68a26a6fdb88bad7b1b2e3512f017
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Fri May 25 16:19:13 2018 +0300
+
+    App.config remove from git
+
+commit 2371412061f30cca3ada1c6f1af003fb55506509
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Fri May 25 15:20:06 2018 +0300
+
+    Minor fix.
+
+commit c8753ff8ce4a0ad213dfa9791b85344926507f95
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Fri May 25 15:04:29 2018 +0300
+
+    Fixed a minor bug and cleaned up code.
+
+commit 0930d17c6303ae59870f4587b4b9b74254b2afed
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Fri May 25 13:45:04 2018 +0300
+
+    ReSharper settings
+
+commit c14afe6e323d3f3ece84e7c10bff747b8869d49e
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Fri May 25 13:36:43 2018 +0300
+
+    Fixed removing an handler from a GUI doesn't affect other GUIs.
+
+commit d2d86bfb26a37c748e1538a2a656128fb55457df
+Author: Kfir Ventura <kfir.ventura@live.biu.ac.il>
+Date:   Fri May 25 13:31:47 2018 +0300
+
+    Added debug messages.
+
+commit e4adab04f4c846bce2d0f8d8f0cd6fd8303faa56
+Author: Kfir Ventura <kfir.ventura@live.biu.ac.il>
+Date:   Thu May 24 20:33:40 2018 +0300
+
+    Little bugs make my day.
+
+commit ea7b5c2bc1f192de0443cd1a1fc312f07a1082f2
+Author: Kfir Ventura <kfir.ventura@live.biu.ac.il>
+Date:   Wed May 23 19:43:59 2018 +0300
+
+    It's ALIVE!!!
+
+commit 2d412d9be93da8e70cb5c9b4115a073241ce7973
+Author: Kfir Ventura <kfir.ventura@live.biu.ac.il>
+Date:   Wed May 23 19:43:10 2018 +0300
+
+    It's alive!
+
+commit 9106942c4585e2913e1ed335435721583db88136
+Author: Kfir Ventura <kfir.ventura@live.biu.ac.il>
+Date:   Wed May 23 17:59:58 2018 +0300
+
+    Removing handler now removing it from settings.
+
+commit c4eec9ae2e430aa653820012efcfbabff13d39b0
+Author: Kfir Ventura <kfir.ventura@live.biu.ac.il>
+Date:   Wed May 23 15:50:41 2018 +0300
+
+    Minor updates.
+
+commit 2d9ee14c977b98ae96bb180d744dc2d193acf40a
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Wed May 23 00:46:27 2018 +0300
+
+    Fixed merging
+
+commit f84b4fdae87c859d7ac1b6be393fa6e6583b97f1
+Author: Kfir Ventura <kfir.ventura@live.biu.ac.il>
+Date:   Wed May 23 00:33:23 2018 +0300
+
+    Fixed mama issues.
+
+commit 0f9e86789279712bf1e3cb21b4b02909d4181258
+Merge: a248646 7c9256d
+Author: Kfir Ventura <kfir.ventura@live.biu.ac.il>
+Date:   Wed May 23 00:29:25 2018 +0300
+
+    Updated  parser separator.
+
+commit a2486460f937c3753c8f021b801888210fb65df6
+Author: Kfir Ventura <kfir.ventura@live.biu.ac.il>
+Date:   Wed May 23 00:27:39 2018 +0300
+
+    Updated parser separator.
+
+commit 375e18a605a3487fe09af9c90665c69b25c62baa
+Merge: 215e65f bb9a5f6
+Author: Kfir Ventura <kfir.ventura@live.biu.ac.il>
+Date:   Wed May 23 00:05:18 2018 +0300
+
+    Passionfruite Sauce.
+
+commit 215e65f04e2bfbad434ff93f337d437574475915
+Author: Kfir Ventura <kfir.ventura@live.biu.ac.il>
+Date:   Wed May 23 00:02:55 2018 +0300
+
+    I didn't choose THUG LIFE... thug life CHOSE ME.
+
+commit f592dcfb96b124d0a52914766e999d94a95c28df
+Author: Kfir Ventura <kfir.ventura@live.biu.ac.il>
+Date:   Tue May 22 22:06:52 2018 +0300
+
+    Handlers are now taken from image service.
+
+commit 7c9256df80cf063150a5757fdcc9d2cb5687a2cb
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Tue May 22 21:24:59 2018 +0300
+
+    reverted
+
+commit 7c1192158063e775c908b30a54ba12ab28a3c9ab
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Tue May 22 21:22:13 2018 +0300
+
+    Reverting
+
+commit 90acadc3b3331723e54c6b21b2bc4ac78b2d54f7
+Merge: 8a24985 375e18a
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Tue May 22 21:15:19 2018 +0300
+
+    merged
+
+commit 8a249851e4aeadbb3730b96804669a36c7a6d49c
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Tue May 22 21:13:20 2018 +0300
+
+    code style
+
+commit bb9a5f666fc970c021603a1b905c692bc7460871
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Tue May 22 20:57:38 2018 +0300
+
+    reverted
+
+commit 270e8e56667692326e170451322883af1b30efbf
+Merge: d2f429b f592dcf
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Tue May 22 20:49:01 2018 +0300
+
+    merged
+
+commit d2f429bc4e05a51682f3d65330a3d16455babb5b
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Tue May 22 20:40:41 2018 +0300
+
+    GUI opens now even if the service is not running.
+
+commit dc0cbce0898078ae0be94add0fb43f2d1e549ebd
+Author: Kfir Ventura <kfir.ventura@live.biu.ac.il>
+Date:   Tue May 22 19:59:29 2018 +0300
+
+    Little fix in TcpClient.ParseMessage
+
+commit 0fd98a278a491f40ceb80383f1f1ba60c86e7933
+Merge: fc91df0 ac25efd
+Author: Kfir Ventura <kfir.ventura@live.biu.ac.il>
+Date:   Tue May 22 17:50:37 2018 +0300
+
+    Merge branch 'master' of https://github.com/aedeny/ImageService
+
+commit fc91df09e86ae478c019d3817398b4dc73551243
+Author: Kfir Ventura <kfir.ventura@live.biu.ac.il>
+Date:   Tue May 22 17:50:22 2018 +0300
+
+    GUI receives the settings, FINALLY.
+
+commit 879e60b3ec0aa7d806a4d3dcb03d5c65a923a927
+Author: Kfir Ventura <kfir.ventura@live.biu.ac.il>
+Date:   Tue May 22 12:35:52 2018 +0300
+
+    Can remove Handlers from GUI and service, cannot update settings in GUI due to a bug.
+
+commit ac25efddc318141ba348e15198c894c92b5643fc
+Merge: 655a9b8 879e60b
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Tue May 22 12:07:02 2018 +0300
+
+    Merge branch 'master' of https://github.com/aedeny/ap_ex_01
+
+commit 655a9b81cadf7d7bde2cd6fa1d9e5ac6c30311d6
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Tue May 22 12:06:48 2018 +0300
+
+    Revert "Started creating SettingsInfo command"
+    
+    This reverts commit 6c2a690c462f279c0485bc4c39be628daff49f47.
+
+commit e057322738e1ea28d2cd334c18a6727320d7ddc5
+Author: Kfir Ventura <kfir.ventura@live.biu.ac.il>
+Date:   Wed May 9 10:03:49 2018 +0300
+
+    New small updates.
+
+commit 6c2a690c462f279c0485bc4c39be628daff49f47
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Mon May 7 14:48:33 2018 +0300
+
+    Started creating SettingsInfo command
+
+commit b8e8e79bc77201c58fd89a46ecb4d3129e4a5c77
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Mon May 7 14:17:09 2018 +0300
+
+    Minor changes.
+
+commit 521cf9616a2286287ce82002425f50a254a56843
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Mon May 7 12:56:28 2018 +0300
+
+    Removed redundant directories.
+
+commit c4db1d13285be6522d853e9a7670483f66a728db
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Mon May 7 12:53:03 2018 +0300
+
+    Can remove DirectoryHandler from service and GUI. Cleaned up code.
+
+commit de727b223eebb1056dfba7977abcbad770aea31e
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Mon May 7 07:40:38 2018 +0300
+
+    Moved functions
+
+commit 8ea3fc0210304f14a01abe2316db2ec8c448752d
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Sun May 6 21:34:56 2018 +0300
+
+    Added CloseDirectoryHandlerCommand, some progress with server. Still can't remove a directory handler.
+
+commit 051ad80ebcff2ea1bb93336adce975afae4318e4
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Sun May 6 15:23:27 2018 +0300
+
+    Added ClientHandlerFactory. Now ClientHandler has a controller.
+
+commit 11ad6318dd6c007e7f44fa3c5f021e34bc570f2c
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Sun May 6 13:01:58 2018 +0300
+
+    Server can now read and write stupid messeges.
+
+commit 1372c9903d6a66316b8f55205451471d2b6dc7ac
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Sun May 6 11:57:55 2018 +0300
+
+    reverting
+
+commit 096d0f70b729713b84dcd11a611bde2983a446a9
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Sun May 6 11:52:25 2018 +0300
+
+    changes
+
+commit 123b8ad18a91c811181662fd18c788e6aec04a52
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Sun May 6 09:17:24 2018 +0300
+
+    Server changes
+
+commit 1dce2c82198fecd711497b05ca3200f0d2563da8
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Sun May 6 08:23:09 2018 +0300
+
+    Fixed a few bugs
+
+commit a5ace390b2a5e678a868a72a3457202a8fde67c1
+Merge: ae670d4 15f45fb
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Sun May 6 08:08:32 2018 +0300
+
+    Merge branch 'master' of https://github.com/aedeny/ap_ex_01
+
+commit 15f45fbffd93b78aa518d9516c68605f346c5d4c
+Merge: 6843285 ba4b9ba
+Author: Kfir Ventura <kfir.ventura@live.biu.ac.il>
+Date:   Sun May 6 11:05:42 2018 +0300
+
+    Merged.
+
+commit 6843285237b1cb266728a876212915db32a5b554
+Author: Kfir Ventura <kfir.ventura@live.biu.ac.il>
+Date:   Sun May 6 11:03:14 2018 +0300
+
+    Added half a server.
+
+commit ae670d457fec00c40a1671beb293bc969b79b821
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Sun May 6 08:07:59 2018 +0300
+
+    Changed color
+
+commit ba4b9ba2e1b6ba771f65f8893ff49862eb15ceb5
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Sat May 5 01:54:56 2018 +0300
+
+    Added logs view
+
+commit eea47e9fb2cd1023375395b52196288691d8c3a9
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Thu May 3 19:25:41 2018 +0300
+
+    A small change.
+
+commit c65a2cbf60435b738e56694983e1268a095fe484
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Thu May 3 19:18:57 2018 +0300
+
+    Implemented RemoveHandler
+
+commit 78d69cb87c120c24ec74f60a77e103ec9a43b0d3
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Thu May 3 16:25:33 2018 +0300
+
+    Made the TCP Server a Singleton.
+
+commit b26428309d56c9817c580b5256a84499cc75dc2a
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Thu May 3 14:40:51 2018 +0300
+
+    Added DirHandlers ListBox
+
+commit 2aa6dcdf33bd714660d646cc6317e8eb1ce23f97
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Thu May 3 11:30:05 2018 +0300
+
+    changes
+
+commit 37b30a662bdb6b1d725a38439b933e84df326a82
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Thu May 3 00:16:03 2018 +0300
+
+    small changes
+
+commit 1cb0845841998876a7f1ce44a12b3d467ee6fc10
+Merge: b310e96 2ea47e0
+Author: Kfir Ventura <kfir.ventura@live.biu.ac.il>
+Date:   Thu May 3 00:12:29 2018 +0300
+
+    MERGED.
+
+commit b310e960da02f0db22da2cd584c197417de6d086
+Author: Kfir Ventura <kfir.ventura@live.biu.ac.il>
+Date:   Thu May 3 00:09:25 2018 +0300
+
+    Ch-ch-ch-changes.
+
+commit 2ea47e02c911ef876c3b3f4a9a064d1d2b4baefc
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Wed May 2 23:59:51 2018 +0300
+
+    changes
+
+commit 4e332140c860adebff868777ac3b1a86212bfd71
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Wed May 2 22:26:22 2018 +0300
+
+    Added infrastructure.
+
+commit e6922fa0266626bc12b42effb67c272b4e8b3e14
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Wed May 2 20:13:22 2018 +0300
+
+    Created skeleton of project
+
+commit 2645b092c48f9af03205da3b22e357480e007f38
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Wed May 2 18:46:47 2018 +0300
+
+    added a few changes
+
+commit d883027f5d88cdbfe2adde09bc258e98d5e0445c
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Wed May 2 12:45:32 2018 +0300
+
+    Added dummy text
+
+commit c73cc15caf5b99f0ddd9582d52cbab9161c431d0
+Author: Kfir Ventura <kfir.ventura@live.biu.ac.il>
+Date:   Wed May 2 10:29:24 2018 +0300
+
+    Little fix. Very really small fix.
+
+commit 0d10baabd51406c294b668f331502c013a902a85
+Author: Kfir Ventura <kfir.ventura@live.biu.ac.il>
+Date:   Wed May 2 00:05:20 2018 +0300
+
+    Added the Model namespace with its soon-to-be-wrriten classes and interfaces.
+
+commit 24fc19dbf2692a51249a3d6dc80e8cbe66e9b62f
+Merge: f67e21a 04b392d
+Author: Kfir Ventura <kfir.ventura@live.biu.ac.il>
+Date:   Tue May 1 23:34:20 2018 +0300
+
+    Updated SettingsViewModel.
+
+commit f67e21ad1d4e984aa669e8340b99b3017cd08096
+Author: Kfir Ventura <kfir.ventura@live.biu.ac.il>
+Date:   Tue May 1 23:32:54 2018 +0300
+
+    Fixed DataContext issues.
+
+commit 04b392d6203585bab086a6e864422c7f4df8a968
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Tue May 1 18:13:15 2018 +0300
+
+    wip
+
+commit 360e7fb093fc5e62c386ec1c9235634db560baa2
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Tue May 1 17:28:45 2018 +0300
+
+    progress
+
+commit 504f02df48f85489d9096c5eba6834b184040dd4
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Tue May 1 13:05:14 2018 +0300
+
+    Created UserControls
+
+commit 5c523af5737128e0b1520e4d872000a6260ff895
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Mon Apr 30 15:36:42 2018 +0300
+
+    Added tabs to WPF
+
+commit fa612afa701f3222112c7fe7d633df7d9b88cfde
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Mon Apr 30 09:28:39 2018 +0300
+
+    WPF
+
+commit 2ae36420780c8e423851d7a442540b6da626ce18
+Merge: 8e17405 1d1b2e9
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Sat Apr 21 15:33:43 2018 +0300
+
+    merging
+
+commit 1d1b2e91d0bc731ad4dff967e057b81f954b5344
+Author: Kfir Ventura <kfir.ventura@live.biu.ac.il>
+Date:   Sat Apr 21 16:24:39 2018 +0300
+
+    The extension is no longer case sensitive; Added a small feature;
+
+commit 8e174050450a4e5b954d1e3564352730565c071e
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Sat Apr 21 15:32:45 2018 +0300
+
+    App.config parsing changes
+
+commit bdc25ba7e6ab0494f209dde6294cd45fa8599e9e
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Mon Apr 9 19:54:58 2018 +0300
+
+    Changed events
+
+commit 791212681c1d7661bd8c9e3e92c3dce551965a1d
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Sat Apr 7 12:54:22 2018 +0300
+
+    Done
+
+commit 3c07502bf692aeb81f87c49fcfe957d6db84a41e
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Sun Apr 1 15:39:03 2018 +0300
+
+    Reformatting
+
+commit f5b1ee48c13b154a0a58558f54681b437b293e2f
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Sun Apr 1 15:08:13 2018 +0300
+
+    Reformatting
+
+commit 66393eefaaf4a1a83ac2b7826d3e3c447a3207ab
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Sun Apr 1 14:22:19 2018 +0300
+
+    Reformatting
+
+commit 7b52381baa39816c92bce42fea376b2ad23c5fa2
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Sat Mar 31 15:44:35 2018 +0300
+
+    Removed unnecessary directories
+
+commit 3a75b8c786ded34bb2283cee7611d9049f7d1460
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Sat Mar 31 15:41:28 2018 +0300
+
+    It works (probably)
+
+commit adb64f0fe06979bc60700a1ae5de0162b0b70164
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Fri Mar 30 01:13:41 2018 +0300
+
+    debugging in progress
+
+commit b33f199ce657205e561850a1b8a56fa15fdb235a
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Thu Mar 29 23:46:40 2018 +0300
+
+    Testing the service.
+
+commit 3d12732d3657c7d7fddfe7e4bc2d557d8ae82618
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Thu Mar 29 14:56:40 2018 +0300
+
+    Fixed Handler, changed result from bool to enum.
+
+commit 8fce544a473e621efdb0c7eb6f2e30f57fc0013c
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Wed Mar 28 14:08:51 2018 +0300
+
+    minor changes
+
+commit 14d1c77e779ac6cf70a6bd812360c5f2ad61927a
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Tue Mar 27 21:24:58 2018 +0300
+
+    A little progress
+
+commit f033d9e03da89ba8e97feb46553e67e1b44f3163
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Tue Mar 27 00:03:08 2018 +0300
+
+    Small changes
+
+commit abeb4031e344f3741e8e56a907db6d66166164ee
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Mon Mar 26 23:35:20 2018 +0300
+
+    Implemented Image Model, Controller and more, after eatting a pizza with onion and pineapple (together).
+
+commit 0010df8749721874bdbc4a4578af6d5bc7540c5c
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Thu Mar 22 11:27:15 2018 +0200
+
+    renaming
+
+commit a7cf5493e5c351659ad424fb0313caf778047954
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Thu Mar 22 11:11:01 2018 +0200
+
+    a
+
+commit bd7f65134f64add6ef89d64ebdbe6b2d6c6fcfda
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Thu Mar 22 10:46:59 2018 +0200
+
+    Added many files
+
+commit facde7a150b7c90fd010a64351a79dbc09eeb77e
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Thu Mar 22 10:19:37 2018 +0200
+
+    Added Infastrucure and Logging
+
+commit 4ef40a52c9d92cc2d5c67a6e372e92c92174a584
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Wed Mar 21 18:36:41 2018 +0200
+
+    first commit
+
+commit cea141ec9824d496fa4e27843ef68e7e05eb2cf9
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Wed Mar 21 11:02:17 2018 +0200
+
+    Add project files.
+
+commit 333846ea17710bef2c5a3894251f3fa1c4d57b45
+Author: Eden Yefet <edenyefet@gmail.com>
+Date:   Wed Mar 21 11:02:15 2018 +0200
+
+    Add .gitignore and .gitattributes.

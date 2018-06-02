@@ -1,0 +1,22 @@
+﻿<Window x:Class="ImageServiceGUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:views="clr-namespace:ImageServiceGUI.Views"
+        xmlns:local="clr-namespace:ImageServiceGUI"
+        mc:Ignorable="d"
+        Title="Image Service GUI" Height="450" Width="800">
+
+    <Grid>
+        <TabControl>
+            <TabItem Name="SettingsTabItem" Header="Settings">
+                <views:SettingsView />
+            </TabItem>
+            <TabItem Name="LogsTabItem" Header="Logs">
+                <views:LogView />
+            </TabItem>
+        </TabControl>
+
+    </Grid>
+</Window>
