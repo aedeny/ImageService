@@ -1,9 +1,0 @@
-Eden Yefet {
-	ID: 204778294,
-	Group: 05
-}
-
-Kfir Ventura {
-	ID: 301754370
-	Group: 04
-}
