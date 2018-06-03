@@ -9,7 +9,7 @@ using System.Windows.Threading;
 using Infrastructure;
 using Infrastructure.Enums;
 using Infrastructure.Event;
-
+using Communication;
 namespace ImageServiceGUI.Model
 {
     internal class SettingsModel : ISettingsModel
@@ -143,7 +143,6 @@ namespace ImageServiceGUI.Model
         public void OnSettingsInfoReceived(object sender, ConfigurationReceivedEventArgs eventArgs)
         {
             Debug.WriteLine("In OnSettingsInfoReceived");
-            //_uiDispatcher.BeginInvoke(new Action(() => { SetSettingsInfo(SettingsInfo.FromJson(eventArgs.Args)); }));
             SetSettingsInfo(SettingsInfo.FromJson(eventArgs.Args));
         }
     }

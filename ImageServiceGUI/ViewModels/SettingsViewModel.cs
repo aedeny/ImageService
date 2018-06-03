@@ -9,6 +9,7 @@ using System.Windows.Threading;
 using ImageServiceGUI.Model;
 using Infrastructure.Event;
 using Microsoft.Practices.Prism.Commands;
+using Communication;
 
 namespace ImageServiceGUI.ViewModels
 {

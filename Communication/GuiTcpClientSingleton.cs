@@ -11,9 +11,9 @@ using Infrastructure.Event;
 using Infrastructure.Logging;
 using Newtonsoft.Json.Linq;
 
-namespace ImageServiceGUI
+namespace Communication
 {
-    internal class GuiTcpClientSingleton
+    public class GuiTcpClientSingleton
     {
         private static GuiTcpClientSingleton _instance;
         private TcpClient _client;
@@ -36,12 +36,17 @@ namespace ImageServiceGUI
         public event EventHandler<DirectoryHandlerClosedEventArgs> DirectoryHandlerRemoved;
         public event EventHandler<ConfigurationReceivedEventArgs> ConfigurationReceived;
 
-        public void ConnectToService()
+        public void ForceReconnect()
+        {
+            _instance = new GuiTcpClientSingleton();
+        }
+
+        private void ConnectToService()
         {
             _ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8000);
             _client = new TcpClient();
 
-            Task c = Task.Run(() =>
+            Task.Run(() =>
             {
                 while (!Connected)
                 {
@@ -147,7 +152,8 @@ namespace ImageServiceGUI
         /// </summary>
         public void Close()
         {
-            _client.Close();
+            _instance = null;
+            Connected = false;
         }
     }
 }

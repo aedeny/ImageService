@@ -1,0 +1,32 @@
+﻿@model Web.Models.Settings
+@{
+    ViewBag.Title = "Settings";
+}
+<h2>@ViewBag.Title.</h2>
+<h3>@ViewBag.Message</h3>
+
+<h4>Settings</h4>
+
+<table class="table table-striped table-dark">
+    <tbody>
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.OutputDirectory)</th>
+        <td>@Html.DisplayName(Model.OutputDirectory)</td>
+    </tr>
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.LogName)</th>
+        <td>@Html.DisplayName(Model.LogName)</td>
+    </tr>
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.SourceName)</th>
+        <td>@Html.DisplayName(Model.SourceName)</td>
+    </tr>
+    <tr>
+        <th>@Html.DisplayNameFor(model => model.ThumbnailSize)</th>
+        <td>@Html.DisplayName(Model.ThumbnailSize.ToString())</td>
+    </tr>
+    </tbody>
+</table>
+
+<hr/>
+<h4>Directory Handlers</h4>
