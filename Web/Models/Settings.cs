@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web.Mvc;
 using Communication;
 using Infrastructure;
 using Infrastructure.Event;
@@ -14,11 +13,34 @@ namespace Web.Models
 {
     public class Settings
     {
+        private bool _gotSettings;
         private string _logName;
         private string _outputDirectory;
         private string _sourceName;
 
-        private bool _gotSettings;
+        public Settings()
+        {
+            _gotSettings = false;
+            if (GuiTcpClientSingleton.Instance.Connected) GuiTcpClientSingleton.Instance.Close();
+
+            ThumbnailSize = 0;
+            GuiTcpClientSingleton.Instance.ConnectedToService += OnClientConnectedToService;
+            GuiTcpClientSingleton.Instance.ConfigurationReceived += OnSettingsInfoReceived;
+
+            // TODO Can we do better? Probably. Do we want to do better? No. Will we do better? Maybe.
+            Task.Run(() =>
+            {
+                for (int i = 0; i < 20; i++)
+                    if (!_gotSettings)
+                        Thread.Sleep(250);
+                    else
+                        break;
+            }).Wait();
+        }
+
+        [DataType(DataType.Text)]
+        [Display(Name = "Directory Handlers")]
+        public ObservableCollection<string> DirectoryHandlers { get; set; }
 
         [Required]
         [DataType(DataType.Text)]
@@ -49,35 +71,6 @@ namespace Web.Models
         [Display(Name = "Thumbnail Size")]
         public int ThumbnailSize { get; set; }
 
-        public Settings()
-        {
-            _gotSettings = false;
-            if (GuiTcpClientSingleton.Instance.Connected)
-            {
-                GuiTcpClientSingleton.Instance.Close();
-            }
-
-            ThumbnailSize = 0;
-            GuiTcpClientSingleton.Instance.ConnectedToService += OnClientConnectedToService;
-            GuiTcpClientSingleton.Instance.ConfigurationReceived += OnSettingsInfoReceived;
-
-            // TODO Can we do better? Probably. Do we want to do better? No. Will we do better? Maybe.
-            Task.Run(() =>
-            {
-                for (int i = 0; i < 20; i++)
-                {
-                    if (!_gotSettings)
-                    {
-                        Thread.Sleep(250);
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-            }).Wait();
-        }
-
         private void OnSettingsInfoReceived(object sender, ConfigurationReceivedEventArgs e)
         {
             Debug.WriteLine("OnSettingsInfoReceived");
@@ -86,12 +79,14 @@ namespace Web.Models
             SourceName = settingsInfo.SourceName;
             OutputDirectory = settingsInfo.OutputDirectory;
             ThumbnailSize = settingsInfo.ThumbnailSize;
+
+            DirectoryHandlers = new ObservableCollection<string>();
+            List<string> handlers = settingsInfo.HandledDirectories;
+
+            foreach (string handler in handlers)
+                DirectoryHandlers.Add(handler);
+
             _gotSettings = true;
-
-            //List<string> handlers = settingsInfo.HandledDirectories;
-
-            //foreach (string handler in handlers)
-            //    DirectoryHandlers.Add(handler);
         }
 
         private void OnClientConnectedToService(object sender, EventArgs e)

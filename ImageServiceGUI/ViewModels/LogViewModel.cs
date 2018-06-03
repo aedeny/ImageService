@@ -4,8 +4,8 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Media;
-using ImageServiceGUI.Model;
 using Communication;
+using ImageServiceGUI.Model;
 
 namespace ImageServiceGUI.ViewModels
 {

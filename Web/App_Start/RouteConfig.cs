@@ -10,9 +10,9 @@ namespace Web
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
-                name: "Default",
-                url: "{controller}/{action}/{id}",
-                defaults: new
+                "Default",
+                "{controller}/{action}/{id}",
+                new
                 {
                     controller = "Settings",
                     action = "Index",

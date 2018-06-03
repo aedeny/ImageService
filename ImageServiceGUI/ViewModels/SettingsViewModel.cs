@@ -6,10 +6,10 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using Communication;
 using ImageServiceGUI.Model;
 using Infrastructure.Event;
 using Microsoft.Practices.Prism.Commands;
-using Communication;
 
 namespace ImageServiceGUI.ViewModels
 {
