@@ -23,7 +23,12 @@ namespace Web.Models
             _gotSettings = false;
             if (GuiTcpClientSingleton.Instance.Connected) GuiTcpClientSingleton.Instance.Close();
 
-            ThumbnailSize = 0;
+            ThumbnailSize = -1;
+            if (!Utils.IsServiceActive("ImageService"))
+            {
+                return;
+            }
+
             GuiTcpClientSingleton.Instance.ConnectedToService += OnClientConnectedToService;
             GuiTcpClientSingleton.Instance.ConfigurationReceived += OnSettingsInfoReceived;
 
@@ -47,7 +52,7 @@ namespace Web.Models
         [Display(Name = "Log Name")]
         public string LogName
         {
-            get => _logName ?? "[Log Name]";
+            get => _logName ?? "N / A";
             set => _logName = value;
         }
 
@@ -55,7 +60,7 @@ namespace Web.Models
         [Display(Name = "Output Directory")]
         public string OutputDirectory
         {
-            get => _outputDirectory ?? "[Output Directory]";
+            get => _outputDirectory ?? "N / A";
             set => _outputDirectory = value;
         }
 
@@ -63,7 +68,7 @@ namespace Web.Models
         [Display(Name = "Source Name")]
         public string SourceName
         {
-            get => _sourceName ?? "[Source Name]";
+            get => _sourceName ?? "N / A";
             set => _sourceName = value;
         }
 

@@ -9,7 +9,7 @@
     <tbody>
     <tr>
         <th>Service Status</th>
-        <td>
+        <td class="text-md-center">
             @if (Model.Active)
             {
                 <span style="font-weight: bold; font-size: large" class="badge badge-success">Active</span>
@@ -22,7 +22,15 @@
     </tr>
     <tr>
         <th>Number of Stored Photos</th>
-        <td>[num]</td>
+        <td class="text-center">@if (Model.NumberOfPhotos > 0)
+                                {
+                                    <span style="font-weight: normal; font-size: large">@Model.NumberOfPhotos</span>
+                                    
+                                }
+                                else
+                                {
+                                    <span style="font-weight: normal; font-size: large">N / A</span>
+                                }</td>
     </tr>
     </tbody>
 </table>
@@ -40,7 +48,6 @@
         <th>
             @Html.DisplayNameFor(model => model.StudentsInfoRoot.StudentsInfo[0].LastName)
         </th>
-        <th></th>
     </tr>
     @foreach (StudentInfo studentInfo in Model.StudentsInfoRoot.StudentsInfo)
     {

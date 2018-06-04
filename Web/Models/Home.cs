@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Communication;
 using Infrastructure;
+using Infrastructure.Event;
 using Newtonsoft.Json;
 
 namespace Web.Models
@@ -16,29 +17,61 @@ namespace Web.Models
     public class Home
     {
         public bool Active;
-
+        public int NumberOfPhotos;
+        public string OutputDirectory;
+        private bool _recievedOutputDirectory;
         public Home()
         {
             Active = false;
+            _recievedOutputDirectory = false;
+            GuiTcpClientSingleton.Instance.Close();
             StudentsInfoRoot = LoadStudentsInfoFromFile(@"C:\Users\edeny\Documents\ex01\details.txt");
             StudentsInfoRoot.StudentsInfo.Sort((x, y) => string.CompareOrdinal(x.FirstName, y.FirstName));
-            Active = IsServiceActive("ImageService");
+            Active = Utils.IsServiceActive("ImageService");
+            if (Active)
+            {
+                GuiTcpClientSingleton.Instance.ConfigurationReceived += OnConfigurationsReceived;
 
+                // TODO Can we do better? Probably. Do we want to do better? No. Will we do better? Maybe.
+                Task.Run(() =>
+                {
+                    for (int i = 0; i < 20; i++)
+                        if (!_recievedOutputDirectory)
+                            Thread.Sleep(250);
+                        else
+                            break;
+                }).Wait();
+            }
+            NumberOfPhotos = GetNumberOfPhotos(OutputDirectory);
+        }
+
+        private void OnConfigurationsReceived(object sender, ConfigurationReceivedEventArgs e)
+        {
+            SettingsInfo settingsInfo = SettingsInfo.FromJson(e.Args);
+            OutputDirectory = settingsInfo.OutputDirectory;
+            _recievedOutputDirectory = true;
+        }
+
+        private static int GetNumberOfPhotos(string path)
+        {
+            int photosCounter = 0;
+            DirectoryInfo directoryName;
             try
             {
-                using (ServiceController sc = new ServiceController("ImageService"))
-                {
-                    Active = (sc.Status == ServiceControllerStatus.Running);
-                }
+                directoryName = new DirectoryInfo(path);
             }
-            catch (ArgumentException)
+            catch (Exception)
             {
-                Active = false;
+                return -1;
             }
-            catch (Win32Exception)
-            {
-                Active = false;
-            }
+            
+            photosCounter += directoryName.GetFiles("*.jpg", SearchOption.AllDirectories).Length;
+            photosCounter += directoryName.GetFiles("*.jpeg", SearchOption.AllDirectories).Length;
+            photosCounter += directoryName.GetFiles("*.png", SearchOption.AllDirectories).Length;
+            photosCounter += directoryName.GetFiles("*.bmp", SearchOption.AllDirectories).Length;
+            photosCounter += directoryName.GetFiles("*.gif", SearchOption.AllDirectories).Length;
+
+            return photosCounter;
         }
 
         [DataType(DataType.Text)]
@@ -57,21 +90,6 @@ namespace Web.Models
         public class StudentsInfoRootObject
         {
             public List<StudentInfo> StudentsInfo { get; set; }
-        }
-
-        public static bool IsServiceActive(string serviceName)
-        {
-            try
-            {
-                using (ServiceController sc = new ServiceController(serviceName))
-                {
-                    return sc.Status == ServiceControllerStatus.Running;
-                }
-            }
-            catch (Exception)
-            {
-                return false;
-            }
         }
     }
 }
