@@ -83,8 +83,7 @@ namespace Web.Models
             DirectoryHandlers = new ObservableCollection<string>();
             List<string> handlers = settingsInfo.HandledDirectories;
 
-            foreach (string handler in handlers)
-                DirectoryHandlers.Add(handler);
+            foreach (string handler in handlers) DirectoryHandlers.Add(handler);
 
             _gotSettings = true;
         }

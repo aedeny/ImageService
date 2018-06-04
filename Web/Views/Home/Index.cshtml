@@ -1,0 +1,47 @@
+﻿@using Infrastructure
+@model Web.Models.Home
+@{
+    ViewBag.Title = "Home";
+}
+<hr/>
+<h4>Overview</h4>
+<table class="table table-striped table-dark">
+    <tbody>
+    <tr>
+        <th>Service Status</th>
+        <td>[status]</td>
+    </tr>
+    <tr>
+        <th>Number of Stored Photos</th>
+        <td>[num]</td>
+    </tr>
+    </tbody>
+</table>
+
+<hr/>
+
+<h4>Students</h4>
+<table class="table table-striped table-dark">
+    <tbody>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.StudentsInfoRoot.StudentsInfo[0].Id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StudentsInfoRoot.StudentsInfo[0].FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StudentsInfoRoot.StudentsInfo[0].LastName)
+        </th>
+        <th></th>
+    </tr>
+    @foreach (StudentInfo studentInfo in Model.StudentsInfoRoot.StudentsInfo)
+    {
+        <tr>
+            <td>@Html.DisplayName(studentInfo.Id)</td>
+            <td>@Html.DisplayName(studentInfo.FirstName)</td>
+            <td>@Html.DisplayName(studentInfo.LastName)</td>
+        </tr>
+    }
+    </tbody>
+</table>
