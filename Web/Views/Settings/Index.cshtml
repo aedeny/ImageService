@@ -62,7 +62,7 @@
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
@@ -93,11 +93,10 @@
             var button = $(event.relatedTarget);
             var handler = button.data('handler');
             var modal = $(this);
-            modal.find('.modal-footer input').attr('handler', handler);
 
             // A workaround to pass JQuery parameter to Razor
             var url = '@Url.Action("Delete", "Settings", new {dirHandlerToDelete = "__param__"})';
-            var replaced = url.replace('__param__', handler);
+            var replacedUrl = url.replace('__param__', handler);
 
             // Sets "Yes" button onclick to delete corresponding handler
             var yesButton = modal.find('.modal-footer input');
@@ -105,7 +104,7 @@
             yesButton.click(function() {
                 yesButton.attr("disabled", true);
                 noButton.attr("disabled", true);
-                location.href = replaced;
+                location.href = replacedUrl;
             });
         });
 
