@@ -40,7 +40,7 @@
     <tbody>
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.StudentsInfoRoot.StudentsInfo[0].Id)
+            @Html.DisplayNameFor(model => Model.StudentsInfoRoot.StudentsInfo[0].Id)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.StudentsInfoRoot.StudentsInfo[0].FirstName)
@@ -49,13 +49,20 @@
             @Html.DisplayNameFor(model => model.StudentsInfoRoot.StudentsInfo[0].LastName)
         </th>
     </tr>
-    @foreach (StudentInfo studentInfo in Model.StudentsInfoRoot.StudentsInfo)
-    {
-        <tr>
-            <td>@Html.DisplayName(studentInfo.Id)</td>
-            <td>@Html.DisplayName(studentInfo.FirstName)</td>
-            <td>@Html.DisplayName(studentInfo.LastName)</td>
-        </tr>
+
+    @{
+        if (Model.StudentsInfoRoot != null)
+        {
+            foreach (StudentInfo studentInfo in Model.StudentsInfoRoot.StudentsInfo)
+            {
+                <tr>
+                    <td>@Html.DisplayName(studentInfo.Id)</td>
+                    <td>@Html.DisplayName(studentInfo.FirstName)</td>
+                    <td>@Html.DisplayName(studentInfo.LastName)</td>
+                </tr>
+            }
+        }
+        
     }
     </tbody>
 </table>

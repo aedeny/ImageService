@@ -20,13 +20,15 @@ namespace Web.Models
         public int NumberOfPhotos;
         public string OutputDirectory;
         private bool _recievedOutputDirectory;
+
         public Home()
         {
             Active = false;
             _recievedOutputDirectory = false;
             GuiTcpClientSingleton.Instance.Close();
             StudentsInfoRoot = LoadStudentsInfoFromFile(@"C:\Users\edeny\Documents\ex01\details.txt");
-            StudentsInfoRoot.StudentsInfo.Sort((x, y) => string.CompareOrdinal(x.FirstName, y.FirstName));
+            StudentsInfoRoot?.StudentsInfo.Sort((x, y) => string.CompareOrdinal(x.FirstName, y.FirstName));
+
             Active = Utils.IsServiceActive("ImageService");
             if (Active)
             {
@@ -42,6 +44,7 @@ namespace Web.Models
                             break;
                 }).Wait();
             }
+
             NumberOfPhotos = GetNumberOfPhotos(OutputDirectory);
         }
 
@@ -64,7 +67,7 @@ namespace Web.Models
             {
                 return -1;
             }
-            
+
             photosCounter += directoryName.GetFiles("*.jpg", SearchOption.AllDirectories).Length;
             photosCounter += directoryName.GetFiles("*.jpeg", SearchOption.AllDirectories).Length;
             photosCounter += directoryName.GetFiles("*.png", SearchOption.AllDirectories).Length;
@@ -80,6 +83,11 @@ namespace Web.Models
 
         public StudentsInfoRootObject LoadStudentsInfoFromFile(string path)
         {
+            if (!File.Exists(path))
+            {
+                return null;
+            }
+
             using (StreamReader r = new StreamReader(path))
             {
                 string json = r.ReadToEnd();

@@ -48,10 +48,59 @@
             {
                 <tr>
                     <td>@Html.DisplayName(handler)</td>
-                    <td>@Html.ActionLink("Delete", "Delete", new {dirHandlerToDelete = handler}, new {@class = "btn btn-danger btn-sm"})</td>
+                    @*<td>@Html.ActionLink("Delete", "Delete", new {dirHandlerToDelete = handler}, new {@class = "btn btn-danger btn-sm"})</td>*@
+                    <td>
+                        <input type="button" class="btn btn-danger btn-sm" value="Delete" data-toggle="modal" data-target="#exampleModal" data-handler="@handler"/>
+                    </td>
                 </tr>
             }
         }
     }
     </tbody>
+
 </table>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this handler?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <input type="button" class="btn btn-primary" handler="" value="Yes" onclick=""/>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    $('#exampleModal').on('shown.bs.modal',
+        function() {
+            $('#myInput').trigger('focus');
+        });
+
+    $('#exampleModal').on('show.bs.modal',
+        function(event) {
+            var button = $(event.relatedTarget);
+            var handler = button.data('handler');
+            var modal = $(this);
+            modal.find('.modal-footer input').attr('handler', handler);
+
+            // A workaround to pass JQuery parameter to Razor
+            var url = '@Url.Action("Delete", "Settings", new {dirHandlerToDelete = "__param__"})';
+            var replaced = url.replace('__param__', handler);
+
+            // Sets "Yes" button onclick to delete corresponding handler
+            modal.find('.modal-footer input').click(function() { location.href = replaced });
+        });
+
+</script>
