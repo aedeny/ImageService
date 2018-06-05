@@ -100,7 +100,13 @@
             var replaced = url.replace('__param__', handler);
 
             // Sets "Yes" button onclick to delete corresponding handler
-            modal.find('.modal-footer input').click(function() { location.href = replaced });
+            var yesButton = modal.find('.modal-footer input');
+            var noButton = modal.find('.modal-footer button');
+            yesButton.click(function() {
+                yesButton.attr("disabled", true);
+                noButton.attr("disabled", true);
+                location.href = replaced;
+            });
         });
 
 </script>
