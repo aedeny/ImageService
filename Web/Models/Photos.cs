@@ -13,8 +13,13 @@ using Infrastructure.Event;
 
 namespace Web.Models
 {
+    
     public class Photos
     {
+        public bool Active
+        {
+            get; set;
+        }
         [DataType(DataType.Text)]
         [Display(Name = "Thumbnails")]
         public ObservableCollection<string> Thumbnails { get; set; }
@@ -25,15 +30,18 @@ namespace Web.Models
 
         public Photos()
         {
+            Active = false;
             Thumbnails = new ObservableCollection<string>();
             _recievedOutputDirectory = false;
             GuiTcpClientSingleton.Instance.Close();
 
             if (!Utils.IsServiceActive("ImageService"))
             {
+                
                 return;
             }
 
+            Active = true;
             GuiTcpClientSingleton.Instance.ConfigurationReceived += OnConfigurationsReceived;
 
             // TODO Can we do better? Probably. Do we want to do better? No. Will we do better? Maybe.
