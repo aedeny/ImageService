@@ -1,8 +1,23 @@
-﻿@{
+﻿@model Web.Models.Photos
+@{
     ViewBag.Title = "Photos";
 }
-<hr/>
+<hr />
 <h2>@ViewBag.Title.</h2>
 <h3>@ViewBag.Message</h3>
 
 <p>Use this area to provide additional information.</p>
+
+@*@{
+        foreach (string imagePath in Model.Thumbnails)
+        {
+            string s = imagePath.Replace("/", "\\");
+
+            <img src="@s" class="rounded float-left"alt="img">
+        }
+    }*@
+
+<!-- Dummy Image -->
+<div class="mx-auto" style="width:600px">
+    <img src="https://pmctvline2.files.wordpress.com/2018/02/family-guy-stewie.jpg?w=620" class="rounded-circle" alt="Dummy Image">
+</div>
