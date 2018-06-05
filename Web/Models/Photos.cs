@@ -46,21 +46,28 @@ namespace Web.Models
                         break;
             }).Wait();
 
+            
             DirectoryInfo directoryName;
-
+            
             try
             {
                 directoryName = new DirectoryInfo(OutputDirectory);
+                if (!directoryName.Exists)
+                {
+                    return;
+                }
             }
             catch (Exception)
             {
                 return;
             }
 
+
             foreach (FileInfo fi in directoryName.GetFiles("*.jpg", SearchOption.AllDirectories))
             {
                 Thumbnails.Add(fi.FullName);
             }
+
         }
 
         private void OnConfigurationsReceived(object sender, ConfigurationReceivedEventArgs e)
