@@ -1,13 +1,16 @@
 ﻿using System.Web.Mvc;
+using Web.Models;
 
 namespace Web.Controllers
 {
     public class PhotosController : Controller
     {
-        // GET: Photos
+        private Photos _photos;
+
         public ActionResult Index()
         {
-            return View();
+            _photos = new Photos();
+            return View(_photos);
         }
     }
 }

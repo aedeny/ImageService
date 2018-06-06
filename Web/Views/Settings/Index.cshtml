@@ -20,7 +20,18 @@
     </tr>
     <tr>
         <th>@Html.DisplayNameFor(model => model.ThumbnailSize)</th>
-        <td>@Html.DisplayName(Model.ThumbnailSize.ToString())</td>
+        <td>
+            @{
+                if (Model.ThumbnailSize > 0)
+                {
+                    @Html.DisplayName(Model.ThumbnailSize.ToString())
+                }
+                else
+                {
+                    <span style="font-weight: normal; font-size: large">N / A</span>
+                }
+            }
+        </td>
     </tr>
     </tbody>
 </table>
@@ -30,12 +41,71 @@
 <h4>Directory Handlers</h4>
 <table class="table table-striped table-dark">
     <tbody>
-    @foreach (string handler in Model.DirectoryHandlers)
-    {
-        <tr>
-            <td>@Html.DisplayName(handler)</td>
-            <td>@Html.ActionLink("Delete", "Delete", new {dirHandlerToDelete = handler}, new {@class = "btn btn-danger btn-sm"})</td>
-        </tr>
+    @{
+        if (Model.DirectoryHandlers != null)
+        {
+            foreach (string handler in Model.DirectoryHandlers)
+            {
+                <tr>
+                    <td>@Html.DisplayName(handler)</td>
+                    @*<td>@Html.ActionLink("Delete", "Delete", new {dirHandlerToDelete = handler}, new {@class = "btn btn-danger btn-sm"})</td>*@
+                    <td>
+                        <input type="button" class="btn btn-danger btn-sm" value="Delete" data-toggle="modal" data-target="#exampleModal" data-handler="@handler"/>
+                    </td>
+                </tr>
+            }
+        }
     }
     </tbody>
+
 </table>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this handler?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <input type="button" class="btn btn-primary" handler="" value="Yes" onclick=""/>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    $('#exampleModal').on('shown.bs.modal',
+        function() {
+            $('#myInput').trigger('focus');
+        });
+
+    $('#exampleModal').on('show.bs.modal',
+        function(event) {
+            var button = $(event.relatedTarget);
+            var handler = button.data('handler');
+            var modal = $(this);
+
+            // A workaround to pass JQuery parameter to Razor
+            var url = '@Url.Action("Delete", "Settings", new {dirHandlerToDelete = "__param__"})';
+            var replacedUrl = url.replace('__param__', handler);
+
+            // Sets "Yes" button onclick to delete corresponding handler
+            var yesButton = modal.find('.modal-footer input');
+            var noButton = modal.find('.modal-footer button');
+            yesButton.click(function() {
+                yesButton.attr("disabled", true);
+                noButton.attr("disabled", true);
+                location.href = replacedUrl;
+            });
+        });
+
+</script>

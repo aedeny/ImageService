@@ -9,23 +9,38 @@
     <tbody>
     <tr>
         <th>Service Status</th>
-        <td>[status]</td>
+        <td class="text-md-center">
+            @if (Model.Active)
+            {
+                <span style="font-weight: bold; font-size: large" class="badge badge-success">Active</span>
+            }
+            else
+            {
+                <span style="font-weight: bold; font-size: large" class="badge badge-warning">Inactive</span>
+            }
+        </td>
     </tr>
     <tr>
         <th>Number of Stored Photos</th>
-        <td>[num]</td>
+        <td class="text-center">@if (Model.NumberOfPhotos > 0)
+                                {
+                                    <span style="font-weight: normal; font-size: large">@Model.NumberOfPhotos</span>
+                                    
+                                }
+                                else
+                                {
+                                    <span style="font-weight: normal; font-size: large">N / A</span>
+                                }</td>
     </tr>
     </tbody>
 </table>
-
 <hr/>
-
 <h4>Students</h4>
 <table class="table table-striped table-dark">
     <tbody>
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.StudentsInfoRoot.StudentsInfo[0].Id)
+            @Html.DisplayNameFor(model => Model.StudentsInfoRoot.StudentsInfo[0].Id)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.StudentsInfoRoot.StudentsInfo[0].FirstName)
@@ -33,15 +48,21 @@
         <th>
             @Html.DisplayNameFor(model => model.StudentsInfoRoot.StudentsInfo[0].LastName)
         </th>
-        <th></th>
     </tr>
-    @foreach (StudentInfo studentInfo in Model.StudentsInfoRoot.StudentsInfo)
-    {
-        <tr>
-            <td>@Html.DisplayName(studentInfo.Id)</td>
-            <td>@Html.DisplayName(studentInfo.FirstName)</td>
-            <td>@Html.DisplayName(studentInfo.LastName)</td>
-        </tr>
+
+    @{
+        if (Model.StudentsInfoRoot != null)
+        {
+            foreach (StudentInfo studentInfo in Model.StudentsInfoRoot.StudentsInfo)
+            {
+                <tr>
+                    <td>@Html.DisplayName(studentInfo.Id)</td>
+                    <td>@Html.DisplayName(studentInfo.FirstName)</td>
+                    <td>@Html.DisplayName(studentInfo.LastName)</td>
+                </tr>
+            }
+        }
+        
     }
     </tbody>
 </table>

@@ -18,9 +18,16 @@ namespace Web.Controllers
         }
 
         // GET: First/Delete/5
-        public ActionResult Delete(string handler2Del)
+        public ActionResult Delete(string dirHandlerToDelete)
         {
-            string command = (int) CommandEnum.CloseDirectoryHandlerCommand + "|" + handler2Del;
+            string command = (int) CommandEnum.CloseDirectoryHandlerCommand + "|" + dirHandlerToDelete;
+            GuiTcpClientSingleton.Instance.Writer.Write(command);
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult OpenDialogBox(string dirHandlerToDelete)
+        {
+            string command = (int)CommandEnum.CloseDirectoryHandlerCommand + "|" + dirHandlerToDelete;
             GuiTcpClientSingleton.Instance.Writer.Write(command);
             return RedirectToAction("Index");
         }
