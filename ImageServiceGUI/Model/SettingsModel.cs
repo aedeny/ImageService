@@ -15,7 +15,7 @@ namespace ImageServiceGUI.Model
 {
     internal class SettingsModel : ISettingsModel
     {
-        private const string WaitingForConnection = "Waiting for connection...";
+        private const string WaitingForConnection = "Waiting for connection";
         private readonly Dispatcher _uiDispatcher;
         private SolidColorBrush _backgroundColor;
 

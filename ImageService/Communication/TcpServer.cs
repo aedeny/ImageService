@@ -41,7 +41,7 @@ namespace ImageService.Communication
             _listener = new TcpListener(ep);
 
             _listener.Start();
-            _loggingService.Log("Waiting for connections...", EventLogEntryType.Information);
+            _loggingService.Log("Waiting for connections", EventLogEntryType.Information);
 
             Task.Run(() =>
             {

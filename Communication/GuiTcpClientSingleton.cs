@@ -32,6 +32,7 @@ namespace Communication
         public bool Connected { get; private set; }
 
         public event EventHandler<MessageRecievedEventArgs> LogMessageRecieved;
+        public event EventHandler<MessageRecievedEventArgs> LogHistoryMessageRecieved;
         public event EventHandler ConnectedToService;
         public event EventHandler<DirectoryHandlerClosedEventArgs> DirectoryHandlerRemoved;
         public event EventHandler<ConfigurationReceivedEventArgs> ConfigurationReceived;
@@ -123,6 +124,7 @@ namespace Communication
                         logHistoryJson["LOGS"].ToObject<List<Tuple<string, EventLogEntryType>>>();
 
                     foreach (Tuple<string, EventLogEntryType> logEntry in entries) Log(logEntry.Item1, logEntry.Item2);
+                    LogHistoryMessageRecieved?.Invoke(this, null);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -142,7 +144,7 @@ namespace Communication
                 Message = message,
                 EventLogEntryType = logEntryType
             };
-
+            // OnLogHistoryRecieved
             LogMessageRecieved?.Invoke(this, messageRecievedEventArgs);
         }
 

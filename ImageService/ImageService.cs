@@ -83,7 +83,7 @@ namespace ImageService
             };
 
             timer.Elapsed += (sender, eventArgs) =>
-                eventLog.WriteEntry("Monitoring the System...", EventLogEntryType.Information);
+                eventLog.WriteEntry("Monitoring the System", EventLogEntryType.Information);
 
             timer.Start();
 
