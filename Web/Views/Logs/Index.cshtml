@@ -47,24 +47,23 @@
 
 <table id="myTable" class="table table-striped table-dark">
     <tbody>
-        @foreach (Tuple<string, string, string> item in Model.LogList)
-        {
-            <tr>
-                <td bgcolor=@Html.DisplayName(item.Item1)>
-                    <span>
-                        @Html.DisplayName(item.Item2)
-                    </span>
-                </td>
-                <td>
-                    <span>
-                        @Html.DisplayName(item.Item3)
-                    </span>
-                </td>
-            </tr>
-        }
+    @foreach (Tuple<string, string, string> item in Model.LogList)
+    {
+        <tr>
+            <td bgcolor=@Html.DisplayName(item.Item1)>
+                <span>
+                    @Html.DisplayName(item.Item2)
+                </span>
+            </td>
+            <td>
+                <span>
+                    @Html.DisplayName(item.Item3)
+                </span>
+            </td>
+        </tr>
+    }
     </tbody>
 </table>
 
 
 <p>End of logs history table.</p>
-

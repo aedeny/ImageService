@@ -1,32 +1,46 @@
 ﻿@using System.Diagnostics
 @using Communication
+@using Microsoft.Ajax.Utilities
 @model Web.Models.Photos
+
 @{
     ViewBag.Title = "Photos";
 }
-<hr/>
+<hr />
 
-
-@{
-    if (Model.Thumbnails.Count == 0)
-    {
-        <h2>Nothing to see here... Yet.</h2>
-        <div class="mx-auto" style="width: 600px">
-            <img src="/Images/family-guy-stewie.jpg" class="rounded-circle" alt="Dummy Image">
-        </div>
-    }
-
-    <div class="container">
-        <div class="row">
-            @foreach (string imagePath in Model.Thumbnails)
-            {
-                // TODO make path it more general
-                string relativePath = "../Images/" + @Utils.AbsoluteToRelativePath(imagePath, Model.OutputDirectory);
-
-                <div class="p-1">
-                    <img src="@relativePath" class="rounded-circle" alt="@relativePath"/>
-                </div>
-            }
-        </div>
+@if (Model.Thumbnails.Count == 0)
+{
+    <h2>Nothing to see here... Yet.</h2>
+    <div class="mx-auto" style="width: 600px">
+        <img src="/Images/family-guy-stewie.jpg" class="rounded-circle" alt="Dummy Image">
     </div>
 }
+
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+<!------ Include the above in your HEAD tag ---------->
+<div class="container" id="tourpackages-carousel">
+    <div class="row">
+        @foreach (var imagePath in Model.Thumbnails)
+        {
+            string relativePath = "../Images/" + @Utils.AbsoluteToRelativePath(imagePath.ThumbnailPath, Model.OutputDirectory);
+            
+            <div class="col-xs-18 col-sm-6 col-md-3">
+                <div class="thumbnail">
+                    <img src=@relativePath alt="" class="rounded-circle" width="242" height="200">
+                    <div class="caption" align="center">
+                        <h4>@imagePath.Name</h4>
+                        <p>@imagePath.CreationDate</p>
+                        <p>@imagePath.ImagePath</p>
+                        <p>
+                            <a href="" id="btnView" class="btn btn-info btn-xl" role="button">View</a>
+                            <a href="" id="btnDelete" class="btn btn-danger btn-xl" role="button">Delete</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div><!-- End row -->
+</div><!-- End container -->

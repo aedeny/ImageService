@@ -20,7 +20,7 @@ namespace Web.Models
 
         [DataType(DataType.Text)]
         [Display(Name = "Thumbnails")]
-        public ObservableCollection<string> Thumbnails { get; set; }
+        public ObservableCollection<PhotoInfo> Thumbnails { get; set; }
 
         private bool _recievedOutputDirectory;
         public string OutputDirectory;
@@ -28,7 +28,7 @@ namespace Web.Models
         public Photos()
         {
             Active = false;
-            Thumbnails = new ObservableCollection<string>();
+            Thumbnails = new ObservableCollection<PhotoInfo>();
             _recievedOutputDirectory = false;
             GuiTcpClientSingleton.Instance.Close();
 
@@ -64,7 +64,7 @@ namespace Web.Models
 
             foreach (string s in temp)
             {
-                Thumbnails.Add(s);
+                Thumbnails.Add(new PhotoInfo(s));
             }
         }
 

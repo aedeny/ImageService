@@ -48,7 +48,6 @@
             {
                 <tr>
                     <td>@Html.DisplayName(handler)</td>
-                    @*<td>@Html.ActionLink("Delete", "Delete", new {dirHandlerToDelete = handler}, new {@class = "btn btn-danger btn-sm"})</td>*@
                     <td>
                         <input type="button" class="btn btn-danger btn-sm" value="Delete" data-toggle="modal" data-target="#exampleModal" data-handler="@handler"/>
                     </td>
@@ -57,7 +56,6 @@
         }
     }
     </tbody>
-
 </table>
 
 <!-- Modal -->
