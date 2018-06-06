@@ -39,7 +39,6 @@ namespace ImageService.Server
             return args.DirectoryPath;
         }
 
-
         public event EventHandler<DirectoryHandlerClosedEventArgs> DirectoryHandlerClosed;
         public event EventHandler<CommandRecievedEventArgs> CommandRecieved;
     }

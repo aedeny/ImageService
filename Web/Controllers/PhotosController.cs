@@ -12,5 +12,12 @@ namespace Web.Controllers
             _photos = new Photos();
             return View(_photos);
         }
+
+        public ActionResult Delete(string dirHandlerToDelete)
+        {
+            // string command = (int)CommandEnum.CloseDirectoryHandlerCommand + "|" + dirHandlerToDelete;
+            // GuiTcpClientSingleton.Instance.Writer.Write(command);
+            return RedirectToAction("Index");
+        }
     }
 }

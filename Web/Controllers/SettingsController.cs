@@ -25,13 +25,6 @@ namespace Web.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult OpenDialogBox(string dirHandlerToDelete)
-        {
-            string command = (int)CommandEnum.CloseDirectoryHandlerCommand + "|" + dirHandlerToDelete;
-            GuiTcpClientSingleton.Instance.Writer.Write(command);
-            return RedirectToAction("Index");
-        }
-
         public ActionResult Error()
         {
             throw new NotImplementedException();

@@ -29,7 +29,6 @@ namespace Web.Models
                 return;
             }
 
-            GuiTcpClientSingleton.Instance.ConnectedToService += OnClientConnectedToService;
             GuiTcpClientSingleton.Instance.ConfigurationReceived += OnSettingsInfoReceived;
 
             // TODO Can we do better? Probably. Do we want to do better? No. Will we do better? Maybe.
@@ -91,11 +90,6 @@ namespace Web.Models
             foreach (string handler in handlers) DirectoryHandlers.Add(handler);
 
             _gotSettings = true;
-        }
-
-        private void OnClientConnectedToService(object sender, EventArgs e)
-        {
-            Debug.WriteLine("OnClientConnectedToService");
         }
     }
 }
