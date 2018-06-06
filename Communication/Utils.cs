@@ -23,5 +23,13 @@ namespace Communication
                 return false;
             }
         }
+
+        // Credit: https://stackoverflow.com/a/13266776
+        public static string AbsoluteToRelativePath(string pathToFile, string referencePath)
+        {
+            Uri fileUri = new Uri(pathToFile);
+            Uri referenceUri = new Uri(referencePath);
+            return referenceUri.MakeRelativeUri(fileUri).ToString();
+        }
     }
 }

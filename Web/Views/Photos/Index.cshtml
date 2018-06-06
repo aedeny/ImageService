@@ -1,20 +1,32 @@
-﻿@model Web.Models.Photos
+﻿@using System.Diagnostics
+@using Communication
+@model Web.Models.Photos
 @{
     ViewBag.Title = "Photos";
 }
 <hr/>
 
 
-@*@{
-        foreach (string imagePath in Model.Thumbnails)
-        {
-            <img src="@imagePath" class="rounded float-left"alt="img">
-        }
-    }*@
+@{
+    if (Model.Thumbnails.Count == 0)
+    {
+        <h2>Nothing to see here... Yet.</h2>
+        <div class="mx-auto" style="width: 600px">
+            <img src="/Images/family-guy-stewie.jpg" class="rounded-circle" alt="Dummy Image">
+        </div>
+    }
 
+    <div class="container">
+        <div class="row">
+            @foreach (string imagePath in Model.Thumbnails)
+            {
+                // TODO make path it more general
+                string relativePath = "../Images/" + @Utils.AbsoluteToRelativePath(imagePath, Model.OutputDirectory);
 
-<!--Temp page -->
-<h2>Nothing to see here... Yet.</h2>
-<div class="mx-auto" style="width: 600px">
-    <img src="/Images/family-guy-stewie.jpg" class="rounded-circle" alt="Dummy Image">
-</div>
+                <div class="p-1">
+                    <img src="@relativePath" class="rounded-circle" alt="@relativePath"/>
+                </div>
+            }
+        </div>
+    </div>
+}

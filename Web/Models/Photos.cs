@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -13,20 +14,16 @@ using Infrastructure.Event;
 
 namespace Web.Models
 {
-    
     public class Photos
     {
-        public bool Active
-        {
-            get; set;
-        }
+        public bool Active { get; set; }
+
         [DataType(DataType.Text)]
         [Display(Name = "Thumbnails")]
         public ObservableCollection<string> Thumbnails { get; set; }
 
         private bool _recievedOutputDirectory;
         public string OutputDirectory;
-
 
         public Photos()
         {
@@ -37,7 +34,6 @@ namespace Web.Models
 
             if (!Utils.IsServiceActive("ImageService"))
             {
-                
                 return;
             }
 
@@ -54,28 +50,22 @@ namespace Web.Models
                         break;
             }).Wait();
 
-            
-            DirectoryInfo directoryName;
-            
-            try
-            {
-                directoryName = new DirectoryInfo(OutputDirectory);
-                if (!directoryName.Exists)
-                {
-                    return;
-                }
-            }
-            catch (Exception)
+            if (!Directory.Exists(OutputDirectory))
             {
                 return;
             }
 
+            string pattern = OutputDirectory + "\\thumbnails\\.*.(jpg|jpeg|gif|png|bmp)";
+            pattern = pattern.Replace("\\", "\\\\");
+            Regex reg = new Regex(pattern);
 
-            foreach (FileInfo fi in directoryName.GetFiles("*.jpg", SearchOption.AllDirectories))
+            List<string> temp = Directory.EnumerateFiles(OutputDirectory, "*.*", SearchOption.AllDirectories)
+                .Where(s => reg.IsMatch(s)).ToList();
+
+            foreach (string s in temp)
             {
-                Thumbnails.Add(fi.FullName);
+                Thumbnails.Add(s);
             }
-
         }
 
         private void OnConfigurationsReceived(object sender, ConfigurationReceivedEventArgs e)

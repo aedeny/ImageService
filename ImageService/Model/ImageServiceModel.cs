@@ -79,7 +79,7 @@ namespace ImageService.Model
                 using (Image image = Image.FromFile(path))
                 using (Image thumb = image.GetThumbnailImage(_thumbnailSize, _thumbnailSize, () => false, IntPtr.Zero))
                 {
-                    thumb.Save(Path.ChangeExtension(thumbnailPath, "thumb"));
+                    thumb.Save(Path.ChangeExtension(thumbnailPath, "jpg"));
                 }
 
                 // Copies the file to the output folder

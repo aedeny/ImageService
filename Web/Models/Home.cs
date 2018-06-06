@@ -4,7 +4,9 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.ServiceProcess;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Communication;
@@ -43,9 +45,13 @@ namespace Web.Models
                         else
                             break;
                 }).Wait();
-            }
 
-            NumberOfPhotos = GetNumberOfPhotos(OutputDirectory);
+                NumberOfPhotos = GetNumberOfPhotos(OutputDirectory);
+            }
+            else
+            {
+                NumberOfPhotos = -1;
+            }
         }
 
         private void OnConfigurationsReceived(object sender, ConfigurationReceivedEventArgs e)
@@ -57,24 +63,15 @@ namespace Web.Models
 
         private static int GetNumberOfPhotos(string path)
         {
-            int photosCounter = 0;
-            DirectoryInfo directoryName;
-            try
+            if (!Directory.Exists(path))
             {
-                directoryName = new DirectoryInfo(path);
-            }
-            catch (Exception)
-            {
-                return -1;
+                return 0;
             }
 
-            photosCounter += directoryName.GetFiles("*.jpg", SearchOption.AllDirectories).Length;
-            photosCounter += directoryName.GetFiles("*.jpeg", SearchOption.AllDirectories).Length;
-            photosCounter += directoryName.GetFiles("*.png", SearchOption.AllDirectories).Length;
-            photosCounter += directoryName.GetFiles("*.bmp", SearchOption.AllDirectories).Length;
-            photosCounter += directoryName.GetFiles("*.gif", SearchOption.AllDirectories).Length;
-
-            return photosCounter;
+            // Matches all files with these extensions which are not in thumbnails directory.
+            Regex reg = new Regex(@"^(?!thumbnails).*.(jpg|jpeg|gif|png|bmp)");
+            return Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories)
+                .Where(s => reg.IsMatch(s)).ToList().Count;
         }
 
         [DataType(DataType.Text)]
