@@ -50,7 +50,10 @@ namespace ImageService.Controller.Handlers
         /// <param name="e">The <see cref="CommandRecievedEventArgs" /> instance containing the event data.</param>
         public void OnCommandRecieved(object sender, CommandRecievedEventArgs e)
         {
-            if (!_commandsDictionary.TryGetValue(e.CommandId, out Action<string[]> currentCommand)) return;
+            if (!_commandsDictionary.TryGetValue(e.CommandId, out Action<string[]> currentCommand))
+            {
+                return;
+            }
 
             currentCommand.BeginInvoke(e.Args, null, null);
         }
@@ -76,7 +79,10 @@ namespace ImageService.Controller.Handlers
             _loggingService.Log("OnNewFileCreated: " + e.FullPath, EventLogEntryType.Information);
             string filePath = new FileInfo(e.FullPath).FullName;
 
-            if (!_extenstions.Contains(Path.GetExtension(filePath).ToLower())) return;
+            if (!_extenstions.Contains(Path.GetExtension(filePath).ToLower()))
+            {
+                return;
+            }
 
             string[] args = {filePath};
 
@@ -94,7 +100,11 @@ namespace ImageService.Controller.Handlers
         /// <param name="args">The <see cref="DirectoryHandlerClosedEventArgs" /> instance containing the event data.</param>
         public void OnDirectoryHandlerClosed(object sender, DirectoryHandlerClosedEventArgs args)
         {
-            if (args != null && !args.DirectoryPath.Equals(_path)) return;
+            if (args != null && !args.DirectoryPath.Equals(_path))
+            {
+                return;
+            }
+
             _dirWatcher.Created -= OnNewFileCreated;
 
             ImageServer imageServer = (ImageServer) sender;
@@ -105,7 +115,10 @@ namespace ImageService.Controller.Handlers
                 new DirectoryHandlerClosedEventArgs(_path, "in OnDirectoryHandlerClosed"));
 
             _loggingService.Log("Stopped handling directory " + _path, EventLogEntryType.Information);
-            if (args != null) args.Closed = true;
+            if (args != null)
+            {
+                args.Closed = true;
+            }
         }
     }
 }

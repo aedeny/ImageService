@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.ServiceProcess;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,10 +14,10 @@ namespace Web.Models
 {
     public class Home
     {
+        private bool _recievedOutputDirectory;
         public bool Active;
         public int NumberOfPhotos;
         public string OutputDirectory;
-        private bool _recievedOutputDirectory;
 
         public Home()
         {
@@ -41,9 +37,13 @@ namespace Web.Models
                 {
                     for (int i = 0; i < 20; i++)
                         if (!_recievedOutputDirectory)
+                        {
                             Thread.Sleep(250);
+                        }
                         else
+                        {
                             break;
+                        }
                 }).Wait();
 
                 NumberOfPhotos = GetNumberOfPhotos(OutputDirectory);
@@ -53,6 +53,10 @@ namespace Web.Models
                 NumberOfPhotos = -1;
             }
         }
+
+        [DataType(DataType.Text)]
+        [Display(Name = "Students")]
+        public StudentsInfoRootObject StudentsInfoRoot { get; set; }
 
         private void OnConfigurationsReceived(object sender, ConfigurationReceivedEventArgs e)
         {
@@ -69,16 +73,12 @@ namespace Web.Models
             }
 
             // Matches all files with these extensions which are not in thumbnails directory.
-            string pattern = "^"+path + "\\(?!thumbnails).*.(jpg|jpeg|gif|png|bmp)";
+            string pattern = "^" + path + "\\(?!thumbnails).*.(jpg|jpeg|gif|png|bmp)";
             pattern = pattern.Replace("\\", "\\\\");
             Regex reg = new Regex(pattern);
             return Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories)
                 .Where(s => reg.IsMatch(s)).ToList().Count;
         }
-
-        [DataType(DataType.Text)]
-        [Display(Name = "Students")]
-        public StudentsInfoRootObject StudentsInfoRoot { get; set; }
 
         public StudentsInfoRootObject LoadStudentsInfoFromFile(string path)
         {

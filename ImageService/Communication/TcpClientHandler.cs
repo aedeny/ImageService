@@ -55,7 +55,10 @@ namespace ImageService.Communication
                             (CommandEnum) Enum.Parse(typeof(CommandEnum), parameters[0]),
                             parameters.Skip(1).ToArray(), out EventLogEntryType _);
 
-                        if (retval == null) continue;
+                        if (retval == null)
+                        {
+                            continue;
+                        }
 
                         _writer.Write(parameters[0] + "|" + retval);
                         _writer.Flush();

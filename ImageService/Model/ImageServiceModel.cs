@@ -40,7 +40,10 @@ namespace ImageService.Model
 
             try
             {
-                if (!File.Exists(path)) return "File does not exist.";
+                if (!File.Exists(path))
+                {
+                    return "File does not exist.";
+                }
 
                 // Tries to get date taken from image. If property doesn't exist, gets date created.
                 DateTime dateTime;

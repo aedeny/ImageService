@@ -4,7 +4,7 @@
 @{
     ViewBag.Title = "Photos";
 }
-<hr />
+<hr/>
 <h4>Photos</h4>
 @if (Model.Thumbnails.Count == 0)
 {
@@ -20,10 +20,10 @@
 <!------ Include the above in your HEAD tag ---------->
 <div class="container" id="tourpackages-carousel">
     <div class="row">
-        @foreach (var photoInfo in Model.Thumbnails)
+        @foreach (PhotoInfo photoInfo in Model.Thumbnails)
         {
-            string relativeThumbnailPath = "../Images/" + @Utils.AbsoluteToRelativePath(photoInfo.ThumbnailPath, Model.OutputDirectory);
-            string relativeImagePath = "../Images/" + @Utils.AbsoluteToRelativePath(photoInfo.ImagePath, Model.OutputDirectory);
+            string relativeThumbnailPath = "../Images/" + Utils.AbsoluteToRelativePath(photoInfo.ThumbnailPath, Model.OutputDirectory);
+            string relativeImagePath = "../Images/" + Utils.AbsoluteToRelativePath(photoInfo.ImagePath, Model.OutputDirectory);
             <div class="col-xs-18 col-sm-6 col-md-3">
                 <div class="thumbnail">
                     <img src=@relativeThumbnailPath alt="" class="rounded-circle" width="242" height="200">
@@ -33,7 +33,7 @@
                         <p>
                             <a href=@relativeImagePath id="btnView" class="btn btn-info btn-xl" role="button" target="_blank">View</a>
                             @*<a href="" id="btnDelete" class="btn btn-danger btn-xl" role="button">Delete</a>*@
-                            <input type="button" class="btn btn-danger btn-xl" value="Delete" data-toggle="modal" data-target="#exampleModal" data-handler="@photoInfo.ThumbnailPath" />
+                            <input type="button" class="btn btn-danger btn-xl" value="Delete" data-toggle="modal" data-target="#exampleModal" data-handler="@photoInfo.ThumbnailPath"/>
                         </p>
                     </div>
                 </div>
@@ -58,7 +58,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                <input type="button" class="btn btn-primary" handler="" value="Yes" onclick="" />
+                <input type="button" class="btn btn-primary" handler="" value="Yes" onclick=""/>
 
             </div>
         </div>

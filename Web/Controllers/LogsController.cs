@@ -6,6 +6,7 @@ namespace Web.Controllers
     public class LogsController : Controller
     {
         private Logs _logs;
+
         // GET: Logs
         public ActionResult Index()
         {

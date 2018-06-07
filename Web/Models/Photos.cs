@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
@@ -7,7 +6,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 using Communication;
 using Infrastructure;
 using Infrastructure.Event;
@@ -16,12 +14,6 @@ namespace Web.Models
 {
     public class Photos
     {
-        public bool Active { get; set; }
-
-        [DataType(DataType.Text)]
-        [Display(Name = "Thumbnails")]
-        public ObservableCollection<PhotoInfo> Thumbnails { get; set; }
-
         private bool _recievedOutputDirectory;
         public string OutputDirectory;
 
@@ -45,9 +37,13 @@ namespace Web.Models
             {
                 for (int i = 0; i < 20; i++)
                     if (!_recievedOutputDirectory)
+                    {
                         Thread.Sleep(250);
+                    }
                     else
+                    {
                         break;
+                    }
             }).Wait();
 
             if (!Directory.Exists(OutputDirectory))
@@ -62,11 +58,14 @@ namespace Web.Models
             List<string> temp = Directory.EnumerateFiles(OutputDirectory, "*.*", SearchOption.AllDirectories)
                 .Where(s => reg.IsMatch(s)).ToList();
 
-            foreach (string s in temp)
-            {
-                Thumbnails.Add(new PhotoInfo(s));
-            }
+            foreach (string s in temp) Thumbnails.Add(new PhotoInfo(s));
         }
+
+        public bool Active { get; set; }
+
+        [DataType(DataType.Text)]
+        [Display(Name = "Thumbnails")]
+        public ObservableCollection<PhotoInfo> Thumbnails { get; set; }
 
         private void OnConfigurationsReceived(object sender, ConfigurationReceivedEventArgs e)
         {
