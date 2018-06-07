@@ -4,7 +4,7 @@
 @{
     ViewBag.Title = "Photos";
 }
-<hr />
+<hr/>
 <h4>Photos</h4>
 @if (Model.Thumbnails.Count == 0)
 {
@@ -16,11 +16,10 @@
 
 @*The link attribute isn't working with the modal for some reason... Will we ever find out why? *@
 @*<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">*@
-
 <!------ Include the above in your HEAD tag ---------->
 <div class="container" id="tourpackages-carousel">
     <div class="row">
-        @foreach (var photoInfo in Model.Thumbnails)
+        @foreach (PhotoInfo photoInfo in Model.Thumbnails)
         {
             string relativeThumbnailPath = "../Images/" + @Utils.AbsoluteToRelativePath(photoInfo.ThumbnailPath, Model.OutputDirectory);
             string relativeImagePath = "../Images/" + @Utils.AbsoluteToRelativePath(photoInfo.ImagePath, Model.OutputDirectory);
@@ -33,8 +32,8 @@
                         <p>
                             @*<a href=@relativeImagePath id="btnView" class="btn btn-info" role="button" target="_blank">View</a>*@
                             @*<a href="" id="btnDelete" class="btn btn-danger btn-xl" role="button">Delete</a>*@
-                            <input type="button" class="btn btn-info" value="View" data-toggle="modal" data-target="#ViewImageModal" data-path="@relativeImagePath" />
-                            <input type="button" class="btn btn-danger" value="Delete" data-toggle="modal" data-target="#exampleModal" data-handler="@photoInfo.ThumbnailPath" />
+                            <input type="button" class="btn btn-info" value="View" data-toggle="modal" data-target="#ViewImageModal" data-path="@relativeImagePath"/>
+                            <input type="button" class="btn btn-danger" value="Delete" data-toggle="modal" data-target="#exampleModal" data-handler="@photoInfo.ThumbnailPath"/>
                         </p>
                     </div>
                 </div>
@@ -58,7 +57,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                <input type="button" class="btn btn-primary" handler="" value="Yes" onclick="" />
+                <input type="button" class="btn btn-primary" handler="" value="Yes" onclick=""/>
 
             </div>
         </div>
@@ -96,23 +95,20 @@
 
 @* This code is taken from the Settings View --> Shhould it be available here as well? And if so, how? *@
 <!-- View Image Modal -->
-<div class="modal fade" id="ViewImageModal" tabindex="-1" role="document" aria-labelledby="ViewImageModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content modal-lg">
-            <div class="modal-header">
-                <h5 class="modal-title" id="ViewImageModalLabel">Are you sure?</h5>
-
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+<div class="modal modal-dark fade" id="ViewImageModal" tabindex="-1" role="document" aria-labelledby="ViewImageModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-dark modal-dialog-centered align-self-center modal-full-width" role="document">
+        <div class="modal-content  modal-dark modal-full-width">
+            @* TODO Float right *@
+            <div class="modal-header-no-line float-right">
+                <div class="mx-auto" >
+                    <span class="">
+                        <input type="button" class="btn btn-danger btn-lg" handler="" value="Delete" onclick=""/>
+                        <input type="button" class="btn btn-secondary btn-lg" data-dismiss="modal" value="Close" aria-label="Close"/>
+                    </span>
+                </div>
             </div>
-            <div class="modal-body">
-                <img src="" alt="Test"/>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                <input type="button" class="btn btn-primary" handler="" value="Yes" onclick="" />
-
+            <div class="modal-body align-items-center">
+                <img class="mx-auto d-block" src="" alt="Test"/>
             </div>
         </div>
     </div>

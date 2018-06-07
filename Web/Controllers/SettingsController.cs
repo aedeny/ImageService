@@ -18,10 +18,15 @@ namespace Web.Controllers
         }
 
         // GET: First/Delete/5
-        public ActionResult Delete(string dirHandlerToDelete)
+        public ActionResult DeleteDirectoryHandler(string dirHandlerToDelete)
         {
             string command = (int) CommandEnum.CloseDirectoryHandlerCommand + "|" + dirHandlerToDelete;
             GuiTcpClientSingleton.Instance.Writer.Write(command);
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult GoToDeleteConfirmationPage(string dirHandlerToDelete)
+        {
             return RedirectToAction("Index");
         }
 

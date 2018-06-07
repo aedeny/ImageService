@@ -93,7 +93,7 @@
             var modal = $(this);
 
             // A workaround to pass JQuery parameter to Razor
-            var url = '@Url.Action("Delete", "Settings", new {dirHandlerToDelete = "__param__"})';
+            var url = '@Url.Action("DeleteDirectoryHandler", "Settings", new {dirHandlerToDelete = "__param__"})';
             var replacedUrl = url.replace('__param__', handler);
 
             // Sets "Yes" button onclick to delete corresponding handler
