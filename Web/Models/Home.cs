@@ -75,7 +75,7 @@ namespace Web.Models
             // Matches all files with these extensions which are not in thumbnails directory.
             string pattern = "^" + path + "\\(?!thumbnails).*.(jpg|jpeg|gif|png|bmp)";
             pattern = pattern.Replace("\\", "\\\\");
-            Regex reg = new Regex(pattern);
+            Regex reg = new Regex(pattern, RegexOptions.IgnoreCase);
             return Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories)
                 .Where(s => reg.IsMatch(s)).ToList().Count;
         }

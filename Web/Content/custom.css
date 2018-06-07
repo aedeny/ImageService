@@ -1,19 +1,21 @@
 ﻿.modal-full-width {
-    min-width: 90%;
+    max-height: 90%;
+    max-width: 90%;
 }
 
-.modal-dark {
-    background-color: #1e1e1e;
-}
+
+.modal-dark { background-color: #2d2d2d; }
+
+.modal-darker { background-color: #1d1d1d; }
 
 .modal-header-no-line {
-    display: -ms-flexbox;
-    display: flex;
     -ms-flex-align: start;
-    align-items: flex-start;
     -ms-flex-pack: justify;
-    justify-content: space-between;
-    padding: 1rem;
+    align-items: flex-start;
     border-top-left-radius: 0.3rem;
     border-top-right-radius: 0.3rem;
+    display: -ms-flexbox;
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
 }

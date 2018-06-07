@@ -13,10 +13,9 @@ namespace Web.Controllers
             return View(_photos);
         }
 
-        public ActionResult Delete(string dirHandlerToDelete)
+        public ActionResult DeletePhoto(string path)
         {
-            // string command = (int)CommandEnum.CloseDirectoryHandlerCommand + "|" + dirHandlerToDelete;
-            // GuiTcpClientSingleton.Instance.Writer.Write(command);
+            System.IO.File.Delete(path);
             return RedirectToAction("Index");
         }
     }

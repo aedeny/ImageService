@@ -5,7 +5,7 @@
     ViewBag.Title = "Photos";
 }
 <hr/>
-<h4>Photos</h4>
+
 @if (Model.Thumbnails.Count == 0)
 {
     <h2>Nothing to see here... Yet.</h2>
@@ -14,15 +14,12 @@
     </div>
 }
 
-@*The link attribute isn't working with the modal for some reason... Will we ever find out why? *@
-@*<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">*@
-<!------ Include the above in your HEAD tag ---------->
 <div class="container" id="tourpackages-carousel">
     <div class="row">
         @foreach (PhotoInfo photoInfo in Model.Thumbnails)
         {
-            string relativeThumbnailPath = "../Images/" + @Utils.AbsoluteToRelativePath(photoInfo.ThumbnailPath, Model.OutputDirectory);
-            string relativeImagePath = "../Images/" + @Utils.AbsoluteToRelativePath(photoInfo.ImagePath, Model.OutputDirectory);
+            string relativeThumbnailPath = "../Images/" + Utils.AbsoluteToRelativePath(photoInfo.ThumbnailPath, Model.OutputDirectory);
+            string relativeImagePath = "../Images/" + Utils.AbsoluteToRelativePath(photoInfo.ImagePath, Model.OutputDirectory);
             <div class="col-sm-6 col-md-3">
                 <div>
                     <img src=@relativeThumbnailPath alt="" class="rounded-circle" width="242" height="200">
@@ -30,10 +27,8 @@
                         <h4>@photoInfo.Name</h4>
                         <p>@photoInfo.CreationDate</p>
                         <p>
-                            @*<a href=@relativeImagePath id="btnView" class="btn btn-info" role="button" target="_blank">View</a>*@
-                            @*<a href="" id="btnDelete" class="btn btn-danger btn-xl" role="button">Delete</a>*@
                             <input type="button" class="btn btn-info" value="View" data-toggle="modal" data-target="#ViewImageModal" data-path="@relativeImagePath"/>
-                            <input type="button" class="btn btn-danger" value="Delete" data-toggle="modal" data-target="#exampleModal" data-handler="@photoInfo.ThumbnailPath"/>
+                            <input type="button" class="btn btn-danger" value="Delete" data-toggle="modal" data-target="#del-img-modal" data-path="@photoInfo.ThumbnailPath"/>
                         </p>
                     </div>
                 </div>
@@ -41,9 +36,9 @@
         }
     </div><!-- End row -->
 </div><!-- End container -->
-@* This code is taken from the Settings View --> Shhould it be available here as well? And if so, how? *@
+
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="del-img-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -53,11 +48,14 @@
                 </button>
             </div>
             <div class="modal-body">
-                Are you sure you want to delete this handler?
+                <p>
+                    Are you sure you want to delete this photo?<br/>
+                    This cannot be undone.
+                </p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                <input type="button" class="btn btn-primary" handler="" value="Yes" onclick=""/>
+                <input type="button" id="delete-button" class="btn btn-danger" handler="" value="Delete" onclick=""/>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancle</button>
 
             </div>
         </div>
@@ -70,15 +68,15 @@
             $('#myInput').trigger('focus');
         });
 
-    $('#exampleModal').on('show.bs.modal',
+    $('#del-img-modal').on('show.bs.modal',
         function(event) {
             var button = $(event.relatedTarget);
-            var handler = button.data('handler');
+            var imagePath = button.data('path');
             var modal = $(this);
 
             // A workaround to pass JQuery parameter to Razor
-            var url = '@Url.Action("Delete", "Photos", new {dirHandlerToDelete = "__param__"})';
-            var replacedUrl = url.replace('__param__', handler);
+            var url = '@Url.Action("DeletePhoto", "Photos", new {path = "__param__"})';
+            var replacedUrl = url.replace('__param__', imagePath);
 
             // Sets "Yes" button onclick to delete corresponding handler
             var yesButton = modal.find('.modal-footer input');
@@ -93,22 +91,21 @@
 </script>
 
 
-@* This code is taken from the Settings View --> Shhould it be available here as well? And if so, how? *@
 <!-- View Image Modal -->
 <div class="modal modal-dark fade" id="ViewImageModal" tabindex="-1" role="document" aria-labelledby="ViewImageModalLabel" aria-hidden="true">
-    <div class="modal-dialog  modal-dark modal-dialog-centered align-self-center modal-full-width" role="document">
-        <div class="modal-content  modal-dark modal-full-width">
+    <div class="modal-dialog  modal-dark modal-full-width" role="document">
+        <div class="modal-content  modal-darker modal-full-width" style="max-height: 90%; max-width: 100%;">
             @* TODO Float right *@
-            <div class="modal-header-no-line float-right">
-                <div class="mx-auto" >
+            <div class="modal-header-no-line float-right" style="max-height: 90%; max-width: 100%;">
+                <div class="mx-auto">
                     <span class="">
-                        <input type="button" class="btn btn-danger btn-lg" handler="" value="Delete" onclick=""/>
+                        <input type="button" id="view-modal-del-btn" class="btn btn-danger btn-lg" handler="" value="Delete" onclick=""/>
                         <input type="button" class="btn btn-secondary btn-lg" data-dismiss="modal" value="Close" aria-label="Close"/>
                     </span>
                 </div>
             </div>
             <div class="modal-body align-items-center">
-                <img class="mx-auto d-block" src="" alt="Test"/>
+                <img class="mx-auto d-block" src="" alt="Test" style="max-height: 90%; max-width: 100%;"/>
             </div>
         </div>
     </div>
@@ -128,7 +125,7 @@
             var modal = $(this);
 
             // A workaround to pass JQuery parameter to Razor
-            var url = '@Url.Action("Delete", "Photos", new {dirHandlerToDelete = "__param__"})';
+            var url = '@Url.Action("DeletePhoto", "Photos", new {dirHandlerToDelete = "__param__"})';
 
             // Sets "Yes" button onclick to delete corresponding handler
             var image = modal.find('.modal-body img');

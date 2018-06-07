@@ -53,7 +53,7 @@ namespace Web.Models
 
             string pattern = OutputDirectory + "\\thumbnails\\.*.(jpg|jpeg|gif|png|bmp)";
             pattern = pattern.Replace("\\", "\\\\");
-            Regex reg = new Regex(pattern);
+            Regex reg = new Regex(pattern, RegexOptions.IgnoreCase);
 
             List<string> temp = Directory.EnumerateFiles(OutputDirectory, "*.*", SearchOption.AllDirectories)
                 .Where(s => reg.IsMatch(s)).ToList();
