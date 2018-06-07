@@ -24,16 +24,17 @@
         {
             string relativeThumbnailPath = "../Images/" + @Utils.AbsoluteToRelativePath(photoInfo.ThumbnailPath, Model.OutputDirectory);
             string relativeImagePath = "../Images/" + @Utils.AbsoluteToRelativePath(photoInfo.ImagePath, Model.OutputDirectory);
-            <div class="col-xs-18 col-sm-6 col-md-3">
-                <div class="thumbnail">
+            <div class="col-sm-6 col-md-3">
+                <div>
                     <img src=@relativeThumbnailPath alt="" class="rounded-circle" width="242" height="200">
-                    <div class="caption" align="center">
+                    <div align="center">
                         <h4>@photoInfo.Name</h4>
                         <p>@photoInfo.CreationDate</p>
                         <p>
-                            <a href=@relativeImagePath id="btnView" class="btn btn-info btn-xl" role="button" target="_blank">View</a>
+                            @*<a href=@relativeImagePath id="btnView" class="btn btn-info" role="button" target="_blank">View</a>*@
                             @*<a href="" id="btnDelete" class="btn btn-danger btn-xl" role="button">Delete</a>*@
-                            <input type="button" class="btn btn-danger btn-xl" value="Delete" data-toggle="modal" data-target="#exampleModal" data-handler="@photoInfo.ThumbnailPath" />
+                            <input type="button" class="btn btn-info" value="View" data-toggle="modal" data-target="#ViewImageModal" data-path="@relativeImagePath" />
+                            <input type="button" class="btn btn-danger" value="Delete" data-toggle="modal" data-target="#exampleModal" data-handler="@photoInfo.ThumbnailPath" />
                         </p>
                     </div>
                 </div>
@@ -41,7 +42,6 @@
         }
     </div><!-- End row -->
 </div><!-- End container -->
-
 @* This code is taken from the Settings View --> Shhould it be available here as well? And if so, how? *@
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -88,6 +88,60 @@
                 yesButton.attr("disabled", true);
                 noButton.attr("disabled", true);
                 location.href = replacedUrl;
+            });
+        });
+
+</script>
+
+
+@* This code is taken from the Settings View --> Shhould it be available here as well? And if so, how? *@
+<!-- View Image Modal -->
+<div class="modal fade" id="ViewImageModal" tabindex="-1" role="document" aria-labelledby="ViewImageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ViewImageModalLabel">Are you sure?</h5>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <img src="" alt="Test"/>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <input type="button" class="btn btn-primary" handler="" value="Yes" onclick="" />
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $('#ViewImageModal').on('shown.bs.modal',
+        function() {
+            $('#myInput').trigger('focus');
+        });
+
+    $('#ViewImageModal').on('show.bs.modal',
+        function(event) {
+            var button = $(event.relatedTarget);
+            var path = button.data('path');
+            var modal = $(this);
+
+            // A workaround to pass JQuery parameter to Razor
+            var url = '@Url.Action("Delete", "Photos", new {dirHandlerToDelete = "__param__"})';
+
+            // Sets "Yes" button onclick to delete corresponding handler
+            var image = modal.find('.modal-body img');
+            image.attr("src", path);
+            var yesButton = modal.find('.modal-footer input');
+            var noButton = modal.find('.modal-footer button');
+            yesButton.click(function() {
+                yesButton.attr("disabled", true);
+                noButton.attr("disabled", true);
             });
         });
 

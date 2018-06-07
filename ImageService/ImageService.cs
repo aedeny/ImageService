@@ -82,8 +82,8 @@ namespace ImageService
                 Interval = 60000
             };
 
-            timer.Elapsed += (sender, eventArgs) =>
-                eventLog.WriteEntry("Monitoring the System", EventLogEntryType.Information);
+            //timer.Elapsed += (sender, eventArgs) =>
+            //    eventLog.WriteEntry("Monitoring the System", EventLogEntryType.Information);
 
             timer.Start();
 

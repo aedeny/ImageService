@@ -41,6 +41,7 @@ namespace Web.Models
 
         public void OnLogMessageRecieved(object sender, MessageRecievedEventArgs e)
         {
+            string color = GetMessageTypeColor(e.EventLogEntryType);
             LogList.Insert(0, new Tuple<string, string, string>(
                 GetMessageTypeColor(e.EventLogEntryType), e.EventLogEntryType.ToString(), e.Message.Replace(".", "")));
         }
@@ -67,7 +68,7 @@ namespace Web.Models
                 case EventLogEntryType.FailureAudit:
                     return "red";
                 default:
-                    return "white";
+                    return "yellow";
             }
         }
     }
