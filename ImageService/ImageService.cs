@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.ServiceProcess;
 using System.Threading.Tasks;
-using System.Timers;
 using ImageService.Commands;
 using ImageService.Communication;
 using ImageService.Controller;
@@ -63,8 +62,9 @@ namespace ImageService
             InitializeComponent();
             eventLog = new EventLog();
             if (!EventLog.SourceExists(_sourceName))
-                EventLog.CreateEventSource(
-                    _sourceName, _logName);
+            {
+                EventLog.CreateEventSource(_sourceName, _logName);
+            }
 
             eventLog.Source = _sourceName;
             eventLog.Log = _logName;
@@ -76,16 +76,6 @@ namespace ImageService
             #region Other
 
             eventLog.WriteEntry("In OnStart", EventLogEntryType.Information);
-            // Sets up a timer to trigger every minute.  
-            Timer timer = new Timer
-            {
-                Interval = 60000
-            };
-
-            timer.Elapsed += (sender, eventArgs) =>
-                eventLog.WriteEntry("Monitoring the System", EventLogEntryType.Information);
-
-            timer.Start();
 
             // Updates the service state to Start Pending.  
             ServiceStatus serviceStatus = new ServiceStatus
