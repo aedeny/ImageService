@@ -14,7 +14,7 @@ namespace Web
                 "{controller}/{action}/{id}",
                 new
                 {
-                    controller = "Photos",
+                    controller = "Home",
                     action = "Index",
                     id = UrlParameter.Optional
                 }

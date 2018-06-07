@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
@@ -21,7 +20,10 @@ namespace Web.Models
         public Settings()
         {
             _gotSettings = false;
-            if (GuiTcpClientSingleton.Instance.Connected) GuiTcpClientSingleton.Instance.Close();
+            if (GuiTcpClientSingleton.Instance.Connected)
+            {
+                GuiTcpClientSingleton.Instance.Close();
+            }
 
             ThumbnailSize = -1;
             if (!Utils.IsServiceActive("ImageService"))
@@ -36,9 +38,13 @@ namespace Web.Models
             {
                 for (int i = 0; i < 20; i++)
                     if (!_gotSettings)
+                    {
                         Thread.Sleep(250);
+                    }
                     else
+                    {
                         break;
+                    }
             }).Wait();
         }
 

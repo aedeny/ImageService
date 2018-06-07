@@ -31,7 +31,10 @@ namespace ImageService.Controller
         {
             result = EventLogEntryType.Error;
 
-            if (!_commandsDictionary.TryGetValue(commandId, out ICommand currentCommand)) return "No such command";
+            if (!_commandsDictionary.TryGetValue(commandId, out ICommand currentCommand))
+            {
+                return "No such command";
+            }
 
             Task<Tuple<string, EventLogEntryType>> task = new Task<Tuple<string, EventLogEntryType>>(() =>
             {

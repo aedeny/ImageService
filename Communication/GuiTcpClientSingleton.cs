@@ -144,6 +144,7 @@ namespace Communication
                 Message = message,
                 EventLogEntryType = logEntryType
             };
+
             // OnLogHistoryRecieved
             LogMessageRecieved?.Invoke(this, messageRecievedEventArgs);
         }

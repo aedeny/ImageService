@@ -1,15 +1,10 @@
-﻿@using System.Diagnostics
-@using System.Threading
-
-@model Web.Models.Logs
+﻿@model Web.Models.Logs
 @{
     ViewBag.Title = "Logs";
 }
 
 <style>
-    input[type=checkbox] {
-        transform: scale(3.5);
-    }
+    input[type=checkbox] { transform: scale(3.5); }
 </style>
 
 <script>
@@ -35,15 +30,15 @@
     }
 </script>
 
-<hr />
+<hr/>
 <h4>Logs</h4>
 
-<div style="text-align: center; font-size: 30px;">
+<div style="font-size: 30px; text-align: center;">
     <input value="green" type="checkbox" checked="checked" id="information" onchange="filterTable(this)">&emsp;Information &emsp;&emsp;
     <input value="yellow" type="checkbox" checked="checked" id="warning" onchange="filterTable(this)">&emsp;Warnings &emsp;&emsp;
     <input value="red" type="checkbox" checked="checked" id="error" onchange="filterTable(this)">&emsp;Errors
 </div>
-<br /><br />
+<br/><br/>
 
 <table id="myTable" class="table table-striped table-dark">
     <tbody>

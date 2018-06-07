@@ -12,25 +12,26 @@
         <td class="text-md-center">
             @if (Model.Active)
             {
-                <span style="font-weight: bold; font-size: large" class="badge badge-success">Active</span>
+                <span style="font-size: large; font-weight: bold;" class="badge badge-success">Active</span>
             }
             else
             {
-                <span style="font-weight: bold; font-size: large" class="badge badge-warning">Inactive</span>
+                <span style="font-size: large; font-weight: bold;" class="badge badge-warning">Inactive</span>
             }
         </td>
     </tr>
     <tr>
         <th>Number of Stored Photos</th>
-        <td class="text-center">@if (Model.NumberOfPhotos >= 0)
-                                {
-                                    <span style="font-weight: normal; font-size: large">@Model.NumberOfPhotos</span>
-                                    
-                                }
-                                else
-                                {
-                                    <span style="font-weight: normal; font-size: large">N / A</span>
-                                }</td>
+        <td class="text-center">
+            @if (Model.NumberOfPhotos >= 0)
+            {
+                <span style="font-size: large; font-weight: normal;">@Model.NumberOfPhotos</span>
+            }
+            else
+            {
+                <span style="font-size: large; font-weight: normal;">N / A</span>
+            }
+        </td>
     </tr>
     </tbody>
 </table>
@@ -62,7 +63,6 @@
                 </tr>
             }
         }
-        
     }
     </tbody>
 </table>
