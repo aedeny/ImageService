@@ -19,7 +19,7 @@ namespace Web.Models
                 GuiTcpClientSingleton.Instance.Close();
             }
 
-            LogList = new ObservableCollection<Tuple<string, string, string>>();
+            LogList = new ObservableCollection<Tuple<string, string>>();
 
             // TODO OnLogMessageRecieved is redundant? Don't we only use full log history?
             GuiTcpClientSingleton.Instance.LogMessageRecieved += OnLogMessageRecieved;
@@ -34,14 +34,11 @@ namespace Web.Models
 
         [DataType(DataType.Text)]
         [Display(Name = "Logs List")]
-        public ObservableCollection<Tuple<string, string, string>> LogList { get; set; }
+        public ObservableCollection<Tuple<string, string>> LogList { get; set; }
 
         public void OnLogMessageRecieved(object sender, MessageRecievedEventArgs e)
         {
-            // TODO Color is unused. Remove or use.
-            string color = GetMessageTypeColor(e.EventLogEntryType);
-            LogList.Insert(0, new Tuple<string, string, string>(
-                GetMessageTypeColor(e.EventLogEntryType), e.EventLogEntryType.ToString(), e.Message.Replace(".", "")));
+            LogList.Insert(0, new Tuple<string, string>(e.EventLogEntryType.ToString(), e.Message.Replace(".", "")));
         }
 
         public void OnLogHistoryRecieved(object sender, MessageRecievedEventArgs e)
@@ -52,25 +49,6 @@ namespace Web.Models
             lock (_lock)
             {
                 Monitor.Pulse(_lock);
-            }
-        }
-
-        private static string GetMessageTypeColor(EventLogEntryType messageType)
-        {
-            switch (messageType)
-            {
-                case EventLogEntryType.Error:
-                    return "red";
-                case EventLogEntryType.Information:
-                    return "green";
-                case EventLogEntryType.Warning:
-                    return "yellow";
-                case EventLogEntryType.SuccessAudit:
-                    return "green";
-                case EventLogEntryType.FailureAudit:
-                    return "red";
-                default:
-                    return "yellow";
             }
         }
     }

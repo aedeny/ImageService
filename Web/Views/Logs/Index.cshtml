@@ -58,18 +58,18 @@
 
 <table id="myTable" class="table table-striped table-dark">
     <tbody>
-    @foreach (Tuple<string, string, string> item in Model.LogList)
+    @foreach (Tuple<string, string> item in Model.LogList)
     {
         //TODO Use Bootstrap Badges instead of cell background (optional).
         <tr>
-            <td class=@Html.DisplayName(item.Item2) id=@Html.DisplayName(item.Item2) width="120">
+            <td class=@Html.DisplayName(item.Item1) id=@Html.DisplayName(item.Item1) width="120">
                 <span>
-                    @Html.DisplayName(item.Item2)
+                    @Html.DisplayName(item.Item1)
                 </span>
             </td>
             <td>
                 <span>
-                    @Html.DisplayName(item.Item3)
+                    @Html.DisplayName(item.Item2)
                 </span>
             </td>
         </tr>
