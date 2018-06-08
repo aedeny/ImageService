@@ -25,10 +25,10 @@
                 <div>
                     <img src=@relativeThumbnailPath alt="" class="rounded-circle" width="242" height="200">
                     <div align="center">
-                        <h4>@photoInfo.Name</h4>
+                        <span class="d-inline-block text-truncate font-weight-bold" style="font-size: large; max-width: 200px;">@photoInfo.Name</span>
                         <p>@photoInfo.CreationDate</p>
                         <p>
-                            <input type="button" class="btn btn-info" value="View" data-absolute-img="@photoInfo.ImagePath" data-absolute-tmb="@photoInfo.ThumbnailPath" data-toggle="modal" data-target="#ViewImageModal" data-path="@relativeImagePath"/>
+                            <input type="button" class="btn btn-primary" value="View" data-title="@photoInfo.Name" data-date="@photoInfo.CreationDate" data-absolute-img="@photoInfo.ImagePath" data-absolute-tmb="@photoInfo.ThumbnailPath" data-toggle="modal" data-target="#ViewImageModal" data-path="@relativeImagePath"/>
                             <input type="button" class="btn btn-danger" value="Delete" data-toggle="modal" data-target="#del-img-modal" data-absolute-img="@photoInfo.ImagePath" data-absolute-tmb="@photoInfo.ThumbnailPath"/>
                         </p>
                     </div>
@@ -98,24 +98,36 @@
 </script>
 
 <!-- View Image Modal -->
-@*TODO Add image title and date in view*@
 <div class="modal modal-dark fade" id="ViewImageModal" tabindex="-1" role="document" aria-labelledby="ViewImageModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dark modal-full-width" role="document">
         <div class="modal-content modal-darker">
             <div class="modal-header-no-line float-right">
                 <div class="mx-auto">
-                    <span class="">
-                        <button id="del-confirm" class="btn btn-lg btn-danger" data-toggle="confirmation"
-                                data-popout="true"
-                                data-btn-ok-label="Delete" data-btn-ok-class="btn-danger"
-                                data-btn-ok-icon-class="material-icons"
-                                data-btn-cancel-label="Cancel" data-btn-cancel-class="btn-secondary"
-                                data-btn-cancel-icon-class="material-icons"
-                                data-title="Are you sure?" data-content="This cannot be undone.">
-                            Delete
-                        </button>
-                        <input id="del-cancel" type="button" class="btn btn-secondary btn-lg" data-dismiss="modal" value="Close" aria-label="Close"/>
-                    </span>
+                    <div class="container">
+                        <div class="row align-items-center">
+                            <div class="col-md-auto text-white">
+                                <span id="view-modal-img-title" class="d-inline-block text-truncate font-weight-bold" style="font-size: large; max-width: 50vw;">Image Title</span>
+                            </div>
+                            <div class="col-sm text-light">
+                                <span id="view-modal-img-date" style="font-size: large; font-weight: normal;">Date</span>
+                            </div>
+                            <div class="col-sm">
+                                @* Deletion confirmation popover *@
+                                <button id="del-confirm" class="btn btn-lg btn-danger" data-toggle="confirmation"
+                                        data-popout="true"
+                                        data-btn-ok-label="Delete" data-btn-ok-class="btn-danger"
+                                        data-btn-ok-icon-class="material-icons"
+                                        data-btn-cancel-label="Cancel" data-btn-cancel-class="btn-secondary"
+                                        data-btn-cancel-icon-class="material-icons"
+                                        data-title="Are you sure?" data-content="This cannot be undone.">
+                                    Delete
+                                </button>
+                            </div>
+                            <div class="col-sm">
+                                <input id="del-cancel" type="button" class="btn btn-secondary btn-lg" data-dismiss="modal" value="Close" aria-label="Close"/>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="modal-body align-items-center">
@@ -140,13 +152,16 @@
             popout: true,
             onConfirm: function() {
 
-                // TODO Disable buttons after confirmation of deletion.
+                // Disables buttons on delete confirmation.
+                $('#del-cancel').attr('disabled', true);
+                $('#del-confirm').attr('disabled', true);
 
                 // A workaround to pass JQuery parameter to Razor
                 var url =
                     '@Html.Raw(Url.Action("DeletePhoto", "Photos", new {image = "__param1__", thumbnail = "__param2__"}))';
                 var replacedUrl = url.replace('__param1__', lastImage);
                 replacedUrl = replacedUrl.replace('__param2__', lastThumbnail);
+
                 location.href = replacedUrl;
             }
         });
@@ -167,5 +182,7 @@
             lastThumbnail = button.data('absolute-tmb');
             var image = modal.find('.modal-body img');
             image.attr("src", path);
+            $('#view-modal-img-title').text(button.data('title'));
+            $('#view-modal-img-date').text(button.data('date'));
         });
 </script>

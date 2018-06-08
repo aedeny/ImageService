@@ -27,5 +27,17 @@ namespace Communication
             Uri referenceUri = new Uri(referencePath);
             return referenceUri.MakeRelativeUri(fileUri).ToString();
         }
+
+        public static string TruncateString(string fullstring, int threshold, double ratio)
+        {
+            int c = (int) (threshold * ratio);
+            if (fullstring.Length > threshold)
+            {
+                return fullstring.Substring(0, threshold - c) + "..." +
+                       fullstring.Substring(fullstring.Length - c, c);
+            }
+
+            return fullstring;
+        }
     }
 }
