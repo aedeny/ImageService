@@ -8,6 +8,7 @@
 </style>
 
 <script>
+    // TODO Use meaningful names and make it more readable.
     function filterTable(blabla) {
         var table = document.getElementById("myTable");
         var tr = table.getElementsByTagName("tr");
@@ -31,7 +32,6 @@
 </script>
 
 <hr/>
-<h4>Logs</h4>
 
 <div style="font-size: 30px; text-align: center;">
     <input value="green" type="checkbox" checked="checked" id="information" onchange="filterTable(this)">&emsp;Information &emsp;&emsp;
@@ -44,6 +44,7 @@
     <tbody>
     @foreach (Tuple<string, string, string> item in Model.LogList)
     {
+        //TODO Use Bootstrap Badges instead of cell background (optional). Also, ReSharper says bgcolor is obsolete or nonstandard.
         <tr>
             <td bgcolor=@Html.DisplayName(item.Item1)>
                 <span>
@@ -59,6 +60,3 @@
     }
     </tbody>
 </table>
-
-
-<p>End of logs history table.</p>

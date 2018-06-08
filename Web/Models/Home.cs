@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Threading.Tasks;
 using Communication;
 using Infrastructure;
 using Infrastructure.Event;
@@ -14,7 +13,7 @@ namespace Web.Models
 {
     public class Home
     {
-        private bool _recievedOutputDirectory;
+        private readonly object _lock = new object();
         public bool Active;
         public int NumberOfPhotos;
         public string OutputDirectory;
@@ -22,7 +21,6 @@ namespace Web.Models
         public Home()
         {
             Active = false;
-            _recievedOutputDirectory = false;
             GuiTcpClientSingleton.Instance.Close();
             StudentsInfoRoot = LoadStudentsInfoFromFile(@"C:\Users\edeny\Documents\ex01\details.txt");
             StudentsInfoRoot?.StudentsInfo.Sort((x, y) => string.CompareOrdinal(x.FirstName, y.FirstName));
@@ -32,19 +30,10 @@ namespace Web.Models
             {
                 GuiTcpClientSingleton.Instance.ConfigurationReceived += OnConfigurationsReceived;
 
-                // TODO Can we do better? Probably. Do we want to do better? No. Will we do better? Maybe.
-                Task.Run(() =>
+                lock (_lock)
                 {
-                    for (int i = 0; i < 20; i++)
-                        if (!_recievedOutputDirectory)
-                        {
-                            Thread.Sleep(250);
-                        }
-                        else
-                        {
-                            break;
-                        }
-                }).Wait();
+                    Monitor.Wait(_lock, 5000);
+                }
 
                 NumberOfPhotos = GetNumberOfPhotos(OutputDirectory);
             }
@@ -62,7 +51,11 @@ namespace Web.Models
         {
             SettingsInfo settingsInfo = SettingsInfo.FromJson(e.Args);
             OutputDirectory = settingsInfo.OutputDirectory;
-            _recievedOutputDirectory = true;
+
+            lock (_lock)
+            {
+                Monitor.Pulse(_lock);
+            }
         }
 
         private static int GetNumberOfPhotos(string path)

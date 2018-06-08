@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Threading;
-using System.Threading.Tasks;
 using Communication;
 using Infrastructure.Logging;
 
@@ -11,33 +10,26 @@ namespace Web.Models
 {
     public class Logs
     {
-        private bool _logHistoryRecieved;
+        private readonly object _lock = new object();
 
         public Logs()
         {
-            _logHistoryRecieved = false;
-
             if (GuiTcpClientSingleton.Instance.Connected)
             {
                 GuiTcpClientSingleton.Instance.Close();
             }
 
             LogList = new ObservableCollection<Tuple<string, string, string>>();
+
+            // TODO OnLogMessageRecieved is redundant? Don't we only use full log history?
             GuiTcpClientSingleton.Instance.LogMessageRecieved += OnLogMessageRecieved;
+
             GuiTcpClientSingleton.Instance.LogHistoryMessageRecieved += OnLogHistoryRecieved;
 
-            Task.Run(() =>
+            lock (_lock)
             {
-                for (int i = 0; i < 100; i++)
-                    if (!_logHistoryRecieved)
-                    {
-                        Thread.Sleep(100);
-                    }
-                    else
-                    {
-                        break;
-                    }
-            }).Wait();
+                Monitor.Wait(_lock, 5000);
+            }
         }
 
         [DataType(DataType.Text)]
@@ -46,6 +38,7 @@ namespace Web.Models
 
         public void OnLogMessageRecieved(object sender, MessageRecievedEventArgs e)
         {
+            // TODO Color is unused. Remove or use.
             string color = GetMessageTypeColor(e.EventLogEntryType);
             LogList.Insert(0, new Tuple<string, string, string>(
                 GetMessageTypeColor(e.EventLogEntryType), e.EventLogEntryType.ToString(), e.Message.Replace(".", "")));
@@ -53,9 +46,13 @@ namespace Web.Models
 
         public void OnLogHistoryRecieved(object sender, MessageRecievedEventArgs e)
         {
-            _logHistoryRecieved = true;
             GuiTcpClientSingleton.Instance.LogMessageRecieved -= OnLogMessageRecieved;
             GuiTcpClientSingleton.Instance.LogHistoryMessageRecieved -= OnLogHistoryRecieved;
+
+            lock (_lock)
+            {
+                Monitor.Pulse(_lock);
+            }
         }
 
         private static string GetMessageTypeColor(EventLogEntryType messageType)

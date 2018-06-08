@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Threading;
-using System.Threading.Tasks;
 using Communication;
 using Infrastructure;
 using Infrastructure.Event;
@@ -12,14 +11,13 @@ namespace Web.Models
 {
     public class Settings
     {
-        private bool _gotSettings;
+        private readonly object _lock = new object();
         private string _logName;
         private string _outputDirectory;
         private string _sourceName;
 
         public Settings()
         {
-            _gotSettings = false;
             if (GuiTcpClientSingleton.Instance.Connected)
             {
                 GuiTcpClientSingleton.Instance.Close();
@@ -33,19 +31,10 @@ namespace Web.Models
 
             GuiTcpClientSingleton.Instance.ConfigurationReceived += OnSettingsInfoReceived;
 
-            // TODO Can we do better? Probably. Do we want to do better? No. Will we do better? Maybe.
-            Task.Run(() =>
+            lock (_lock)
             {
-                for (int i = 0; i < 20; i++)
-                    if (!_gotSettings)
-                    {
-                        Thread.Sleep(250);
-                    }
-                    else
-                    {
-                        break;
-                    }
-            }).Wait();
+                Monitor.Wait(_lock, 5000);
+            }
         }
 
         [DataType(DataType.Text)]
@@ -95,7 +84,10 @@ namespace Web.Models
 
             foreach (string handler in handlers) DirectoryHandlers.Add(handler);
 
-            _gotSettings = true;
+            lock (_lock)
+            {
+                Monitor.Pulse(_lock);
+            }
         }
     }
 }
