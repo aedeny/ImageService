@@ -4,26 +4,42 @@
 }
 
 <style>
-    input[type=checkbox] { transform: scale(3.5); }
+    input[type=checkbox] {
+        -ms-transform: scale(3.5);
+        -webkit-transform: scale(3.5);
+        transform: scale(3.5);
+    }
+
+    .Information {
+        background-color: green
+    }
+
+    .Error {
+        background-color: red
+    }
+
+    .Warning {
+        background-color: yellow
+    }
 </style>
 
 <script>
     // TODO Use meaningful names and make it more readable.
-    function filterTable(blabla) {
+    function filterTable(checkbox) {
         var table = document.getElementById("myTable");
         var tr = table.getElementsByTagName("tr");
         var allOrNone = "none";
         var td, i;
 
-        if ($(blabla).is(':checked')) {
+        if ($(checkbox).is(':checked')) {
             allOrNone = "";
         }
-
+        
         for (i = 0; i < tr.length; i++) {
             td = tr[i].getElementsByTagName("td")[0];
 
             if (td) {
-                if (td.bgColor === blabla.value) {
+                if (td.id === checkbox.id) {
                     tr[i].style.display = allOrNone;
                 }
             }
@@ -34,9 +50,9 @@
 <hr/>
 
 <div style="font-size: 30px; text-align: center;">
-    <input value="green" type="checkbox" checked="checked" id="information" onchange="filterTable(this)">&emsp;Information &emsp;&emsp;
-    <input value="yellow" type="checkbox" checked="checked" id="warning" onchange="filterTable(this)">&emsp;Warnings &emsp;&emsp;
-    <input value="red" type="checkbox" checked="checked" id="error" onchange="filterTable(this)">&emsp;Errors
+    <input type="checkbox" checked="checked" id="Information" onchange="filterTable(this)">&emsp;Information &emsp;&emsp;
+    <input type="checkbox" checked="checked" id="Warning" onchange="filterTable(this)">&emsp;Warnings &emsp;&emsp;
+    <input type="checkbox" checked="checked" id="Error" onchange="filterTable(this)">&emsp;Errors
 </div>
 <br/><br/>
 
@@ -44,9 +60,9 @@
     <tbody>
     @foreach (Tuple<string, string, string> item in Model.LogList)
     {
-        //TODO Use Bootstrap Badges instead of cell background (optional). Also, ReSharper says bgcolor is obsolete or nonstandard.
+        //TODO Use Bootstrap Badges instead of cell background (optional).
         <tr>
-            <td bgcolor=@Html.DisplayName(item.Item1)>
+            <td class=@Html.DisplayName(item.Item2) id=@Html.DisplayName(item.Item2) width="120">
                 <span>
                     @Html.DisplayName(item.Item2)
                 </span>
