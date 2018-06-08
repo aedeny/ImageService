@@ -17,5 +17,10 @@
     display: -ms-flexbox;
     display: flex;
     justify-content: space-between;
-    padding: 1rem;
+    padding-top: 1rem;
+}
+
+.img-responsive {
+    max-height: 85vh;
+    max-width: 85vw;
 }

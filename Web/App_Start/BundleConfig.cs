@@ -9,7 +9,13 @@ namespace Web
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                 "~/Scripts/jquery-{version}.js",
-                "~/Scripts/my.script.js"));
+                "~/Scripts/my.script.js"
+            ));
+
+            //bundles.Add(new ScriptBundle("~/bundles/popper").Include(
+            //    "~/Scripts/popper.min.js",
+            //    "~/Scripts/popper.js"
+            //));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                 "~/Scripts/jquery.validate*"));
@@ -20,7 +26,7 @@ namespace Web
                 "~/Scripts/modernizr-*"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                "~/Scripts/bootstrap.js"));
+                "~/Scripts/bootstrap.bundle.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                 "~/Content/bootstrap.css",

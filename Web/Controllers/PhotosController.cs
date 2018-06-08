@@ -13,9 +13,10 @@ namespace Web.Controllers
             return View(_photos);
         }
 
-        public ActionResult DeletePhoto(string path)
+        public ActionResult DeletePhoto(string image, string thumbnail)
         {
-            System.IO.File.Delete(path);
+            System.IO.File.Delete(image);
+            System.IO.File.Delete(thumbnail);
             return RedirectToAction("Index");
         }
     }
