@@ -21,17 +21,15 @@
         {
             string relativeThumbnailPath = "../Images/" + Utils.AbsoluteToRelativePath(photoInfo.ThumbnailPath, Model.OutputDirectory);
             string relativeImagePath = "../Images/" + Utils.AbsoluteToRelativePath(photoInfo.ImagePath, Model.OutputDirectory);
-            <div class="col-sm-6 col-md-3">
-                <div>
-                    <img src=@relativeThumbnailPath alt="" class="rounded-circle" width="242" height="200">
-                    <div align="center">
-                        <span class="d-inline-block text-truncate font-weight-bold" style="font-size: large; max-width: 200px;">@photoInfo.Name</span>
-                        <p>@photoInfo.CreationDate</p>
-                        <p>
-                            <input type="button" class="btn btn-primary" value="View" data-title="@photoInfo.Name" data-date="@photoInfo.CreationDate" data-absolute-img="@photoInfo.ImagePath" data-absolute-tmb="@photoInfo.ThumbnailPath" data-toggle="modal" data-target="#ViewImageModal" data-path="@relativeImagePath"/>
-                            <input type="button" class="btn btn-danger" value="Delete" data-toggle="modal" data-target="#del-img-modal" data-absolute-img="@photoInfo.ImagePath" data-absolute-tmb="@photoInfo.ThumbnailPath"/>
-                        </p>
-                    </div>
+            <div class="col-sm-3 col-sm-3 col-sm-3 col-sm-3">
+                <img src=@relativeThumbnailPath alt="" class="rounded-circle" width="242" height="200">
+                <div align="center">
+                    <span class="d-inline-block text-truncate font-weight-bold" style="font-size: large; max-width: 200px;">@photoInfo.Name</span>
+                    <p>@photoInfo.CreationDate</p>
+                    <p>
+                        <input type="button" class="btn btn-primary" value="View" data-title="@photoInfo.Name" data-date="@photoInfo.CreationDate" data-absolute-img="@photoInfo.ImagePath" data-absolute-tmb="@photoInfo.ThumbnailPath" data-toggle="modal" data-target="#ViewImageModal" data-path="@relativeImagePath"/>
+                        <input type="button" class="btn btn-danger" value="Delete" data-toggle="modal" data-target="#del-img-modal" data-absolute-img="@photoInfo.ImagePath" data-absolute-tmb="@photoInfo.ThumbnailPath"/>
+                    </p>
                 </div>
             </div>
         }
