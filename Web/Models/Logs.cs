@@ -19,6 +19,10 @@ namespace Web.Models
                 GuiTcpClientSingleton.Instance.Close();
             }
 
+            NoWarnings = true;
+            NoInformation = true;
+            NoErrors = true;
+
             LogList = new ObservableCollection<Tuple<string, string>>();
 
             // TODO OnLogMessageRecieved is redundant? Don't we only use full log history?
@@ -36,8 +40,34 @@ namespace Web.Models
         [Display(Name = "Logs List")]
         public ObservableCollection<Tuple<string, string>> LogList { get; set; }
 
+        [DataType(DataType.Text)]
+        [Display(Name = "No Warnings")]
+        public bool NoWarnings { get; private set; }
+
+        [DataType(DataType.Text)]
+        [Display(Name = "No Information")]
+        public bool NoInformation { get; private set; }
+
+        [DataType(DataType.Text)]
+        [Display(Name = "No Errors")]
+        public bool NoErrors { get; private set; }
+
         public void OnLogMessageRecieved(object sender, MessageRecievedEventArgs e)
         {
+            // TODO it better...
+            if (e.EventLogEntryType.ToString().Equals("Information"))
+            {
+                NoInformation = false;
+            } else if (e.EventLogEntryType.ToString().Equals("Error"))
+            {
+                NoErrors = false;
+            }
+            else
+            {
+                e.EventLogEntryType = EventLogEntryType.Warning;
+                NoWarnings = false;
+            }
+
             LogList.Insert(0, new Tuple<string, string>(e.EventLogEntryType.ToString(), e.Message.Replace(".", "")));
         }
 
