@@ -5,54 +5,23 @@
 
 <style>
     input[type=checkbox] {
-        -ms-transform: scale(3.5);
-        -webkit-transform: scale(3.5);
-        transform: scale(3.5);
-    }
-
-    .Information {
-        background-color: green
-    }
-
-    .Error {
-        background-color: red
-    }
-
-    .Warning {
-        background-color: yellow
+        -ms-transform: scale(2);
+        -webkit-transform: scale(2);
+        transform: scale(2);
+        float: left
     }
 </style>
-
-<script>
-    // TODO Use meaningful names and make it more readable.
-    function filterTable(checkbox) {
-        var table = document.getElementById("myTable");
-        var tr = table.getElementsByTagName("tr");
-        var allOrNone = "none";
-        var td, i;
-
-        if ($(checkbox).is(':checked')) {
-            allOrNone = "";
-        }
-        
-        for (i = 0; i < tr.length; i++) {
-            td = tr[i].getElementsByTagName("td")[0];
-
-            if (td) {
-                if (td.id === checkbox.id) {
-                    tr[i].style.display = allOrNone;
-                }
-            }
-        }
-    }
-</script>
 
 <hr/>
 
 <div style="font-size: 30px; text-align: center;">
-    <input type="checkbox" checked="checked" id="Information" onchange="filterTable(this)">&emsp;Information &emsp;&emsp;
-    <input type="checkbox" checked="checked" id="Warning" onchange="filterTable(this)">&emsp;Warnings &emsp;&emsp;
-    <input type="checkbox" checked="checked" id="Error" onchange="filterTable(this)">&emsp;Errors
+
+    <span style="width: 33%;"><input type="button" state="isPressed" onclick="filterTable(this)" value="Information" class="btn btn-success"></span>
+    <span style="width: 33%;"><input type="button" state="isPressed" onclick="filterTable(this)" value="Error" class="btn btn-danger"></span>
+    @if (!Model.NoWarnings)
+    {
+        <span style="width: 33%;"><input type="button" state="isPressed" onclick="filterTable(this)" value="Warning" class="btn btn-warning"></span>
+    }
 </div>
 <br/><br/>
 
@@ -60,12 +29,9 @@
     <tbody>
     @foreach (Tuple<string, string> item in Model.LogList)
     {
-        //TODO Use Bootstrap Badges instead of cell background (optional).
         <tr>
-            <td class=@Html.DisplayName(item.Item1) id=@Html.DisplayName(item.Item1) width="120">
-                <span>
-                    @Html.DisplayName(item.Item1)
-                </span>
+            <td id=@Html.DisplayName(item.Item1) width="145">
+                <h4><span style="width: 100%; display: block; float: left;" class=@Html.DisplayName(item.Item1)>@Html.DisplayName(item.Item1)</span></h4>
             </td>
             <td>
                 <span>
@@ -76,3 +42,43 @@
     }
     </tbody>
 </table>
+
+<script>
+    $('.Error').addClass('badge badge-danger');
+    $('.Information').addClass('badge badge-success');
+    $('.Warning').addClass('badge badge-warning');
+
+    function filterTable(checkbox) {
+        var table = document.getElementById("myTable");
+        var tr = table.getElementsByTagName("tr");
+        var shouldDisplay = "";
+        var td;
+
+        if (checkbox.state === "isPressed") {
+            checkbox.state = "isNotPressed";
+            $(checkbox).removeClass("btn-secondary");
+
+            if (checkbox.value === "Information") {
+                $(checkbox).addClass("btn-success");
+            } else if (checkbox.value === "Error") {
+                $(checkbox).addClass("btn-danger");
+            } else {
+                $(checkbox).addClass("btn-warning");
+            }
+        } else {
+            shouldDisplay = "none";
+            checkbox.state = "isPressed";
+            $(checkbox).attr("class", "btn btn-secondary");
+        }
+
+        for (var i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+
+            if (td) {
+                if (td.id === checkbox.value) {
+                    tr[i].style.display = shouldDisplay;
+                }
+            }
+        }
+    }
+</script>
