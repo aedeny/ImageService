@@ -18,9 +18,9 @@ namespace Web
                 ThumbnailPath = thumbnailPath;
                 ImagePath = ThumbnailPath.Replace(@"thumbnails\", "");
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                // TODO PhotoInfo Exception Handler
+                Console.WriteLine(e.Message);
             }
         }
 

@@ -14,20 +14,19 @@ namespace Web.Models
 
         public Logs()
         {
-            if (GuiTcpClientSingleton.Instance.Connected)
+            LogList = new ObservableCollection<Tuple<string, string>>();
+            if (!Utils.IsServiceActive("ImageService"))
             {
-                GuiTcpClientSingleton.Instance.Close();
+                return;
             }
+
+            GuiTcpClientSingleton.Instance.Close();
 
             NoWarnings = true;
             NoInformation = true;
             NoErrors = true;
 
-            LogList = new ObservableCollection<Tuple<string, string>>();
-
-            // TODO OnLogMessageRecieved is redundant? Don't we only use full log history?
             GuiTcpClientSingleton.Instance.LogMessageRecieved += OnLogMessageRecieved;
-
             GuiTcpClientSingleton.Instance.LogHistoryMessageRecieved += OnLogHistoryRecieved;
 
             lock (_lock)
@@ -54,11 +53,11 @@ namespace Web.Models
 
         public void OnLogMessageRecieved(object sender, MessageRecievedEventArgs e)
         {
-            // TODO it better...
             if (e.EventLogEntryType.ToString().Equals("Information"))
             {
                 NoInformation = false;
-            } else if (e.EventLogEntryType.ToString().Equals("Error"))
+            }
+            else if (e.EventLogEntryType.ToString().Equals("Error"))
             {
                 NoErrors = false;
             }

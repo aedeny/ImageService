@@ -3,37 +3,52 @@
     ViewBag.Title = "Logs";
 }
 
-<style>
-    input[type=checkbox] {
-        -ms-transform: scale(2);
-        -webkit-transform: scale(2);
-        transform: scale(2);
-        float: left
-    }
-</style>
-
 <hr/>
 
-<div style="font-size: 30px; text-align: center;">
+@if (Model.LogList.Count == 0)
+{
+    <div class="mx-auto" style="width: 600px">
+        <h2>No logs... Peace among worlds!</h2>
+        <img src="/Images/rick-and-morty.gif" class="rounded-circle" alt="Dummy Image">
+    </div>
+    return;
+}
 
-    <span style="width: 33%;"><input type="button" state="isPressed" onclick="filterTable(this)" value="Information" class="btn btn-success"></span>
-    <span style="width: 33%;"><input type="button" state="isPressed" onclick="filterTable(this)" value="Error" class="btn btn-danger"></span>
-    @if (!Model.NoWarnings)
-    {
-        <span style="width: 33%;"><input type="button" state="isPressed" onclick="filterTable(this)" value="Warning" class="btn btn-warning"></span>
-    }
+<div style="font-size: 30px; text-align: center;">
+    <input id="info-btn"type="button" state="isPressed" onclick="filterTable(this)" value="Information" class="btn btn-success">
+    <input id="err-btn" type="button" state="isPressed" onclick="filterTable(this)" value="Error" class="btn btn-danger">
+    <input id="wrn-btn" type="button" state="isPressed" onclick="filterTable(this)" value="Warning" class="btn btn-warning">
 </div>
-<br/><br/>
+<br/>
+
+<script>
+    if ("@Model.NoWarnings" === "True") {
+        $('#wrn-btn').attr("disabled", true);
+        $('#wrn-btn').attr("class", "btn btn-secondary");
+    }
+
+    if ("@Model.NoErrors" === "True") {
+        $('#err-btn').attr("disabled", true);
+        $('#err-btn').attr("class", "btn btn-secondary");
+    }
+
+    if ("@Model.NoInformation" === "True") {
+        $('#info-btn').attr("disabled", true);
+        $('#info-btn').attr("class", "btn btn-secondary");
+    }
+</script>
 
 <table id="myTable" class="table table-striped table-dark">
     <tbody>
     @foreach (Tuple<string, string> item in Model.LogList)
     {
         <tr>
-            <td id=@Html.DisplayName(item.Item1) width="145">
-                <h4><span style="width: 100%; display: block; float: left;" class=@Html.DisplayName(item.Item1)>@Html.DisplayName(item.Item1)</span></h4>
+            <td id=@Html.DisplayName(item.Item1) style="vertical-align: middle; width: 20%;">
+                <h4>
+                    <span style="display: block; float: left; width: 100%;" class=@Html.DisplayName(item.Item1)>@Html.DisplayName(item.Item1)</span>
+                </h4>
             </td>
-            <td>
+            <td style="vertical-align: middle; width: 80%; word-break: break-all;">
                 <span>
                     @Html.DisplayName(item.Item2)
                 </span>

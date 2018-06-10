@@ -24,3 +24,8 @@
     max-height: 85vh;
     max-width: 85vw;
 }
+
+.break-word {
+    max-width: 10px;
+    word-break: break-all;
+}
