@@ -14,25 +14,26 @@
     return;
 }
 
-<div style="font-size: 30px; text-align: center;">
-    <input id="info-btn"type="button" state="isPressed" onclick="filterTable(this)" value="Information" class="btn btn-success">
-    <input id="err-btn" type="button" state="isPressed" onclick="filterTable(this)" value="Error" class="btn btn-danger">
-    <input id="wrn-btn" type="button" state="isPressed" onclick="filterTable(this)" value="Warning" class="btn btn-warning">
+<div style="text-align: center;">
+    <button onclick="filterTable(this)" state="isPressed" id="info-btn" value="Information" class="btn btn-success" data-toggle="tooltip" title="@Model.NumOfInformation">Information</button>
+    <button onclick="filterTable(this)" state="isPressed" id="err-btn" value="Error" class="btn btn-danger" data-toggle="tooltip" title="@Model.NumOfErrors">Error</button>
+    <button onclick="filterTable(this)" state="isPressed" id="wrn-btn" value="Warning" class="btn btn-warning" data-toggle="tooltip" title="@Model.NumOfWarnings">Warning</button>
 </div>
 <br/>
 
 <script>
-    if ("@Model.NoWarnings" === "True") {
+    if (!@Model.NumOfWarnings) {
         $('#wrn-btn').attr("disabled", true);
         $('#wrn-btn').attr("class", "btn btn-secondary");
+        // pointer-events: none;
     }
 
-    if ("@Model.NoErrors" === "True") {
+    if (!@Model.NumOfErrors) {
         $('#err-btn').attr("disabled", true);
         $('#err-btn').attr("class", "btn btn-secondary");
     }
 
-    if ("@Model.NoInformation" === "True") {
+    if (!@Model.NumOfInformation) {
         $('#info-btn').attr("disabled", true);
         $('#info-btn').attr("class", "btn btn-secondary");
     }
@@ -63,34 +64,40 @@
     $('.Information').addClass('badge badge-success');
     $('.Warning').addClass('badge badge-warning');
 
-    function filterTable(checkbox) {
+    $(function() {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+
+    function filterTable(inputButton) {
+        $(inputButton).tooltip("hide");
+
         var table = document.getElementById("myTable");
         var tr = table.getElementsByTagName("tr");
         var shouldDisplay = "";
         var td;
 
-        if (checkbox.state === "isPressed") {
-            checkbox.state = "isNotPressed";
-            $(checkbox).removeClass("btn-secondary");
+        if (inputButton.state === "isPressed") {
+            inputButton.state = "isNotPressed";
+            $(inputButton).removeClass("btn-secondary");
 
-            if (checkbox.value === "Information") {
-                $(checkbox).addClass("btn-success");
-            } else if (checkbox.value === "Error") {
-                $(checkbox).addClass("btn-danger");
+            if (inputButton.value === "Information") {
+                $(inputButton).addClass("btn-success");
+            } else if (inputButton.value === "Error") {
+                $(inputButton).addClass("btn-danger");
             } else {
-                $(checkbox).addClass("btn-warning");
+                $(inputButton).addClass("btn-warning");
             }
         } else {
             shouldDisplay = "none";
-            checkbox.state = "isPressed";
-            $(checkbox).attr("class", "btn btn-secondary");
+            inputButton.state = "isPressed";
+            $(inputButton).attr("class", "btn btn-secondary");
         }
 
         for (var i = 0; i < tr.length; i++) {
             td = tr[i].getElementsByTagName("td")[0];
 
             if (td) {
-                if (td.id === checkbox.value) {
+                if (td.id === inputButton.value) {
                     tr[i].style.display = shouldDisplay;
                 }
             }

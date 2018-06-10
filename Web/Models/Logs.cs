@@ -22,9 +22,9 @@ namespace Web.Models
 
             GuiTcpClientSingleton.Instance.Close();
 
-            NoWarnings = true;
-            NoInformation = true;
-            NoErrors = true;
+            NumOfWarnings = 0;
+            NumOfInformation = 0;
+            NumOfErrors = 0;
 
             GuiTcpClientSingleton.Instance.LogMessageRecieved += OnLogMessageRecieved;
             GuiTcpClientSingleton.Instance.LogHistoryMessageRecieved += OnLogHistoryRecieved;
@@ -41,30 +41,30 @@ namespace Web.Models
 
         [DataType(DataType.Text)]
         [Display(Name = "No Warnings")]
-        public bool NoWarnings { get; private set; }
+        public int NumOfWarnings { get; private set; }
 
         [DataType(DataType.Text)]
         [Display(Name = "No Information")]
-        public bool NoInformation { get; private set; }
+        public int NumOfInformation { get; private set; }
 
         [DataType(DataType.Text)]
         [Display(Name = "No Errors")]
-        public bool NoErrors { get; private set; }
+        public int NumOfErrors { get; private set; }
 
         public void OnLogMessageRecieved(object sender, MessageRecievedEventArgs e)
         {
             if (e.EventLogEntryType.ToString().Equals("Information"))
             {
-                NoInformation = false;
+                NumOfInformation++;
             }
             else if (e.EventLogEntryType.ToString().Equals("Error"))
             {
-                NoErrors = false;
+                NumOfErrors++;
             }
             else
             {
                 e.EventLogEntryType = EventLogEntryType.Warning;
-                NoWarnings = false;
+                NumOfWarnings++;
             }
 
             LogList.Insert(0, new Tuple<string, string>(e.EventLogEntryType.ToString(), e.Message.Replace(".", "")));

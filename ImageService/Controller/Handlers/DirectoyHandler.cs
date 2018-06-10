@@ -107,10 +107,6 @@ namespace ImageService.Controller.Handlers
 
             _dirWatcher.Created -= OnNewFileCreated;
 
-            ImageServer imageServer = (ImageServer) sender;
-            imageServer.DirectoryHandlerClosed -= OnDirectoryHandlerClosed;
-            imageServer.CommandRecieved -= OnCommandRecieved;
-
             DirectoryHandlerClosed?.Invoke(this,
                 new DirectoryHandlerClosedEventArgs(_path, "in OnDirectoryHandlerClosed"));
 
@@ -119,6 +115,10 @@ namespace ImageService.Controller.Handlers
             {
                 args.Closed = true;
             }
+
+            ImageServer imageServer = (ImageServer)sender;
+            imageServer.DirectoryHandlerClosed -= OnDirectoryHandlerClosed;
+            imageServer.CommandRecieved -= OnCommandRecieved;
         }
     }
 }
