@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Web;
 using Communication;
 using Infrastructure;
 using Infrastructure.Event;
@@ -22,7 +24,7 @@ namespace Web.Models
         {
             Active = false;
             GuiTcpClientSingleton.Instance.Close();
-            StudentsInfoRoot = LoadStudentsInfoFromFile(@"C:\Users\edeny\Documents\ex01\details.txt");
+            StudentsInfoRoot = LoadStudentsInfoFromFile(@"~/App_Data/details.txt");
             StudentsInfoRoot?.StudentsInfo.Sort((x, y) => string.CompareOrdinal(x.FirstName, y.FirstName));
 
             Active = Utils.IsServiceActive("ImageService");
@@ -75,12 +77,13 @@ namespace Web.Models
 
         public StudentsInfoRootObject LoadStudentsInfoFromFile(string path)
         {
-            if (!File.Exists(path))
+            string absolutePath = HttpContext.Current.Server.MapPath(path);
+            if (!File.Exists(absolutePath))
             {
                 return null;
             }
 
-            using (StreamReader r = new StreamReader(path))
+            using (StreamReader r = new StreamReader(absolutePath ?? throw new InvalidOperationException()))
             {
                 string json = r.ReadToEnd();
                 return JsonConvert.DeserializeObject<StudentsInfoRootObject>(json);
