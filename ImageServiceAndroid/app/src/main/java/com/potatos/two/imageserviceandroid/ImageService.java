@@ -66,7 +66,6 @@ public class ImageService extends Service {
                     if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
                         if (networkInfo.getState() == NetworkInfo.State.CONNECTED) {
                             Toast.makeText(context, "Connected to WiFi", Toast.LENGTH_SHORT).show();
-
                             mTcpClient.connect(notificationManager, builder);
                         }
                     }
