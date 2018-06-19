@@ -35,6 +35,7 @@
     <StartupObject>ImageService.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -167,6 +168,10 @@
     <Folder Include="obj\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Communication\Communication.csproj">
+      <Project>{528B2E13-04E4-4248-A34D-51041D52AFF5}</Project>
+      <Name>Communication</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj">
       <Project>{d3a04302-e931-4c21-a566-bb2f1c856584}</Project>
       <Name>Infrastructure</Name>

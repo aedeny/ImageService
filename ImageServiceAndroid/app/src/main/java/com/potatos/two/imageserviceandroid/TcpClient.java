@@ -17,12 +17,14 @@ import java.net.Socket;
 class TcpClient {
     private OutputStream outputStream;
 
-    public void connect(final NotificationManager notificationManager, final NotificationCompat.Builder builder) {
+    public void connect(final NotificationManager notificationManager, final NotificationCompat
+            .Builder builder) {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 getConnection();
-                File dcim = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "Camera");
+                File dcim = new File(Environment.getExternalStoragePublicDirectory(Environment
+                        .DIRECTORY_DCIM), "Camera");
 
                 File[] files = dcim.listFiles();
                 double numberOfPictures = files.length;
@@ -36,22 +38,19 @@ class TcpClient {
                         try {
                             int imageLength = imgbyte.length;
 
-                            //sends the size of the array bytes.
+                            // Sends the size of the array bytes.
                             String picSizeString = imageLength + "";
-                            outputStream.write(picSizeString.getBytes(), 0, picSizeString.getBytes().length);
-                            outputStream.flush();
-                            Thread.sleep(100);
+                            outputStream.write(picSizeString.getBytes(), 0, picSizeString
+                                    .getBytes().length);
 
                             //sends the name of file.
                             String fileNameString = file.getName();
-                            outputStream.write(fileNameString.getBytes(), 0, fileNameString.getBytes().length);
-                            outputStream.flush();
-                            Thread.sleep(100);
+                            outputStream.write(fileNameString.getBytes(), 0, fileNameString
+                                    .getBytes().length);
 
                             //sends the array bytes.
                             outputStream.write(imgbyte, 0, imgbyte.length);
                             outputStream.flush();
-                            Thread.sleep(500);
 
                         } catch (Exception e1) {
                             Log.e("TCP", "S: Error:", e1);
@@ -95,11 +94,12 @@ class TcpClient {
             // Computer's IP address
             InetAddress serverAddr = InetAddress.getByName("10.0.2.2");
 
-            // Creating a socket to make the connection with the server
-            Socket socket = new Socket(serverAddr, 1234);
+            // Creates a socket to make the connection with the server
+            Socket socket = new Socket(serverAddr, 3748);
             try {
-                // Suppose to send the message to the ImageServer...
+                // Supposed to send the message to the ImageServer...
                 outputStream = socket.getOutputStream();
+                // TODO Remove commented code without fear. Maximum effort.
 //                FileInputStream fileInputStream = new FileInputStream(pic);
 //                Bitmap bitmap = BitmapFactory.decodeStream(fileInputStream);
 //                byte[] imgbyte = getBytesFromBitmap(bitmap);

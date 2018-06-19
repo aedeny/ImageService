@@ -3,8 +3,11 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using Communication;
+using Infrastructure.Event;
 
 namespace ImageService.Model
 {
@@ -14,6 +17,7 @@ namespace ImageService.Model
 
 
         private readonly string _outputFolder;
+        private readonly string _tempOutputFolder;
         private readonly int _thumbnailSize;
 
         /// <summary>
@@ -24,7 +28,31 @@ namespace ImageService.Model
         public ImageServiceModel(string outputFolder, int thumbnailSize)
         {
             _outputFolder = outputFolder;
+            _tempOutputFolder = _outputFolder + @"\temp\";
             _thumbnailSize = thumbnailSize;
+            AndroidTcpClient.Instance.ImageRecieved += OnImageRecieved;
+        }
+
+        /// <summary>
+        /// Adds an image file from bytes array to output folder.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnImageRecieved(object sender, ImageReceivedEventArgs e)
+        {
+            string newImagePath = _tempOutputFolder + e.ImageName;
+            // Saves a temp image copy to a temp directory, adds it to the output folder and deletes temp copy.
+
+            Directory.CreateDirectory(_tempOutputFolder);
+            File.WriteAllBytes(newImagePath, e.Bytes);
+            AddFile(newImagePath, out EventLogEntryType _);
+            File.Delete(newImagePath);
+
+            // Removes temp directory
+            if (Directory.GetFiles(_tempOutputFolder).Length == 0)
+            {
+                Directory.Delete(_tempOutputFolder);
+            }
         }
 
         /// <inheritdoc />
@@ -66,15 +94,20 @@ namespace ImageService.Model
 
                 int i = 0;
                 string copyNumber = "";
-
+                
                 // If a file named 'name.image' already exists, a file named 'name(1).image' will be created.
-                while (File.Exists(outputFilePath + copyNumber + extension))
+                string newOutputPath = outputFilePath + copyNumber + extension;
+                while (File.Exists(newOutputPath))
                 {
+                    if (FilesEqual(newOutputPath, path))
+                    {
+                        return newOutputPath;
+                    }
+
                     i++;
                     copyNumber = "(" + i + ")";
+                    newOutputPath = outputFilePath + copyNumber + extension;
                 }
-
-                outputFilePath += copyNumber + extension;
 
                 string thumbnailPath = _outputFolder + "\\thumbnails\\" + pathSuffix + copyNumber + extension;
 
@@ -86,10 +119,10 @@ namespace ImageService.Model
                 }
 
                 // Copies the file to the output folder
-                File.Copy(path, outputFilePath, true);
+                File.Copy(path, newOutputPath, true);
 
                 result = EventLogEntryType.Information;
-                return outputFilePath;
+                return newOutputPath;
             }
             catch (Exception e)
             {
@@ -124,6 +157,18 @@ namespace ImageService.Model
 
             // Creates thumbnail folder
             Directory.CreateDirectory(_outputFolder + "\\thumbnails\\" + dateTime.Year + "\\" + dateTime.Month);
+        }
+
+        private static bool FilesEqual(string imagePath1, string imagePath2)
+        {
+            byte[] file1 = File.ReadAllBytes(imagePath1);
+            byte[] file2 = File.ReadAllBytes(imagePath2);
+            if (file1.Length != file2.Length)
+            {
+                return false;
+            }
+
+            return !file1.Where((t, i) => t != file2[i]).Any();
         }
     }
 }

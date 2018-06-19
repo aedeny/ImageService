@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Event\ImageReceivedEventArgs.cs" />
     <Compile Include="Event\ConfigurationReceivedEventArgs.cs" />
     <Compile Include="SettingsInfo.cs" />
     <Compile Include="Enums\CommandEnum.cs" />
