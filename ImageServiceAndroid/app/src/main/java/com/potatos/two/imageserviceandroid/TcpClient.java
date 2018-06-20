@@ -1,57 +1,52 @@
 package com.potatos.two.imageserviceandroid;
 
 import android.app.NotificationManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.nio.file.Files;
+import java.util.Arrays;
+import java.util.List;
 
 class TcpClient {
-    private OutputStream outputStream;
+    private static final String mIPAddress = "10.0.2.2";
+    private static final int mPort = 3748;
+    private DataOutputStream mOutputStream;
 
-    public void connect(final NotificationManager notificationManager, final NotificationCompat
+
+    public void connect(final NotificationManager nm, final NotificationCompat
             .Builder builder) {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 getConnection();
-                File dcim = new File(Environment.getExternalStoragePublicDirectory(Environment
-                        .DIRECTORY_DCIM), "Camera");
-
+                File dcim;
+                try {
+                    dcim = new File(Environment.getExternalStoragePublicDirectory(Environment
+                            .DIRECTORY_DCIM), "Camera");
+                } catch (NullPointerException e) {
+                    System.out.println(e.getMessage());
+                    return;
+                }
                 File[] files = dcim.listFiles();
-                double numberOfPictures = files.length;
-                double count = 0;
+                if (files == null) {
+                    return;
+                }
+                List<File> imageFiles = Arrays.asList(dcim.listFiles());
+                int numberOfImages = imageFiles.size();
+                int transferredImages = 0;
 
-                for (File file : files) {
+                for (File imageFile : imageFiles) {
                     try {
-                        FileInputStream fis = new FileInputStream(file);
-                        Bitmap bm = BitmapFactory.decodeStream(fis);
-                        byte[] imgbyte = getBytesFromBitmap(bm);
                         try {
-                            int imageLength = imgbyte.length;
-
-                            // Sends the size of the array bytes.
-                            String picSizeString = imageLength + "";
-                            outputStream.write(picSizeString.getBytes(), 0, picSizeString
-                                    .getBytes().length);
-
-                            //sends the name of file.
-                            String fileNameString = file.getName();
-                            outputStream.write(fileNameString.getBytes(), 0, fileNameString
-                                    .getBytes().length);
-
-                            //sends the array bytes.
-                            outputStream.write(imgbyte, 0, imgbyte.length);
-                            outputStream.flush();
-
+                            if (transferImage(imageFile)) {
+                                transferredImages++;
+                            }
                         } catch (Exception e1) {
                             Log.e("TCP", "S: Error:", e1);
                         }
@@ -59,29 +54,27 @@ class TcpClient {
                         Log.e("TCP", "S: Error:", e2);
                     }
 
-                    count++;
-                    int myProgress = (int) ((count / numberOfPictures) * 100);
+                    int myProgress = (transferredImages / numberOfImages) * 100;
                     String message = myProgress + "%";
                     builder.setProgress(100, myProgress, false);
                     builder.setContentText(message);
-                    notificationManager.notify(1, builder.build());
-
+                    nm.notify(1, builder.build());
                 }
                 try {
                     String toSend = "Stop Transfer\n";
-                    outputStream.write(toSend.getBytes(), 0, toSend.getBytes().length);
-                    outputStream.flush();
+                    mOutputStream.write(toSend.getBytes(), 0, toSend.getBytes().length);
+                    mOutputStream.flush();
 
-                    builder.setContentTitle("Finish transfer");
-                    builder.setContentText("Image Service finish backing up your photos");
-                    notificationManager.notify(1, builder.build());
+                    builder.setContentTitle("Finished");
+                    builder.setContentText("Image Service has finished backing up your photos.");
+                    nm.notify(1, builder.build());
 
                 } catch (Exception e3) {
                     Log.e("TCP", "S: Error:", e3);
 
                     builder.setContentTitle("Error");
-                    builder.setContentText("Image Service could not transfer your photos");
-                    notificationManager.notify(1, builder.build());
+                    builder.setContentText("Image Service could not transfer your photos.");
+                    nm.notify(1, builder.build());
                 }
             }
         });
@@ -89,35 +82,38 @@ class TcpClient {
         thread.start();
     }
 
+    private boolean transferImage(File ImageFile) {
+        try {
+            byte[] imageName = ImageFile.getName().getBytes();
+            byte[] imageData = Files.readAllBytes(ImageFile.toPath());
+
+            mOutputStream.writeInt(imageName.length);
+            mOutputStream.write(imageName);
+            mOutputStream.writeInt(imageData.length);
+            mOutputStream.write(imageData, 0, imageData.length);
+
+
+            mOutputStream.flush();
+        } catch (Exception e) {
+            Log.e("TCP", "Error transferring image" + ImageFile.getName() + ".", e);
+            return false;
+        }
+        return true;
+    }
+
     private void getConnection() {
         try {
-            // Computer's IP address
-            InetAddress serverAddr = InetAddress.getByName("10.0.2.2");
-
-            // Creates a socket to make the connection with the server
-            Socket socket = new Socket(serverAddr, 3748);
+            InetAddress serverAddress = InetAddress.getByName(mIPAddress);
+            Socket socket = new Socket(serverAddress, mPort);
             try {
                 // Supposed to send the message to the ImageServer...
-                outputStream = socket.getOutputStream();
-                // TODO Remove commented code without fear. Maximum effort.
-//                FileInputStream fileInputStream = new FileInputStream(pic);
-//                Bitmap bitmap = BitmapFactory.decodeStream(fileInputStream);
-//                byte[] imgbyte = getBytesFromBitmap(bitmap);
-                // ...
-//                outputStream.write(imgbyte);
-//                outputStream.flush();
+                mOutputStream = new DataOutputStream(socket.getOutputStream());
+
             } catch (Exception e) {
                 Log.e("TCP", "S: Error", e);
             }
         } catch (Exception e) {
             Log.e("TCP", "C: Error", e);
         }
-    }
-
-    private byte[] getBytesFromBitmap(Bitmap bitmap) {
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 70, stream);
-
-        return stream.toByteArray();
     }
 }

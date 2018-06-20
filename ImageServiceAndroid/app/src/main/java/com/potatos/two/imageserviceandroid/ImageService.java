@@ -29,7 +29,6 @@ public class ImageService extends Service {
 
     public void onCreate() {
         super.onCreate();
-
         mTcpClient = new TcpClient();
     }
 
@@ -46,29 +45,27 @@ public class ImageService extends Service {
                 context.getSystemService(Context.WIFI_SERVICE);
                 NetworkInfo networkInfo = intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
 
-                final NotificationManager notificationManager = (NotificationManager) context.getSystemService
-                        (Context.NOTIFICATION_SERVICE);
-                NotificationChannel channel = new NotificationChannel("default", "Channel name", NotificationManager
-                        .IMPORTANCE_DEFAULT);
+                final NotificationManager notificationManager = (NotificationManager) context
+                        .getSystemService(Context.NOTIFICATION_SERVICE);
+                NotificationChannel channel = new NotificationChannel("default", "Channel name",
+                        NotificationManager.IMPORTANCE_DEFAULT);
                 channel.setDescription("Channel description");
 
                 if (notificationManager != null) {
                     notificationManager.createNotificationChannel(channel);
                 }
 
-                final NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "default");
+                final NotificationCompat.Builder builder = new NotificationCompat.Builder
+                        (context, "default");
                 builder.setSmallIcon(R.drawable.ic_launcher_background);
                 builder.setContentTitle("Transferring Images status");
                 builder.setContentText("In progress");
 
 
-                if (networkInfo != null) {
-                    if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
-                        if (networkInfo.getState() == NetworkInfo.State.CONNECTED) {
-                            Toast.makeText(context, "Connected to WiFi", Toast.LENGTH_SHORT).show();
-                            mTcpClient.connect(notificationManager, builder);
-                        }
-                    }
+                if (networkInfo != null && networkInfo.getType() == ConnectivityManager.TYPE_WIFI
+                        && networkInfo.getState() == NetworkInfo.State.CONNECTED) {
+                    Toast.makeText(context, "Connected to WiFi", Toast.LENGTH_SHORT).show();
+                    mTcpClient.connect(notificationManager, builder);
                 }
             }
         };
@@ -80,6 +77,5 @@ public class ImageService extends Service {
 
     public void onDestroy() {
         Toast.makeText(this, "Service stopping...", Toast.LENGTH_SHORT).show();
-//        tcpConnection.closeConnection();
     }
 }

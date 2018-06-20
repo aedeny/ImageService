@@ -30,7 +30,7 @@ namespace ImageService.Model
             _outputFolder = outputFolder;
             _tempOutputFolder = _outputFolder + @"\temp\";
             _thumbnailSize = thumbnailSize;
-            AndroidTcpClient.Instance.ImageRecieved += OnImageRecieved;
+            AndroidTcpClientHandler.Instance.ImageRecieved += OnImageRecieved;
         }
 
         /// <summary>

@@ -1,39 +1,27 @@
 package com.potatos.two.imageserviceandroid;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.content.BroadcastReceiver;
-import android.content.Context;
+import android.Manifest;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.media.Image;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.net.NetworkRequest;
-import android.net.wifi.WifiManager;
-import android.os.Build;
-import android.os.IBinder;
-import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.NotificationCompat;
-import android.support.v7.app.AppCompatActivity;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        final Context context = getApplicationContext();
+        getApplicationContext();
 
         final Button startServiceButton = findViewById(R.id.startServiceButton);
         final Button stopServiceButton = findViewById(R.id.stopServiceButton);
+        askForPermissions();
         stopServiceButton.setEnabled(false);
         startServiceButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,11 +29,6 @@ public class MainActivity extends AppCompatActivity {
                 startServiceButton.setEnabled(false);
                 stopServiceButton.setEnabled(true);
                 startService(view);
-
-                CharSequence text = "Service started...";
-                int duration = Toast.LENGTH_SHORT;
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
             }
         });
 
@@ -55,11 +38,6 @@ public class MainActivity extends AppCompatActivity {
                 startServiceButton.setEnabled(true);
                 stopServiceButton.setEnabled(false);
                 stopService(view);
-
-                CharSequence text = "Service stopped";
-                int duration = Toast.LENGTH_SHORT;
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
             }
         });
     }
@@ -72,6 +50,14 @@ public class MainActivity extends AppCompatActivity {
     private void stopService(View view) {
         Intent intent = new Intent(this, ImageService.class);
         stopService(intent);
+    }
+
+    private void askForPermissions() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) !=
+                PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission
+                    .READ_EXTERNAL_STORAGE}, 1);
+        }
     }
 }
 
