@@ -1,5 +1,6 @@
 package com.potatos.two.imageserviceandroid;
 
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
@@ -29,12 +30,10 @@ public class ImageService extends Service {
 
     public void onCreate() {
         super.onCreate();
-        mTcpClient = new TcpClient();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flag, int startId) {
-
         final IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("android.net.wifi.supplicant.CONNECTION_CHANGE");
         intentFilter.addAction("android.net.wifi.STATE_CHANGE");
@@ -65,13 +64,18 @@ public class ImageService extends Service {
                 if (networkInfo != null && networkInfo.getType() == ConnectivityManager.TYPE_WIFI
                         && networkInfo.getState() == NetworkInfo.State.CONNECTED) {
                     Toast.makeText(context, "Connected to WiFi", Toast.LENGTH_SHORT).show();
+                    mTcpClient = new TcpClient();
                     mTcpClient.connect(notificationManager, builder);
                 }
+                startForeground(1234, new Notification.Builder(context,"default").build());
+
             }
         };
 
+
         registerReceiver(broadcastReceiver, intentFilter);
         Toast.makeText(this, "Service starting...", Toast.LENGTH_SHORT).show();
+
         return START_STICKY;
     }
 

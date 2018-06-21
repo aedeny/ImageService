@@ -120,36 +120,11 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="Content\bootstrap-grid.css.map" />
-    <None Include="Content\bootstrap-grid.min.css.map" />
-    <None Include="Content\bootstrap-reboot.css.map" />
-    <None Include="Content\bootstrap-reboot.min.css.map" />
-    <None Include="Content\bootstrap.css.map" />
-    <None Include="Content\bootstrap.min.css.map" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="Scripts\bootstrap.bundle.js.map" />
-    <None Include="Scripts\bootstrap.bundle.min.js.map" />
-    <None Include="Scripts\bootstrap.js.map" />
-    <None Include="Scripts\bootstrap.min.js.map" />
-    <None Include="Scripts\esm\popper-utils.js.map" />
-    <None Include="Scripts\esm\popper-utils.min.js.map" />
-    <None Include="Scripts\esm\popper.js.map" />
-    <None Include="Scripts\esm\popper.min.js.map" />
-    <None Include="Scripts\jquery-3.3.1.min.map" />
-    <None Include="Scripts\jquery-3.3.1.slim.min.map" />
-    <None Include="Scripts\popper-utils.js.map" />
-    <None Include="Scripts\popper-utils.min.js.map" />
-    <None Include="Scripts\popper.js.map" />
-    <None Include="Scripts\popper.min.js.map" />
-    <None Include="Scripts\README.md" />
-    <None Include="Scripts\umd\popper-utils.js.map" />
-    <None Include="Scripts\umd\popper-utils.min.js.map" />
-    <None Include="Scripts\umd\popper.js.map" />
-    <None Include="Scripts\umd\popper.min.js.map" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -163,36 +138,6 @@
       <Project>{d3a04302-e931-4c21-a566-bb2f1c856584}</Project>
       <Name>Infrastructure</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Content\bootstrap-grid.css" />
-    <Content Include="Content\bootstrap-grid.min.css" />
-    <Content Include="Content\bootstrap-reboot.css" />
-    <Content Include="Content\bootstrap-reboot.min.css" />
-    <Content Include="Content\bootstrap.css" />
-    <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Scripts\bootstrap.bundle.js" />
-    <Content Include="Scripts\bootstrap.bundle.min.js" />
-    <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Scripts\esm\popper-utils.js" />
-    <Content Include="Scripts\esm\popper-utils.min.js" />
-    <Content Include="Scripts\esm\popper.js" />
-    <Content Include="Scripts\esm\popper.min.js" />
-    <Content Include="Scripts\index.d.ts" />
-    <Content Include="Scripts\jquery-3.3.1.intellisense.js" />
-    <Content Include="Scripts\jquery-3.3.1.js" />
-    <Content Include="Scripts\jquery-3.3.1.min.js" />
-    <Content Include="Scripts\jquery-3.3.1.slim.js" />
-    <Content Include="Scripts\jquery-3.3.1.slim.min.js" />
-    <Content Include="Scripts\popper-utils.js" />
-    <Content Include="Scripts\popper-utils.min.js" />
-    <Content Include="Scripts\popper.js" />
-    <Content Include="Scripts\popper.min.js" />
-    <Content Include="Scripts\umd\popper-utils.js" />
-    <Content Include="Scripts\umd\popper-utils.min.js" />
-    <Content Include="Scripts\umd\popper.js" />
-    <Content Include="Scripts\umd\popper.min.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -33,28 +33,6 @@ namespace ImageService.Model
             AndroidTcpClientHandler.Instance.ImageRecieved += OnImageRecieved;
         }
 
-        /// <summary>
-        /// Adds an image file from bytes array to output folder.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnImageRecieved(object sender, ImageReceivedEventArgs e)
-        {
-            string newImagePath = _tempOutputFolder + e.ImageName;
-            // Saves a temp image copy to a temp directory, adds it to the output folder and deletes temp copy.
-
-            Directory.CreateDirectory(_tempOutputFolder);
-            File.WriteAllBytes(newImagePath, e.Bytes);
-            AddFile(newImagePath, out EventLogEntryType _);
-            File.Delete(newImagePath);
-
-            // Removes temp directory
-            if (Directory.GetFiles(_tempOutputFolder).Length == 0)
-            {
-                Directory.Delete(_tempOutputFolder);
-            }
-        }
-
         /// <inheritdoc />
         /// <summary>
         ///     Adds the file to the output folder.
@@ -94,7 +72,7 @@ namespace ImageService.Model
 
                 int i = 0;
                 string copyNumber = "";
-                
+
                 // If a file named 'name.image' already exists, a file named 'name(1).image' will be created.
                 string newOutputPath = outputFilePath + copyNumber + extension;
                 while (File.Exists(newOutputPath))
@@ -127,6 +105,28 @@ namespace ImageService.Model
             catch (Exception e)
             {
                 return e.Message;
+            }
+        }
+
+        /// <summary>
+        ///     Adds an image file from bytes array to output folder.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnImageRecieved(object sender, ImageReceivedEventArgs e)
+        {
+            string newImagePath = _tempOutputFolder + e.ImageName;
+            // Saves a temp image copy to a temp directory, adds it to the output folder and deletes temp copy.
+
+            Directory.CreateDirectory(_tempOutputFolder);
+            File.WriteAllBytes(newImagePath, e.Bytes);
+            AddFile(newImagePath, out EventLogEntryType _);
+            File.Delete(newImagePath);
+
+            // Removes temp directory
+            if (Directory.GetFiles(_tempOutputFolder).Length == 0)
+            {
+                Directory.Delete(_tempOutputFolder);
             }
         }
 

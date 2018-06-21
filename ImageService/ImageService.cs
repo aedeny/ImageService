@@ -194,7 +194,9 @@ namespace ImageService
                 List<Tuple<string, EventLogEntryType>> entries = new List<Tuple<string, EventLogEntryType>>();
 
                 foreach (EventLogEntry logEntry in eventLog.Entries)
+                {
                     entries.Add(new Tuple<string, EventLogEntryType>(logEntry.Message, logEntry.EntryType));
+                }
 
                 JObject logHistoryJson = new JObject
                 {

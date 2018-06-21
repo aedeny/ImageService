@@ -7,6 +7,7 @@ import android.util.Log;
 
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.nio.file.Files;
@@ -41,12 +42,17 @@ class TcpClient {
                 int numberOfImages = imageFiles.size();
                 int transferredImages = 0;
 
+                try {
+                    mOutputStream.writeInt(numberOfImages);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 for (File imageFile : imageFiles) {
                     try {
                         try {
-                            if (transferImage(imageFile)) {
-                                transferredImages++;
-                            }
+                            transferImage(imageFile);
+                            transferredImages++;
+
                         } catch (Exception e1) {
                             Log.e("TCP", "S: Error:", e1);
                         }

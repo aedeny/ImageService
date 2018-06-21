@@ -86,7 +86,9 @@ namespace ImageService.Communication
         public void RemoveDirHandlerFromAllGuis(string directoryPath)
         {
             foreach (ITcpClientHandler ch in _clientHandlersList)
+            {
                 ch.Write(CommandEnum.CloseDirectoryHandlerCommand + "|" + directoryPath);
+            }
         }
 
         /// <summary>
@@ -97,7 +99,9 @@ namespace ImageService.Communication
         public void OnLogEntryWritten(object sender, EntryWrittenEventArgs e)
         {
             foreach (ITcpClientHandler ch in _clientHandlersList)
+            {
                 ch.Write(CommandEnum.NewLogCommand + "|" + e.Entry.Message + "|" + e.Entry.EntryType);
+            }
         }
     }
 }

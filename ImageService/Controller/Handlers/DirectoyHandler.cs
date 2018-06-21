@@ -116,7 +116,7 @@ namespace ImageService.Controller.Handlers
                 args.Closed = true;
             }
 
-            ImageServer imageServer = (ImageServer)sender;
+            ImageServer imageServer = (ImageServer) sender;
             imageServer.DirectoryHandlerClosed -= OnDirectoryHandlerClosed;
             imageServer.CommandRecieved -= OnCommandRecieved;
         }
