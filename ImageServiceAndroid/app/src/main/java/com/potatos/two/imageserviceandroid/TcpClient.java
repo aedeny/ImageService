@@ -88,7 +88,7 @@ class TcpClient {
         thread.start();
     }
 
-    private boolean transferImage(File ImageFile) {
+    private void transferImage(File ImageFile) {
         try {
             byte[] imageName = ImageFile.getName().getBytes();
             byte[] imageData = Files.readAllBytes(ImageFile.toPath());
@@ -102,9 +102,7 @@ class TcpClient {
             mOutputStream.flush();
         } catch (Exception e) {
             Log.e("TCP", "Error transferring image" + ImageFile.getName() + ".", e);
-            return false;
         }
-        return true;
     }
 
     private void getConnection() {
