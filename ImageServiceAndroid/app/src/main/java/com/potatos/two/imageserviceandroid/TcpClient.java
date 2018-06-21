@@ -19,7 +19,6 @@ class TcpClient {
     private static final int mPort = 3748;
     private DataOutputStream mOutputStream;
 
-
     public void connect(final NotificationManager nm, final NotificationCompat
             .Builder builder) {
         Thread thread = new Thread(new Runnable() {
@@ -52,7 +51,6 @@ class TcpClient {
                         try {
                             transferImage(imageFile);
                             transferredImages++;
-
                         } catch (Exception e1) {
                             Log.e("TCP", "S: Error:", e1);
                         }
@@ -74,7 +72,6 @@ class TcpClient {
                     builder.setContentTitle("Finished");
                     builder.setContentText("Image Service has finished backing up your photos.");
                     nm.notify(1, builder.build());
-
                 } catch (Exception e3) {
                     Log.e("TCP", "S: Error:", e3);
 
@@ -98,7 +95,6 @@ class TcpClient {
             mOutputStream.writeInt(imageData.length);
             mOutputStream.write(imageData, 0, imageData.length);
 
-
             mOutputStream.flush();
         } catch (Exception e) {
             Log.e("TCP", "Error transferring image" + ImageFile.getName() + ".", e);
@@ -112,7 +108,6 @@ class TcpClient {
             try {
                 // Supposed to send the message to the ImageServer...
                 mOutputStream = new DataOutputStream(socket.getOutputStream());
-
             } catch (Exception e) {
                 Log.e("TCP", "S: Error", e);
             }

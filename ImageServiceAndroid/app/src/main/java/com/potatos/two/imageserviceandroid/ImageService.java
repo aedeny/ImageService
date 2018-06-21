@@ -67,7 +67,7 @@ public class ImageService extends Service {
                     mTcpClient = new TcpClient();
                     mTcpClient.connect(notificationManager, builder);
                 }
-                startForeground(1234, new Notification.Builder(context,"default").build());
+                startForeground(1234, new Notification.Builder(context, "default").build());
 
             }
         };
